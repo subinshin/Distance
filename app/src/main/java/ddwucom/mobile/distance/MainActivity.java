@@ -14,7 +14,6 @@ public class MainActivity extends AppCompatActivity {
         int value;
         int value2;
         int value3;
-
-        //주석입니다.
+        int value4;
     }
 }
