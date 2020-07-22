@@ -15,5 +15,6 @@ public class MainActivity extends AppCompatActivity {
         int val;
         int value3;
 
+        int value4;
     }
 }
