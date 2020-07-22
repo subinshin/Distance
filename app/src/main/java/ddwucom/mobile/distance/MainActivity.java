@@ -12,7 +12,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         //안녕하세요
         int value;
-        int value2;
+        int val;
         int value3;
 
     }
