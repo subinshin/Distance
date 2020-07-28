@@ -1,9 +1,11 @@
 <resources>
     <string name="app_name">Distance</string>
+
     <string name="login_title">로그인</string>
     <string name="login_email">이메일</string>
     <string name="login_pw">비밀번호</string>
     <string name="login_btn">로그인</string>
+
     <string name="join_title">회원가입</string>
     <string name="join_title_email">이메일</string>
     <string name="join_btn_phoneCode">확인</string>
@@ -22,6 +24,7 @@
     <string name="join_btn_cancel">취소</string>
     <string name="join_btn_join">가입</string>
     <string name="join_title_pw">비밀번호</string>
+
     <string name="mypage_title">마이페이지</string>
     <string name="mypage_title_email">이메일</string>
     <string name="mypage_btn_phoneCode">확인</string>
