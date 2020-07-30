@@ -5,7 +5,6 @@
     <string name="login_email">이메일</string>
     <string name="login_pw">비밀번호</string>
     <string name="login_btn">로그인</string>
-
     <string name="join_title">회원가입</string>
     <string name="join_title_email">이메일</string>
     <string name="join_btn_phoneCode">확인</string>
@@ -46,6 +45,10 @@
     <string name="actionbar_name">COVID 19 동선관리</string>
     <string name="nav_header_title">사용자 닉네임</string>
     <string name="nav_header_subtitle">이메일 주소</string>
-    <string name="nav_header_desc">헤더 설명</string>
 
+    <string name="nav_option_myPage">마이페이지</string>
+    <string name="nav_option_moving">동선확인</string>
+    <string name="nav_option_condition">확진자현황</string>
+    <string name="nav_option_setting">설정</string>
+    <string name="nav_option_logout">로그아웃</string>
 </resources>
