@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Distance</string>
+    <string name="actionbar_name">COVID 19 동선관리</string>
+    <string name="nav_header_title">사용자 닉네임</string>
+    <string name="nav_header_subtitle">이메일 주소</string>
+    <string name="nav_header_desc">헤더 설명</string>
+
 </resources>
