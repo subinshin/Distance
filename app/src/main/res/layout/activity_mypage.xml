@@ -7,30 +7,30 @@
     android:layout_height="match_parent">
 
     <Button
-        android:id="@+id/join_btn_phoneCode"
+        android:id="@+id/mypage_btn_phoneCode"
         android:layout_width="85dp"
         android:layout_height="43dp"
         android:layout_marginStart="2dp"
         android:layout_marginLeft="2dp"
         android:text="@string/join_btn_phoneCode"
-        app:layout_constraintStart_toEndOf="@+id/join_et_phoneCode"
-        app:layout_constraintTop_toBottomOf="@+id/join_btn_phone" />
+        app:layout_constraintStart_toEndOf="@+id/mypage_et_phoneCode"
+        app:layout_constraintTop_toBottomOf="@+id/mypage_btn_phone" />
 
     <Button
-        android:id="@+id/join_btn_phone"
+        android:id="@+id/mypage_btn_phone"
         android:layout_width="85dp"
         android:layout_height="43dp"
         android:layout_marginTop="141dp"
         android:text="@string/join_btn_phone"
-        app:layout_constraintStart_toEndOf="@+id/join_et_phone"
-        app:layout_constraintTop_toBottomOf="@+id/join_et_pw_2" />
+        app:layout_constraintStart_toEndOf="@+id/mypage_et_phone"
+        app:layout_constraintTop_toBottomOf="@+id/mypage_et_pw_2" />
 
     <TextView
-        android:id="@+id/join_title"
+        android:id="@+id/mypage_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="@string/join_title"
+        android:text="@string/mypage_title"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -38,31 +38,31 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/join_title_email"
+        android:id="@+id/mypage_title_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/join_title_email"
+        android:text="@string/mypage_title_email"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.045"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/join_title" />
+        app:layout_constraintTop_toBottomOf="@+id/mypage_title" />
 
     <EditText
-        android:id="@+id/join_et_email"
+        android:id="@+id/mypage_et_email"
         android:layout_width="276dp"
         android:layout_height="40dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="24dp"
         android:ems="10"
-        android:hint="@string/join_et_email"
+        android:hint="@string/mypage_et_email"
         android:inputType="textEmailAddress"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/join_title" />
+        app:layout_constraintTop_toBottomOf="@+id/mypage_title" />
 
     <TextView
-        android:id="@+id/join_title_pw"
+        android:id="@+id/mypage_title_pw"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -70,24 +70,24 @@
         android:layout_marginTop="8dp"
         android:text="@string/join_title_pw"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/join_et_email" />
+        app:layout_constraintTop_toBottomOf="@+id/mypage_et_email" />
 
     <EditText
-        android:id="@+id/join_et_pw"
+        android:id="@+id/mypage_et_pw"
         android:layout_width="187dp"
         android:layout_height="38dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="2dp"
         android:ems="10"
-        android:hint="@string/join_et_pw"
+        android:hint="@string/mypage_et_pw"
         android:inputType="textPassword"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/join_title_pw" />
+        app:layout_constraintTop_toBottomOf="@+id/mypage_title_pw" />
 
     <EditText
-        android:id="@+id/join_et_pw_2"
+        android:id="@+id/mypage_et_pw_2"
         android:layout_width="187dp"
         android:layout_height="37dp"
         android:layout_marginStart="5dp"
@@ -97,11 +97,11 @@
         android:hint="@string/join_et_pw_2"
         android:inputType="textPassword"
         android:textSize="14sp"
-        app:layout_constraintStart_toEndOf="@+id/join_et_pw"
-        app:layout_constraintTop_toBottomOf="@+id/join_btn_email" />
+        app:layout_constraintStart_toEndOf="@+id/mypage_et_pw"
+        app:layout_constraintTop_toBottomOf="@+id/mypage_btn_email" />
 
     <Button
-        android:id="@+id/join_btn_email"
+        android:id="@+id/mypage_btn_email"
         android:layout_width="85dp"
         android:layout_height="43dp"
         android:layout_marginStart="8dp"
@@ -111,21 +111,21 @@
         android:layout_marginRight="26dp"
         android:text="@string/join_btn_email"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/join_et_email"
+        app:layout_constraintStart_toEndOf="@+id/mypage_et_email"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/join_title_name"
+        android:id="@+id/mypage_title_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:text="@string/join_title_name"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/join_et_pw" />
+        app:layout_constraintTop_toBottomOf="@+id/mypage_et_pw" />
 
     <EditText
-        android:id="@+id/join_et_name"
+        android:id="@+id/mypage_et_name"
         android:layout_width="187dp"
         android:layout_height="38dp"
         android:layout_marginStart="16dp"
@@ -135,10 +135,10 @@
         android:inputType="textPersonName"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/join_title_name" />
+        app:layout_constraintTop_toBottomOf="@+id/mypage_title_name" />
 
     <TextView
-        android:id="@+id/join_title_birth"
+        android:id="@+id/mypage_title_birth"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -146,10 +146,10 @@
         android:layout_marginTop="3dp"
         android:text="@string/join_title_birth"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/join_et_name" />
+        app:layout_constraintTop_toBottomOf="@+id/mypage_et_name" />
 
     <EditText
-        android:id="@+id/join_et_birth"
+        android:id="@+id/mypage_et_birth"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -159,10 +159,10 @@
         android:inputType="date"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/join_title_birth" />
+        app:layout_constraintTop_toBottomOf="@+id/mypage_title_birth" />
 
     <TextView
-        android:id="@+id/join_title_phone"
+        android:id="@+id/mypage_title_phone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="17dp"
@@ -170,10 +170,10 @@
         android:layout_marginTop="1dp"
         android:text="@string/join_title_phone"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/join_et_birth" />
+        app:layout_constraintTop_toBottomOf="@+id/mypage_et_birth" />
 
     <EditText
-        android:id="@+id/join_et_phone"
+        android:id="@+id/mypage_et_phone"
         android:layout_width="241dp"
         android:layout_height="41dp"
         android:layout_marginStart="16dp"
@@ -183,10 +183,10 @@
         android:inputType="phone"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/join_title_phone" />
+        app:layout_constraintTop_toBottomOf="@+id/mypage_title_phone" />
 
     <EditText
-        android:id="@+id/join_et_phoneCode"
+        android:id="@+id/mypage_et_phoneCode"
         android:layout_width="239dp"
         android:layout_height="42dp"
         android:layout_marginStart="16dp"
@@ -197,10 +197,10 @@
         android:inputType="number"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/join_et_phone" />
+        app:layout_constraintTop_toBottomOf="@+id/mypage_et_phone" />
 
     <Button
-        android:id="@+id/join_btn_cancel"
+        android:id="@+id/mypage_btn_cancel"
         android:layout_width="167dp"
         android:layout_height="47dp"
         android:layout_marginStart="36dp"
@@ -209,18 +209,18 @@
         android:onClick="onClick"
         android:text="@string/join_btn_cancel"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/join_et_phoneCode" />
+        app:layout_constraintTop_toBottomOf="@+id/mypage_et_phoneCode" />
 
     <Button
-        android:id="@+id/join_btn_join"
+        android:id="@+id/mypage_btn_join"
         android:layout_width="161dp"
         android:layout_height="48dp"
         android:layout_marginStart="13dp"
         android:layout_marginLeft="13dp"
         android:layout_marginTop="63dp"
         android:onClick="onClick"
-        android:text="@string/join_btn_join"
-        app:layout_constraintStart_toEndOf="@+id/join_btn_cancel"
-        app:layout_constraintTop_toBottomOf="@+id/join_btn_phoneCode" />
+        android:text="@string/mypage_btn_update"
+        app:layout_constraintStart_toEndOf="@+id/mypage_btn_cancel"
+        app:layout_constraintTop_toBottomOf="@+id/mypage_btn_phoneCode" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
