@@ -2,14 +2,25 @@ package ddwucom.mobile.distance;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 public class JoinActivity extends AppCompatActivity {
+    private static final String TAG ="signUpActivity";
+    private FirebaseAuth mAuth;
+
     EditText join_et_email;
     EditText join_et_pw;
     EditText join_et_pw_2;
@@ -31,6 +42,9 @@ public class JoinActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join);
 
+        // Initialize Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
+
         join_et_email = findViewById(R.id.join_et_email);
         join_et_pw = findViewById(R.id.join_et_pw);
         join_et_pw_2 = findViewById(R.id.join_et_pw_2);
@@ -40,6 +54,15 @@ public class JoinActivity extends AppCompatActivity {
         join_et_phoneCode = findViewById(R.id.join_et_phoneCode);
 
         resultIntent = new Intent();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+//        updateUI(currentUser);
+// 아직은 필요x
     }
 
     public void onClick(View v){
@@ -71,4 +94,30 @@ public class JoinActivity extends AppCompatActivity {
         }
 
     }
+
+    private void signUp() {
+
+        //회원가입 로직
+        mAuth.createUserWithEmailAndPassword(email, pw)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "createUserWithEmail:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            //성공시 UI로직
+//                            updateUI(user);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                            //실패시 UI로직
+//                            updateUI(null);
+                        }
+
+                        // ...
+                    }
+                });
+    }
+
 }
