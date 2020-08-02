@@ -212,7 +212,7 @@
         app:layout_constraintTop_toBottomOf="@+id/mypage_et_phoneCode" />
 
     <Button
-        android:id="@+id/mypage_btn_join"
+        android:id="@+id/mypage_btn_modify"
         android:layout_width="161dp"
         android:layout_height="48dp"
         android:layout_marginStart="13dp"

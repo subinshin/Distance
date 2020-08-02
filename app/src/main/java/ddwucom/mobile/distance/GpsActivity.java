@@ -14,6 +14,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class GpsActivity extends AppCompatActivity {
 
@@ -26,7 +27,7 @@ public class GpsActivity extends AppCompatActivity {
         setContentView(R.layout.layout_gps);
 
         Intent intent = getIntent();
-        id = intent.getStringExtra("id");
+        id = intent.getStringExtra("email_id");
         Toast.makeText(this,  "사용자 이메일 : " + id, Toast.LENGTH_SHORT).show();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -61,6 +62,8 @@ public class GpsActivity extends AppCompatActivity {
                 }
                 else if(id == R.id.item_logout){
                     Toast.makeText(context, "로그아웃", Toast.LENGTH_SHORT).show();
+                    FirebaseAuth.getInstance().signOut();
+                    startLoginActivity();
                 }
 
                 return true;
@@ -77,5 +80,11 @@ public class GpsActivity extends AppCompatActivity {
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void startLoginActivity() {
+        Intent intent = new Intent(this, loginActivity.class);
+        intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 }

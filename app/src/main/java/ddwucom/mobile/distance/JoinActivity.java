@@ -1,6 +1,7 @@
 package ddwucom.mobile.distance;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,14 +13,20 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class JoinActivity extends AppCompatActivity {
     private static final String TAG ="signUpActivity";
     private FirebaseAuth mAuth;
+    Intent intent;
 
     EditText join_et_email;
     EditText join_et_pw;
@@ -42,7 +49,7 @@ public class JoinActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join);
 
-        // Initialize Firebase Auth
+        // important call
         mAuth = FirebaseAuth.getInstance();
 
         join_et_email = findViewById(R.id.join_et_email);
@@ -56,14 +63,6 @@ public class JoinActivity extends AppCompatActivity {
         resultIntent = new Intent();
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-//        updateUI(currentUser);
-// 아직은 필요x
-    }
 
     public void onClick(View v){
         switch(v.getId()){
@@ -82,8 +81,8 @@ public class JoinActivity extends AppCompatActivity {
                     Toast.makeText(JoinActivity.this, "항목을 빠짐 없이 입력하세요.", Toast.LENGTH_SHORT).show();
                 }else{
                     //db전송
-                    Toast.makeText(JoinActivity.this, "회원가입 되었습니다.", Toast.LENGTH_SHORT).show();
-                    finish();
+                    signUp();
+
                 }
                 break;
 
@@ -105,13 +104,18 @@ public class JoinActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
                             //성공시 UI로직
+//                            initProfile();
+                            initUserDB();
+                            startMainActivity();
 //                            updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             //실패시 UI로직
+                            if(task.getException() != null) {
+                                startToast(task.getException().toString());
+                            }
 //                            updateUI(null);
                         }
 
@@ -119,5 +123,59 @@ public class JoinActivity extends AppCompatActivity {
                     }
                 });
     }
+//
+//join하면 바로 user가 로그인 되는듯..
+//    private void initProfile() {
+//        FirebaseUser user = mAuth.getCurrentUser();
+//        if (user != null) {
+//
+//            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+//                    .setDisplayName(name)
+//                    .build();
+//
+//            user.updateProfile(profileUpdates)
+//                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<Void> task) {
+//                            if (task.isSuccessful()) {
+//                                Log.d(TAG, "User profile updated.");
+//                            }
+//                        }
+//                    });
+//        }
+//    }
 
+    private void initUserDB() {
+        FirebaseUser user = mAuth.getCurrentUser();
+        // Access a Cloud Firestore instance from your Activity
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        UserInfo userInfo = new UserInfo(email, pw, name, birth, phone);
+        if (user != null) {
+
+            db.collection("users").document(user.getUid()).set(userInfo)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d(TAG, "Document added");
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w(TAG, "Error adding document", e);
+                        }
+                    });
+        }
+    }
+
+    private void startToast(String msg) {
+        Toast.makeText(JoinActivity.this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    private void startMainActivity() {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+    }
 }

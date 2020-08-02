@@ -1,56 +1,64 @@
 package ddwucom.mobile.distance;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.Toast;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
+    Intent intent;
+    private FirebaseAuth mAuth;
 
-    EditText login_et_id;
-    EditText login_et_pw;
-
-    // db로 전달해야 할 것들
-    String id;
-    String pass;
-
+    private static final String TAG ="MainActivity";
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-       login_et_id = findViewById(R.id.login_et_id);
-       login_et_pw = findViewById(R.id.login_et_pw);
+// Initialize Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
 
 
-    }
-
-    public void onClick(View v){
-        Intent intent;
-        switch(v.getId()){
-            case R.id.login_btn:
-                //정보를 xml 혹은 json화 시켜서 db로 전달할 것
-                id = login_et_id.getText().toString();
-                pass = login_et_pw.getText().toString();
-
-                if(id.equals("") || pass.equals("")){
-                    Toast.makeText(this, "빈칸을 빠짐없이 입력하세요.", Toast.LENGTH_SHORT).show();
-                }else {
-                    intent = new Intent(this, GpsActivity.class);
-                    intent.putExtra("id", id);
-                    startActivity(intent);
-                }
-                break;
-
-            case R.id.join_btn:
-                intent = new Intent(this, JoinActivity.class);
-                startActivity(intent);
-                break;
+        //미로그인 -> loginActivity
+        if(mAuth.getCurrentUser() == null) {
+            intent = new Intent(this, loginActivity.class);
+            startActivity(intent);
+        }
+        else { //현재 로그인 된 상태 -> GpsActivity
+            Log.d(TAG, "logined: "+mAuth.getCurrentUser().getUid());
+            intent = new Intent(this, GpsActivity.class);
+//            intent.putExtra("email_id", FirebaseAuth.getInstance().getCurrentUser().getEmail());
+            startActivity(intent);
         }
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+//        updateUI(currentUser);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        //미로그인 -> loginActivity
+        if(mAuth.getCurrentUser() == null) {
+            intent = new Intent(this, loginActivity.class);
+            startActivity(intent);
+        }
+        else { //현재 로그인 된 상태 -> GpsActivity
+            Log.d(TAG, "logined: "+mAuth.getCurrentUser().getUid());
+            intent = new Intent(this, GpsActivity.class);
+            intent.putExtra("email_id", FirebaseAuth.getInstance().getCurrentUser().getEmail());
+            startActivity(intent);
+        }
+    }
 }

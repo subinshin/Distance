@@ -51,4 +51,7 @@
     <string name="nav_option_condition">확진자현황</string>
     <string name="nav_option_setting">설정</string>
     <string name="nav_option_logout">로그아웃</string>
+    <string name="password_reset_title">비밀번호 재설정</string>
+
+    <string name="password_title_send">보내기</string>
 </resources>
