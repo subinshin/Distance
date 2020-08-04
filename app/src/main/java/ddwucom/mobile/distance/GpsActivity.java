@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -44,6 +45,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -161,6 +163,13 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
                 return true;
             }
         });
+
+        PolylineOptions pOptions = new PolylineOptions();
+        pOptions.color(Color.RED);
+        pOptions.width(5);
+
+        pOptions.add(currentPosition);
+        mMap.addPolyline(pOptions);
     }
 
     @Override
