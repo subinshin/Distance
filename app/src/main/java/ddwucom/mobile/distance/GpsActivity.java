@@ -62,6 +62,7 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
     private Marker currentMarker = null;
+    private PolylineOptions lineOptions;
 
     private static final String TAG = "googlemap_example";
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
@@ -164,12 +165,11 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
             }
         });
 
-        PolylineOptions pOptions = new PolylineOptions();
-        pOptions.color(Color.RED);
-        pOptions.width(5);
+        lineOptions = new PolylineOptions();
+        lineOptions.color(Color.RED);
+        lineOptions.width(5);
 
-        pOptions.add(currentPosition);
-        mMap.addPolyline(pOptions);
+
     }
 
     @Override
@@ -288,6 +288,10 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
                 setCurrentLocation(location, markerTitle, markerSnippet);
 
                 mCurrentLocatiion = location;
+
+                // 현재 위치를 라인 정보로 추가
+                lineOptions.add(currentPosition);
+                mMap.addPolyline(lineOptions);
             }
 
 
