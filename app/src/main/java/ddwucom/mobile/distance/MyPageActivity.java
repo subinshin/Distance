@@ -77,7 +77,7 @@ public class MyPageActivity extends AppCompatActivity {
                             if(document.getData() != null) {
                                 UserInfo user = document.toObject(UserInfo.class);
                                 //이메일, 폰번호 수정불가해야함..textView로 수정요망!!
-                                
+
                                 myPage_et_email.setText(user.getEmail());
                                 myPage_et_pw.setText(user.getPass());
                                 myPage_et_pw2.setText(user.getPass());
