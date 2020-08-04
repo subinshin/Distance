@@ -53,5 +53,7 @@
     <string name="nav_option_logout">로그아웃</string>
     <string name="password_reset_title">비밀번호 재설정</string>
 
+    <string name="string_value">이미지 다운로드 실패</string>
+
     <string name="password_title_send">보내기</string>
 </resources>
