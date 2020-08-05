@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -44,6 +45,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -60,6 +62,7 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
     private Marker currentMarker = null;
+    private PolylineOptions lineOptions;
 
     private static final String TAG = "googlemap_example";
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
@@ -161,6 +164,12 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
                 return true;
             }
         });
+
+        lineOptions = new PolylineOptions();
+        lineOptions.color(Color.RED);
+        lineOptions.width(5);
+
+
     }
 
     @Override
@@ -279,6 +288,10 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
                 setCurrentLocation(location, markerTitle, markerSnippet);
 
                 mCurrentLocatiion = location;
+
+                // 현재 위치를 라인 정보로 추가
+                lineOptions.add(currentPosition);
+                mMap.addPolyline(lineOptions);
             }
 
 
