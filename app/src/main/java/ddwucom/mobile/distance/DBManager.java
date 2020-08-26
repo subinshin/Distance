@@ -47,8 +47,8 @@ public class DBManager {
     public Cursor searchWithDate(int year, int month, int dayOfMonth){
         SQLiteDatabase db = helper.getReadableDatabase();
 
-        String selection = null;
-        String [] selectArgs = new String[]{String.valueOf(year), String.valueOf(month), String.valueOf(dayOfMonth)};
+        String selection = helper.COL_YEAR + "=? and " + helper.COL_MONTH + "=? and " + helper.COL_DAY + "=?";
+        String [] selectArgs = new String[]{ String.valueOf(year), String.valueOf(month + 1), String.valueOf(dayOfMonth)};
 
         cursor = db.query(helper.TABLE_NAME, null, selection, selectArgs, null, null, null, null);
 

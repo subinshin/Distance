@@ -16,8 +16,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import java.util.Date;
-
 public class MovingActivity extends AppCompatActivity {
 
     Spinner spinner;
@@ -50,6 +48,8 @@ public class MovingActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch(position){
                     case 0:
+                        adapter.changeCursor(manager.getAllInfos());
+
                         layout_moving.removeAllViews();
                         inflater.inflate(R.layout.layout_moving_all, layout_moving, true);
 
@@ -58,6 +58,8 @@ public class MovingActivity extends AppCompatActivity {
 
                         break;
                     case 1:
+                        adapter.changeCursor(null);
+
                         layout_moving.removeAllViews();
                         inflater.inflate(R.layout.layout_moving_calendar, layout_moving, true);
 
@@ -68,9 +70,10 @@ public class MovingActivity extends AppCompatActivity {
                         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
                             @Override
                             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-//                               Cursor cursor = manager.searchWithDate(year, month, dayOfMonth);
-//
-//                                  adapter.changeCursor(cursor);
+
+                                Log.d(TAG, year + ", " + month + ", " + dayOfMonth);
+                                Cursor cursor = manager.searchWithDate(year, month, dayOfMonth);
+                               adapter.changeCursor(cursor);
 
                             }
                         });
