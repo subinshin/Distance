@@ -3,6 +3,7 @@ package ddwucom.mobile.distance;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -23,10 +24,13 @@ public class MovingActivity extends AppCompatActivity {
     CalendarView calendarView;
     DBManager manager;
     MovingInfoAdapter adapter;
-    ListView listView;
+    ListView all_listView;
+    ListView calendar_listView;
     Cursor cursor;
     ConstraintLayout layout_moving;
     LayoutInflater inflater;
+
+    private static final String TAG = "MovingActivity";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,20 +41,8 @@ public class MovingActivity extends AppCompatActivity {
         inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         manager = new DBManager(this);
-        listView = findViewById(R.id.listView);
-
         cursor = manager.getAllInfos();
         adapter = new MovingInfoAdapter(MovingActivity.this, R.layout.layout_listview, cursor);
-
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-            }
-        });
-
-        //calendarListView.setAdapter(adapter);
 
         spinner = findViewById(R.id.search_spinner);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -59,10 +51,30 @@ public class MovingActivity extends AppCompatActivity {
                 switch(position){
                     case 0:
                         layout_moving.removeAllViews();
+                        inflater.inflate(R.layout.layout_moving_all, layout_moving, true);
+
+                        all_listView = findViewById(R.id.all_listView);
+                        all_listView.setAdapter(adapter);
+
                         break;
                     case 1:
                         layout_moving.removeAllViews();
                         inflater.inflate(R.layout.layout_moving_calendar, layout_moving, true);
+
+                        calendar_listView = findViewById(R.id.calendar_listView);
+                        calendar_listView.setAdapter(adapter);
+
+                        calendarView = findViewById(R.id.calendarView);
+                        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+                            @Override
+                            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
+//                               Cursor cursor = manager.searchWithDate(year, month, dayOfMonth);
+//
+//                                  adapter.changeCursor(cursor);
+
+                            }
+                        });
+
                         break;
                     case 2:
                         layout_moving.removeAllViews();
@@ -77,16 +89,9 @@ public class MovingActivity extends AppCompatActivity {
             }
         });
 
-        calendarView = findViewById(R.id.calendarView);
-//        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-//            @Override
-//            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-////                Cursor cursor = manager.searchWithDate(year, month, dayOfMonth);
-////
-////                adapter.changeCursor(cursor);
-//
-//            }
-//        });
+
+
+
 
     }
 }

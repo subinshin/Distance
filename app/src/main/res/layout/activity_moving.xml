@@ -19,19 +19,12 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_moving"
-        android:layout_width="415dp"
-        android:layout_height="307dp"
+        android:layout_width="407dp"
+        android:layout_height="638dp"
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_spinner" >
+        app:layout_constraintTop_toBottomOf="@+id/search_spinner">
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <ListView
-        android:id="@+id/listView"
-        android:layout_width="411dp"
-        android:layout_height="346dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout_moving" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

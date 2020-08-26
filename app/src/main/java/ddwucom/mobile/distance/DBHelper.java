@@ -40,7 +40,22 @@ public class DBHelper extends SQLiteOpenHelper {
 
         db.execSQL("insert into " + TABLE_NAME + " values(null, 2020, 8, 24, '"
                 + (new Time(12, 5, 0)).toString() +"', '" + (new Time(12, 11, 0)).toString()
-                + "', 'guui', '32.7895', '45.7895');" );
+                + "', '구의동 75-89', '32.7895', '45.7895');" );
+        db.execSQL("insert into " + TABLE_NAME + " values(null, 2020, 8, 26, '"
+                + (new Time(18, 52, 0)).toString() +"', '" + (new Time(19, 11, 0)).toString()
+                + "', '성북구 23-1', '15.3485', '45.7895');" );
+        db.execSQL("insert into " + TABLE_NAME + " values(null, 2020, 8, 27, '"
+                + (new Time(22, 43, 0)).toString() +"', '" + (new Time(22, 50, 0)).toString()
+                + "', '동대문구 89-21', '32.7895', '45.7895');" );
+        db.execSQL("insert into " + TABLE_NAME + " values(null, 2020, 8, 24, '"
+                + (new Time(12, 5, 0)).toString() +"', '" + (new Time(12, 11, 0)).toString()
+                + "', '구의동 75-89', '32.7895', '45.7895');" );
+        db.execSQL("insert into " + TABLE_NAME + " values(null, 2020, 8, 26, '"
+                + (new Time(18, 52, 0)).toString() +"', '" + (new Time(19, 11, 0)).toString()
+                + "', '성북구 23-1', '15.3485', '45.7895');" );
+        db.execSQL("insert into " + TABLE_NAME + " values(null, 2020, 8, 27, '"
+                + (new Time(22, 43, 0)).toString() +"', '" + (new Time(22, 50, 0)).toString()
+                + "', '동대문구 89-21', '32.7895', '45.7895');" );
 
     }
 
