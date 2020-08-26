@@ -1,9 +1,11 @@
 package ddwucom.mobile.distance;
 
 import android.Manifest;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Address;
@@ -11,7 +13,12 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.IBinder;
 import android.os.Looper;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -65,10 +72,11 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
     private PolylineOptions lineOptions;
 
     private static final String TAG = "googlemap_example";
+    private static final String TAG2 = "GpsActivity";
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
     private static final int UPDATE_INTERVAL_MS = 1000;  // 1초
     private static final int FASTEST_UPDATE_INTERVAL_MS = 500; // 0.5초
-
+    static int counter = 0;
 
     // onRequestPermissionsResult에서 수신된 결과에서 ActivityCompat.requestPermissions를 사용한 퍼미션 요청을 구별하기 위해 사용됩니다.
     private static final int PERMISSIONS_REQUEST_CODE = 100;
@@ -78,7 +86,7 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
     // 앱을 실행하기 위해 필요한 퍼미션을 정의합니다.
     String[] REQUIRED_PERMISSIONS  = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};  // 외부 저장소
 
-    Location mCurrentLocatiion;
+    Location mCurrentLocation;
     //좌표객체
     LatLng currentPosition;
 
@@ -92,12 +100,57 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
 
     private View mLayout;  // Snackbar 사용하기 위해서는 View가 필요합니다.
 
+    ///////// service 파트
+    private static final int MSG_REGISTER_CLIENT = 44;
+
+    boolean isService = false;
+    private Messenger mService;
+    private final Messenger mMessenger = new Messenger(new IncomingHandler());
+
+        //messenger 주고받을시 handler 사용
+    class IncomingHandler extends Handler {
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            switch (msg.what){
+                case BackgroundService.MSG_REGISTER_CLIENT:
+                    Log.e("서비스 등록", "완료");
+                    break;
+                default:
+                    super.handleMessage(msg);
+            }
+        }
+    }
+
+    ServiceConnection conn = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mService = new Messenger(service);
+            Log.d(TAG, "onServiceConnected 메소드 실행");
+
+            try{
+                // obtain 함수 : 메세지 풀에서 Message 객체를 획득
+                Message msg = Message.obtain(null, MSG_REGISTER_CLIENT);
+                msg.replyTo = mMessenger;
+                mService.send(msg);
+            }catch (RemoteException e){
+
+            }
+
+            isService = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            isService = false;
+        }
+    };
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        setContentView(R.layout.layout_gps);
+        setContentView(R.layout.activity_gps);
 
         mLayout = findViewById(R.id.gps_layout);
 
@@ -120,7 +173,19 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-///////
+
+        //////////// service 동작
+        // wifi 연결이 끊기면 service 동작
+        Intent serviceIntent = new Intent(getApplicationContext(), BackgroundService.class);
+        bindService(serviceIntent, conn, Context.BIND_AUTO_CREATE);
+        startService(serviceIntent);
+
+        //wifi 연결되면 service 종료
+        //stopService(intent);
+
+
+
+        //////////// 네비게이션 메뉴바
         Intent intent = getIntent();
         id = intent.getStringExtra("email_id");
         Toast.makeText(this,  "사용자 이메일 : " + id, Toast.LENGTH_SHORT).show();
@@ -148,7 +213,8 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
                     Intent intent = new Intent(GpsActivity.this, MyPageActivity.class);
                     startActivity(intent);
                 }else if(id == R.id.item_moving){
-                    Toast.makeText(context, "나의 동선 확인", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(GpsActivity.this, MovingActivity.class);
+                    startActivity(intent);
                 }else if(id == R.id.item_condition){
                     Toast.makeText(context, "확진자 현황 확인", Toast.LENGTH_SHORT).show();
                 }
@@ -168,8 +234,6 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
         lineOptions = new PolylineOptions();
         lineOptions.color(Color.RED);
         lineOptions.width(5);
-
-
     }
 
     @Override
@@ -211,7 +275,7 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
 
 
         if (hasFineLocationPermission == PackageManager.PERMISSION_GRANTED &&
-                hasCoarseLocationPermission == PackageManager.PERMISSION_GRANTED   ) {
+                hasCoarseLocationPermission == PackageManager.PERMISSION_GRANTED) {
 
             // 2. 이미 퍼미션을 가지고 있다면
             // ( 안드로이드 6.0 이하 버전은 런타임 퍼미션이 필요없기 때문에 이미 허용된 걸로 인식합니다.)
@@ -276,7 +340,6 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
                 currentPosition
                         = new LatLng(location.getLatitude(), location.getLongitude());
 
-
                 String markerTitle = getCurrentAddress(currentPosition);
                 String markerSnippet = "위도:" + String.valueOf(location.getLatitude())
                         + " 경도:" + String.valueOf(location.getLongitude());
@@ -287,7 +350,7 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
                 //현재 위치에 마커 생성하고 이동
                 setCurrentLocation(location, markerTitle, markerSnippet);
 
-                mCurrentLocatiion = location;
+                mCurrentLocation = location;
 
                 // 현재 위치를 라인 정보로 추가
                 lineOptions.add(currentPosition);

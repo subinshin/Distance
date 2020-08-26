@@ -17,6 +17,7 @@
         <activity android:name=".loginActivity"/>
         <activity android:name=".GpsActivity" />
         <activity android:name=".JoinActivity" />
+        <activity android:name=".MovingActivity" />
         <activity android:name=".StartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,6 +33,11 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBirPKZ6hwetA2S_2x_Yhez11zriqotBD4" />
+
+        <service
+            android:name=".BackgroundService"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />
