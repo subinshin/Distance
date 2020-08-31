@@ -1,9 +1,11 @@
 package ddwucom.mobile.distance;
 
 import android.Manifest;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Address;
@@ -12,7 +14,12 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.IBinder;
 import android.os.Looper;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -102,7 +109,7 @@ public class GpsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        setContentView(R.layout.layout_gps);
+        setContentView(R.layout.activity_gps);
 
         // 위치관리자 준비
         locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -152,8 +159,11 @@ public class GpsActivity extends AppCompatActivity {
                     Intent intent = new Intent(GpsActivity.this, MyPageActivity.class);
                     startActivity(intent);
                 }else if(id == R.id.item_moving){
-                    Toast.makeText(context, "나의 동선 확인", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(GpsActivity.this, MovingActivity.class);
+                    startActivity(intent);
                 }else if(id == R.id.item_condition){
+                    Intent intent = new Intent(GpsActivity.this, ConfirmedCaseActivity.class);
+                    startActivity((intent));
                     Toast.makeText(context, "확진자 현황 확인", Toast.LENGTH_SHORT).show();
                 }
                 else if(id == R.id.item_setting){
