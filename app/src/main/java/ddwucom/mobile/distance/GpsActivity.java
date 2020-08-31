@@ -216,6 +216,8 @@ public class GpsActivity extends AppCompatActivity implements OnMapReadyCallback
                     Intent intent = new Intent(GpsActivity.this, MovingActivity.class);
                     startActivity(intent);
                 }else if(id == R.id.item_condition){
+                    Intent intent = new Intent(GpsActivity.this, ConfirmedCaseActivity.class);
+                    startActivity((intent));
                     Toast.makeText(context, "확진자 현황 확인", Toast.LENGTH_SHORT).show();
                 }
                 else if(id == R.id.item_setting){
