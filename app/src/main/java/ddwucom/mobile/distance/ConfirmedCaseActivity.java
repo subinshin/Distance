@@ -15,7 +15,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.nio.file.Path;
+
 import java.util.ArrayList;
 
 public class ConfirmedCaseActivity extends AppCompatActivity {
