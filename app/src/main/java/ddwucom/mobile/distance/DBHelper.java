@@ -19,7 +19,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public final String COL_MONTH = "month";
     public final String COL_DAY = "dayOfMonth";
     public final String COL_START_TIME = "startTime";
-    public final String COL_FINISH_TIME = "finishTime";
+    public final String COL_END_TIME = "endTime";
     public final String COL_LOCATION = "location";
     public final String COL_LATITUDE = "latitude";
     public final String COL_LONGITUDE = "longitude";
@@ -32,7 +32,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         String sql = "CREATE TABLE " + TABLE_NAME + " (" + COL_ID + " integer primary key autoincrement, " +
-                COL_YEAR + " integer, " + COL_MONTH + " integer, " + COL_DAY + " integer, " + COL_START_TIME + " String, " + COL_FINISH_TIME + " String, "
+                COL_YEAR + " integer, " + COL_MONTH + " integer, " + COL_DAY + " integer, " + COL_START_TIME + " String, " + COL_END_TIME + " String, "
                 + COL_LOCATION + " TEXT, " + COL_LATITUDE + " TEXT, " + COL_LONGITUDE + " TEXT)";
 
         Log.d(TAG, sql);

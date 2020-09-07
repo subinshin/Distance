@@ -20,7 +20,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -62,8 +61,9 @@ public class GpsActivity extends AppCompatActivity {
     private MarkerOptions markerOptions;    // 마커 옵션
     private PolylineOptions lineOptions;    // 선 그리기 옵션
 
+    DBManager dbManager;
 
-    LatLng lastLatLng;
+    LatLng startLatLng;
     LatLng currentLatLng;
     float distance;
     int count = 0;
@@ -73,9 +73,10 @@ public class GpsActivity extends AppCompatActivity {
     // 현재시간을 date 변수에 저장한다.
     Date date = new Date(now);
     // 시간을 나타냇 포맷을 정한다 ( yyyy/MM/dd 같은 형태로 변형 가능 )
-    SimpleDateFormat sdfNow = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+    SimpleDateFormat sdfNow = new SimpleDateFormat("yyyy/MM/dd HH:mm");
     // nowDate 변수에 값을 저장한다.
-    String formatDate = sdfNow.format(date);
+    String startDate = sdfNow.format(date);
+    String endDate;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -83,6 +84,8 @@ public class GpsActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_gps);
+
+        dbManager = new DBManager(this);
 
         // 위치관리자 준비
         locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -159,7 +162,7 @@ public class GpsActivity extends AppCompatActivity {
         super.onResume();
         if (checkPermission()) {
             // 위치 정보 수신 시작 - 10초 간격, 0m 이상 이동 시 수신
-            locManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, 10000, 0, locationListener);
+            locManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, 5000, 0, locationListener);
         }
     }
 
@@ -198,23 +201,23 @@ public class GpsActivity extends AppCompatActivity {
 
             // 기록한 최종 위치가 있을 경우와 없을 경우를 구분하여 구현
             if (lastLocation != null) {
-                lastLatLng = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
+                startLatLng = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
             } else {
-                lastLatLng = new LatLng(Double.valueOf(getString(R.string.init_lat)),
+                startLatLng = new LatLng(Double.valueOf(getString(R.string.init_lat)),
                         Double.valueOf(getString(R.string.init_lng)));     // 최종 위치가 없을 경우 지정한 곳으로 위치 지정
             }
 
 
-            Log.i(TAG, "Start location: " + lastLatLng.latitude + ", " + lastLatLng.longitude);
+            Log.i(TAG, "Start location: " + startLatLng.latitude + ", " + startLatLng.longitude);
 
             // 이동 시
-            mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lastLatLng, ZOOM_LEVEL));
+            mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(startLatLng, ZOOM_LEVEL));
 
             // 애니메이션 효과로 이동 시
-            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lastLatLng, ZOOM_LEVEL));
+            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(startLatLng, ZOOM_LEVEL));
 
             // 지정한 위치로 마커 위치 설정
-            markerOptions.position(lastLatLng);
+            markerOptions.position(startLatLng);
             centerMarker = mGoogleMap.addMarker(markerOptions);
 
             /*이하의 내용은 실습 1, 2 내용에 포함되어 있지 않은 지도 관련 이벤트 처리에 대한 예이므로 참고*/
@@ -261,13 +264,44 @@ public class GpsActivity extends AppCompatActivity {
 //            현재 수신한 위치 정보 Location을 LatLng 형태로 변환
             currentLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
 
+            if (count == 0) {
+                // 현재시간을 msec 으로 구한다.
+                now = System.currentTimeMillis();
+                // 현재시간을 date 변수에 저장한다.
+                date = new Date(now);
+                // nowDate 변수에 값을 저장한다.
+                startDate = sdfNow.format(date);
+            }
+
             distance = lastLocation.distanceTo(currentLocation);
 
             if (distance <= 15) {
                 count++;
             } else {
                 if (count >= 5) {
-                    Log.d(TAG, "저장");
+                    // 현재시간을 msec 으로 구한다.
+                    now = System.currentTimeMillis();
+                    // 현재시간을 date 변수에 저장한다.
+                    date = new Date(now);
+                    // nowDate 변수에 값을 저장한다.
+                    endDate = sdfNow.format(date);
+
+                    boolean result = dbManager.addNewGps(
+                            new MovingInfo(startDate, endDate, lastLocation.getLatitude(), lastLocation.getLongitude()));
+
+                    if (result) {    // 정상수행에 따른 처리
+//                        Intent resultIntent = new Intent();
+//                        resultIntent.putExtra("food", etFood.getText().toString() );
+//                        setResult(RESULT_OK, resultIntent);
+//                        finish();
+                        Toast.makeText(GpsActivity.this, "새로운 위치 추가 성공!", Toast.LENGTH_SHORT).show();
+                    } else {        // 이상에 따른 처리
+                        Toast.makeText(GpsActivity.this, "새로운 위치 추가 실패!", Toast.LENGTH_SHORT).show();
+                    }
+
+                    Log.d(TAG, startDate);
+                    Log.d(TAG, endDate);
+                    Toast.makeText(GpsActivity.this, Integer.toString(count), Toast.LENGTH_SHORT).show();
                 }
                 count = 0;
                 lastLocation.setLatitude(currentLocation.getLatitude());
