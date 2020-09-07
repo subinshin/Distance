@@ -27,7 +27,7 @@ public class DBManager {
         return cursor;
     }
 
-    public void saveMovingInfo(int year, int month, int dayOfMonth, Time startTime, Time finshTime, String latitude, String longitude){
+    public void saveMovingInfo(int year, int month, int dayOfMonth, Time startTime, Time endTime, String latitude, String longitude){
         SQLiteDatabase db = helper.getWritableDatabase();
         ContentValues row = new ContentValues();
 
@@ -35,7 +35,7 @@ public class DBManager {
         row.put(helper.COL_MONTH, month);
         row.put(helper.COL_DAY, dayOfMonth);
         row.put(helper.COL_START_TIME, startTime.toString());
-        row.put(helper.COL_FINISH_TIME, finshTime.toString());
+        row.put(helper.COL_END_TIME, endTime.toString());
         row.put(helper.COL_LATITUDE, latitude);
         row.put(helper.COL_LONGITUDE, longitude);
 
@@ -64,6 +64,23 @@ public class DBManager {
         cursor = db.query(helper.TABLE_NAME, null, selection, selectArgs, null, null, null, null);
 
         return cursor;
+    }
+
+    //    DB 에 새로운 food 추가
+    public boolean addNewGps(MovingInfo newGps) {
+        SQLiteDatabase db = helper.getWritableDatabase();
+        ContentValues value = new ContentValues();
+        value.put(helper.COL_START_TIME, newGps.getStartTime());
+        value.put(helper.COL_END_TIME, newGps.getEndTime());
+//        value.put(helper.COL_LOCATION, newGps.getLocation());
+        value.put(helper.COL_LATITUDE, newGps.getLatitude());
+        value.put(helper.COL_LONGITUDE, newGps.getLatitude());
+
+//      insert 메소드를 사용할 경우 데이터 삽입이 정상적으로 이루어질 경우 1 이상, 이상이 있을 경우 0 반환 확인 가능
+        long count = db.insert(helper.TABLE_NAME, null, value);
+        helper.close();
+        if (count > 0) return true;
+        return false;
     }
 
 }
