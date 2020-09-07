@@ -20,6 +20,8 @@ public class MovingInfo {
         endTime = null;
     }
 
+
+
     public MovingInfo(String startTime, String endTime, double latitude, double longitude) {
         this.startTime = startTime;
         this.endTime = endTime;

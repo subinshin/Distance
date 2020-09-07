@@ -66,7 +66,7 @@ public class DBManager {
         return cursor;
     }
 
-    //    DB 에 새로운 food 추가
+    //    DB 에 새로운 Gps 추가
     public boolean addNewGps(MovingInfo newGps) {
         SQLiteDatabase db = helper.getWritableDatabase();
         ContentValues value = new ContentValues();

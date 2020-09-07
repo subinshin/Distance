@@ -26,10 +26,10 @@ public class ConfirmedCaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        paths = getPath();
+        paths = getAllPath();
     }
 
-    protected ArrayList<PathInfo> getPath() {
+    protected ArrayList<PathInfo> getAllPath() {
         final ArrayList<PathInfo> paths = new ArrayList<PathInfo>();
         paths.clear();
 
