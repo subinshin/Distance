@@ -33,29 +33,24 @@ public class DBHelper extends SQLiteOpenHelper {
 
         String sql = "CREATE TABLE " + TABLE_NAME + " (" + COL_ID + " integer primary key autoincrement, " +
                 COL_YEAR + " integer, " + COL_MONTH + " integer, " + COL_DAY + " integer, " + COL_START_TIME + " String, " + COL_END_TIME + " String, "
-                + COL_LOCATION + " TEXT, " + COL_LATITUDE + " TEXT, " + COL_LONGITUDE + " TEXT)";
+                + COL_LOCATION + " TEXT, " + COL_LATITUDE + " double, " + COL_LONGITUDE + " double)";
 
         Log.d(TAG, sql);
         db.execSQL(sql);
 
-        db.execSQL("insert into " + TABLE_NAME + " values(null, 2020, 8, 24, '"
+        db.execSQL("insert into " + TABLE_NAME + " values(null, 2020, 9, 10, '"
                 + (new Time(12, 5, 0)).toString() +"', '" + (new Time(12, 11, 0)).toString()
-                + "', '구의동 75-89', '32.7895', '45.7895');" );
-        db.execSQL("insert into " + TABLE_NAME + " values(null, 2020, 8, 26, '"
-                + (new Time(18, 52, 0)).toString() +"', '" + (new Time(19, 11, 0)).toString()
-                + "', '성북구 23-1', '15.3485', '45.7895');" );
-        db.execSQL("insert into " + TABLE_NAME + " values(null, 2020, 8, 27, '"
-                + (new Time(22, 43, 0)).toString() +"', '" + (new Time(22, 50, 0)).toString()
-                + "', '동대문구 89-21', '32.7895', '45.7895');" );
-        db.execSQL("insert into " + TABLE_NAME + " values(null, 2020, 8, 24, '"
-                + (new Time(12, 5, 0)).toString() +"', '" + (new Time(12, 11, 0)).toString()
-                + "', '구의동 75-89', '32.7895', '45.7895');" );
-        db.execSQL("insert into " + TABLE_NAME + " values(null, 2020, 8, 26, '"
-                + (new Time(18, 52, 0)).toString() +"', '" + (new Time(19, 11, 0)).toString()
-                + "', '성북구 23-1', '15.3485', '45.7895');" );
-        db.execSQL("insert into " + TABLE_NAME + " values(null, 2020, 8, 27, '"
-                + (new Time(22, 43, 0)).toString() +"', '" + (new Time(22, 50, 0)).toString()
-                + "', '동대문구 89-21', '32.7895', '45.7895');" );
+                + "', '광진구 구의동 43-1', 37.550711, 127.095457);" );
+        db.execSQL("insert into " + TABLE_NAME + " values(null, 2020, 9, 10, '"
+                + (new Time(13, 2, 0)).toString() +"', '" + (new Time(13, 52, 0)).toString()
+                + "', '강북구 번동 415-78', 37.636423, 127.028295);" );
+
+        db.execSQL("insert into " + TABLE_NAME + " values(null, 2020, 9, 11, '"
+                + (new Time(10, 34, 0)).toString() +"', '" + (new Time(10, 59, 0)).toString()
+                + "', '광진구 구의동 43-1', 37.550711, 127.095457);" );
+        db.execSQL("insert into " + TABLE_NAME + " values(null, 2020, 9, 11, '"
+                + (new Time(12, 5, 0)).toString() +"', '" + (new Time(14, 11, 0)).toString()
+                + "', '동덕여자대학교 (성북구 하월곡동 화랑로13길 60)', 37.60632, 127.041808);" );
 
     }
 

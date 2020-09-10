@@ -24,6 +24,8 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MovingActivity extends AppCompatActivity {
 
@@ -45,12 +47,15 @@ public class MovingActivity extends AppCompatActivity {
     MapFragment mapFragment;
     GoogleMap map;
 
+    DBHelper helper;
     private static final String TAG = "MovingActivity";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_moving);
+
+        helper = new DBHelper(this);
 
         layout_moving = findViewById(R.id.layout_moving);
         inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -87,10 +92,40 @@ public class MovingActivity extends AppCompatActivity {
             @Override
             public void onMapReady(GoogleMap googleMap) {
                 map = googleMap;
-                LatLng standard = new LatLng(37.519576, 126.940245);
-                CameraPosition cameraPosition = new CameraPosition.Builder().target(standard).zoom(16).build();
+
+                CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(37.5759, 126.9769)).zoom(16).build();
                 map.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+                Cursor cursor = manager.getAllInfos();
+
+                MovingInfo info = null;
+                while(cursor.moveToNext()){
+                    info = new MovingInfo();
+                    info.setId(cursor.getInt(cursor.getColumnIndex(helper.COL_ID)));
+                    info.setYear(cursor.getInt(cursor.getColumnIndex(helper.COL_YEAR)));
+                    info.setMonth(cursor.getInt(cursor.getColumnIndex(helper.COL_MONTH)));
+                    info.setDayOfMonth(cursor.getInt(cursor.getColumnIndex(helper.COL_DAY)));
+                    info.setLatitude(cursor.getDouble(cursor.getColumnIndex(helper.COL_LATITUDE)));
+                    info.setLongitude(cursor.getDouble(cursor.getColumnIndex(helper.COL_LONGITUDE)));
+                    info.setLocation(cursor.getString(cursor.getColumnIndex(helper.COL_LOCATION)));
+                    info.setStartTime(cursor.getString(cursor.getColumnIndex(helper.COL_START_TIME)));
+                    info.setEndTime(cursor.getString(cursor.getColumnIndex(helper.COL_END_TIME)));
+
+                    Log.d(TAG,  "latitude : "+ info.getLatitude() + ", longitude : " + info.getLongitude());
+
+                    String s = info.getYear() + "/" + info.getMonth() + "/" + info.getDayOfMonth() + ", " + info.getStartTime() + " - " + info.getEndTime();
+                    LatLng pos = new LatLng(info.getLatitude(), info.getLongitude());
+                    MarkerOptions marker = new MarkerOptions().position(pos)
+                            .title(info.getLocation()).snippet(s);
+                    map.addMarker(marker);
+                }
+
+
+                cameraPosition = new CameraPosition.Builder().target(new LatLng(info.getLatitude(), info.getLongitude())).zoom(16).build();
+                map.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
             }
+
         });
 
         spinner = findViewById(R.id.search_spinner);
