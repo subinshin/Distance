@@ -96,13 +96,15 @@ public class ComparePathActivity extends AppCompatActivity {
         if(cursor.moveToNext()) {
             while(!cursor.isAfterLast()) {
 //                location 변수 저장하는 코드, 시간 가져오는 코드 수정 필요
-//                startTime -> year, month, day로 변환........?
+                int year = cursor.getInt(cursor.getColumnIndex(helper.COL_YEAR));
+                int month = cursor.getInt(cursor.getColumnIndex(helper.COL_MONTH));
+                int dayOfMonth = cursor.getInt(cursor.getColumnIndex(helper.COL_DAY));
                 String startTime = cursor.getString(cursor.getColumnIndex(helper.COL_START_TIME));
                 String endTime = cursor.getString(cursor.getColumnIndex(helper.COL_END_TIME));
                 double latitude = cursor.getDouble(cursor.getColumnIndex(helper.COL_LATITUDE));
                 double longitude = cursor.getDouble(cursor.getColumnIndex(helper.COL_LATITUDE));
 //                MovingInfo 객체 생성 (일단 location 없이)
-                MovingInfo movingInfo = new MovingInfo(startTime, endTime, latitude, longitude);
+                MovingInfo movingInfo = new MovingInfo(year, month, dayOfMonth, startTime, endTime, latitude, longitude);
 //                list에 add
                 myMoving.add(movingInfo);
             }
