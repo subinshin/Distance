@@ -26,10 +26,22 @@ public class MovingInfo {
         this.dayOfMonth = dayOfMonth;
         this.startTime = startTime;
         this.endTime = endTime;
-//        this.location = location;
+        this.location = location;
         this.latitude = latitude;
         this.longitude = longitude;
     }
+
+    public MovingInfo(int year, int month, int dayOfMonth, String startTime, String endTime, double latitude, double longitude, String location) {
+        this.year = year;
+        this.month = month;
+        this.dayOfMonth = dayOfMonth;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.location = location;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
 
     public int getId() {
         return id;

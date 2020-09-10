@@ -43,7 +43,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 + "', '광진구 구의동 43-1', 37.550711, 127.095457);" );
         db.execSQL("insert into " + TABLE_NAME + " values(null, 2020, 9, 10, '"
                 + (new Time(13, 2, 0)).toString() +"', '" + (new Time(13, 52, 0)).toString()
-                + "', '강북구 번동 415-78', 37.636423, 127.028295);" );
+                + "', '스타벅스 월곡역점 (성북구 하월곡동 46-73)', 37.601944, 127.040408);" );
 
         db.execSQL("insert into " + TABLE_NAME + " values(null, 2020, 9, 11, '"
                 + (new Time(10, 34, 0)).toString() +"', '" + (new Time(10, 59, 0)).toString()
