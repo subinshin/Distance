@@ -2,6 +2,7 @@ package ddwucom.mobile.distance;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -40,10 +41,53 @@ public class ComparePathActivity extends AppCompatActivity {
         helper = new DBHelper(this);
         dbManager = new DBManager(this);
 
+        //모든 확진자 동선과 나의 동선을 ArrayList에 담는다.
         paths = getAllPath();
+        myMoving = getAllMoving();
+
+        matchedPath = new ArrayList<PathInfo>();
+        matchedMoving = new ArrayList<MovingInfo>();
+
+        //call by reference..
+        comparePathAndMoving();
     }
 
-    protected ArrayList<MovingInfo> getAllMyMoving() {
+    //위,경도를 비교하는 메소드
+    protected void comparePathAndMoving() {
+        //동선 비교 메뉴를 누를 때마다 onCreate가 실행된다면 clear필요..........
+        matchedPath.clear();
+        matchedMoving.clear();
+        //나의 동선 vs 모든 확진자들의 동선 하나씩 비교
+        for (MovingInfo moving : myMoving) {
+            double movingLat = moving.getLatitude();
+            double movinglon = moving.getLongitude();
+            //내 동선의 위,경도 추출
+            Location myLocation = new Location("");
+            myLocation.setLatitude(movingLat);
+            myLocation.setLongitude(movinglon);
+            for (PathInfo path : paths) {
+                double pathLat = path.getLat();
+                double pathlon = path.getLng();
+                //확진자 동선의 위,경도 추출
+                Location patientLocation = new Location("");
+                patientLocation.setLatitude(pathLat);
+                patientLocation.setLongitude(pathlon);
+                //두 좌표간의 간격 비교
+                float distanceInMeters = myLocation.distanceTo(patientLocation);
+                //두 좌표간 간격이 15미터 이내라면 같은 장소에 있던 것으로 간주
+                if(distanceInMeters <= 15) {
+                    Log.d(TAG, "나의 동선 좌표: ( " + moving.getLatitude() + ", " + moving.getLongitude() + ") \n확진자 동선 좌표: (" +
+                            path.getLat() + ", " + path.getLng() + ") / 확진자 동선 주소: " + path.getPlace());
+                    matchedMoving.add(moving);
+                    matchedPath.add(path);
+                }
+
+            }
+        }
+
+    }
+
+    protected ArrayList<MovingInfo> getAllMoving() {
         cursor = dbManager.getAllInfos();
         ArrayList<MovingInfo> myMoving = new ArrayList<MovingInfo>();
 
@@ -51,15 +95,16 @@ public class ComparePathActivity extends AppCompatActivity {
 
         if(cursor.moveToNext()) {
             while(!cursor.isAfterLast()) {
-//                location 변수 저장하는 코드 필요
+//                location 변수 저장하는 코드, 시간 가져오는 코드 수정 필요
+//                startTime -> year, month, day로 변환........?
                 String startTime = cursor.getString(cursor.getColumnIndex(helper.COL_START_TIME));
                 String endTime = cursor.getString(cursor.getColumnIndex(helper.COL_END_TIME));
                 double latitude = cursor.getDouble(cursor.getColumnIndex(helper.COL_LATITUDE));
                 double longitude = cursor.getDouble(cursor.getColumnIndex(helper.COL_LATITUDE));
-//                MovingInfo 객체 생성
-
+//                MovingInfo 객체 생성 (일단 location 없이)
+                MovingInfo movingInfo = new MovingInfo(startTime, endTime, latitude, longitude);
 //                list에 add
-
+                myMoving.add(movingInfo);
             }
         }
         helper.close();
@@ -84,7 +129,7 @@ public class ComparePathActivity extends AppCompatActivity {
 
                             paths.add(path);
 
-                            Log.d(TAG, path.getPatient_no() + " / " + path.getPlace());
+//                            Log.d(TAG, path.getPatient_no() + " / " + path.getPlace());
                         }
                     }
                 });
