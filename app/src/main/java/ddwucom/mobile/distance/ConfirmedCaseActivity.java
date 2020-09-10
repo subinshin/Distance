@@ -7,11 +7,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -19,9 +17,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -63,7 +59,7 @@ public class ConfirmedCaseActivity extends AppCompatActivity {
 
     }
 
-    protected ArrayList<PathInfo> getPath() {
+    protected ArrayList<PathInfo> getAllPath() {
         final ArrayList<PathInfo> paths = new ArrayList<PathInfo>();
         paths.clear();
 
@@ -106,7 +102,7 @@ public class ConfirmedCaseActivity extends AppCompatActivity {
                         Double.valueOf(getString(R.string.init_lng)));     // 최종 위치가 없을 경우 지정한 곳으로 위치 지정
             }
 
-            paths = getPath();
+            paths = getAllPath();
 
             for (PathInfo path : paths) {
                 latlng = new LatLng(path.getLat(), path.getLng());
