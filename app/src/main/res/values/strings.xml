@@ -56,4 +56,7 @@
     <string name="string_value">이미지 다운로드 실패</string>
 
     <string name="password_title_send">보내기</string>
+
+    <string name="init_lat">37.606320</string>
+    <string name="init_lng">127.041808</string>
 </resources>
