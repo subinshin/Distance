@@ -20,9 +20,10 @@ public class MovingInfo {
         endTime = null;
     }
 
-
-
-    public MovingInfo(String startTime, String endTime, double latitude, double longitude) {
+    public MovingInfo(int year, int month, int dayOfMonth, String startTime, String endTime, double latitude, double longitude) {
+        this.year = year;
+        this.month = month;
+        this.dayOfMonth = dayOfMonth;
         this.startTime = startTime;
         this.endTime = endTime;
 //        this.location = location;

@@ -74,9 +74,13 @@ public class GpsActivity extends AppCompatActivity {
     Date date = new Date(now);
     // 시간을 나타냇 포맷을 정한다 ( yyyy/MM/dd 같은 형태로 변형 가능 )
     SimpleDateFormat sdfNow = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+    SimpleDateFormat sdfNowDate = new SimpleDateFormat("yyyy/MM/dd");
     // nowDate 변수에 값을 저장한다.
-    String startDate = sdfNow.format(date);
-    String endDate;
+    String startDateTime = sdfNow.format(date);
+    String startDate = sdfNowDate.format(date);
+    String endDateTime;
+
+    int year, month, day;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -270,7 +274,14 @@ public class GpsActivity extends AppCompatActivity {
                 // 현재시간을 date 변수에 저장한다.
                 date = new Date(now);
                 // nowDate 변수에 값을 저장한다.
-                startDate = sdfNow.format(date);
+                startDateTime = sdfNow.format(date);
+                startDate = sdfNowDate.format(date);
+
+                String a[] = startDate.split("/");
+
+                year = Integer.parseInt(a[0]);
+                month = Integer.parseInt(a[1]);
+                day = Integer.parseInt(a[2]);
             }
 
             distance = lastLocation.distanceTo(currentLocation);
@@ -284,10 +295,10 @@ public class GpsActivity extends AppCompatActivity {
                     // 현재시간을 date 변수에 저장한다.
                     date = new Date(now);
                     // nowDate 변수에 값을 저장한다.
-                    endDate = sdfNow.format(date);
+                    endDateTime = sdfNow.format(date);
 
                     boolean result = dbManager.addNewGps(
-                            new MovingInfo(startDate, endDate, lastLocation.getLatitude(), lastLocation.getLongitude()));
+                            new MovingInfo(year, month, day, startDateTime, endDateTime, lastLocation.getLatitude(), lastLocation.getLongitude()));
 
                     if (result) {    // 정상수행에 따른 처리
 //                        Intent resultIntent = new Intent();
@@ -299,8 +310,8 @@ public class GpsActivity extends AppCompatActivity {
                         Toast.makeText(GpsActivity.this, "새로운 위치 추가 실패!", Toast.LENGTH_SHORT).show();
                     }
 
-                    Log.d(TAG, startDate);
-                    Log.d(TAG, endDate);
+                    Log.d(TAG, startDateTime);
+                    Log.d(TAG, endDateTime);
                     Toast.makeText(GpsActivity.this, Integer.toString(count), Toast.LENGTH_SHORT).show();
                 }
                 count = 0;
