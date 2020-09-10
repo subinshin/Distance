@@ -13,6 +13,7 @@ public class MovingInfoAdapter extends CursorAdapter {
     Context context;
     int layout;
     LayoutInflater layoutInflater;
+    DBHelper helper;
 
     public MovingInfoAdapter(Context context, int layout, Cursor c) {
         super(context, c);
@@ -20,6 +21,7 @@ public class MovingInfoAdapter extends CursorAdapter {
         this.layout = layout;
         this.cursor = c;
         this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        helper = new DBHelper(context);
     }
 
     @Override
@@ -29,10 +31,10 @@ public class MovingInfoAdapter extends CursorAdapter {
         TextView tv_gps = view.findViewById(R.id.tv_gps);
         TextView tv_location = view.findViewById(R.id.tv_location);
 
-        tv_date.setText(cursor.getInt(cursor.getColumnIndex("year")) + "/" +cursor.getInt(cursor.getColumnIndex("month")) + "/" + cursor.getInt(cursor.getColumnIndex("dayOfMonth")));
-        tv_time.setText(cursor.getString(cursor.getColumnIndex("startTime")) + " ~ " + cursor.getString(cursor.getColumnIndex("finishTime")));
-        tv_gps.setText("(" + cursor.getString(cursor.getColumnIndex("latitude")) + ", " + cursor.getString(cursor.getColumnIndex("longitude")) + ")");
-        tv_location.setText(cursor.getString(cursor.getColumnIndex("location")));
+        tv_date.setText(cursor.getInt(cursor.getColumnIndex(helper.COL_YEAR)) + "/" +cursor.getInt(cursor.getColumnIndex(helper.COL_MONTH)) + "/" + cursor.getInt(cursor.getColumnIndex(helper.COL_DAY)));
+        tv_time.setText(cursor.getString(cursor.getColumnIndex(helper.COL_START_TIME)) + " ~ " + cursor.getString(cursor.getColumnIndex(helper.COL_END_TIME)));
+        tv_gps.setText("(" + cursor.getString(cursor.getColumnIndex(helper.COL_LATITUDE)) + ", " + cursor.getString(cursor.getColumnIndex(helper.COL_LONGITUDE)) + ")");
+        tv_location.setText(cursor.getString(cursor.getColumnIndex(helper.COL_LOCATION)));
     }
 
     @Override
