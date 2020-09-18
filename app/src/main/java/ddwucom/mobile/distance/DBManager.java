@@ -70,11 +70,14 @@ public class DBManager {
     public boolean addNewGps(MovingInfo newGps) {
         SQLiteDatabase db = helper.getWritableDatabase();
         ContentValues value = new ContentValues();
+        value.put(helper.COL_YEAR, newGps.getYear());
+        value.put(helper.COL_MONTH, newGps.getMonth());
+        value.put(helper.COL_DAY, newGps.getDayOfMonth());
         value.put(helper.COL_START_TIME, newGps.getStartTime());
         value.put(helper.COL_END_TIME, newGps.getEndTime());
-//        value.put(helper.COL_LOCATION, newGps.getLocation());
+        value.put(helper.COL_LOCATION, newGps.getLocation());
         value.put(helper.COL_LATITUDE, newGps.getLatitude());
-        value.put(helper.COL_LONGITUDE, newGps.getLatitude());
+        value.put(helper.COL_LONGITUDE, newGps.getLongitude());
 
 //      insert 메소드를 사용할 경우 데이터 삽입이 정상적으로 이루어질 경우 1 이상, 이상이 있을 경우 0 반환 확인 가능
         long count = db.insert(helper.TABLE_NAME, null, value);
