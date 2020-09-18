@@ -54,4 +54,5 @@
         android:textColor="#4C4C4C"
         app:layout_constraintStart_toEndOf="@+id/tv_time"
         app:layout_constraintTop_toBottomOf="@+id/tv_gps" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

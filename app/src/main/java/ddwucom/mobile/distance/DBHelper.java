@@ -6,8 +6,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.sql.Time;
-import java.util.Date;
-
 
 public class DBHelper extends SQLiteOpenHelper {
 
@@ -48,6 +46,16 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("insert into " + TABLE_NAME + " values(null, 2020, 9, 11, '"
                 + (new Time(10, 34, 0)).toString() +"', '" + (new Time(10, 59, 0)).toString()
                 + "', '광진구 구의동 43-1', 37.550711, 127.095457);" );
+        db.execSQL("insert into " + TABLE_NAME + " values(null, 2020, 9, 11, '"
+                + (new Time(12, 5, 0)).toString() +"', '" + (new Time(14, 11, 0)).toString()
+                + "', '동덕여자대학교 (성북구 하월곡동 화랑로13길 60)', 37.60632, 127.041808);" );
+
+        db.execSQL("insert into " + TABLE_NAME + " values(null, 2020, 9, 18, '"
+                + (new Time(12, 5, 0)).toString() +"', '" + (new Time(14, 11, 0)).toString()
+                + "', '서울숲(성동구 성수동1가 뚝섬로 273)', 37.544566, 127.037496);" );
+        db.execSQL("insert into " + TABLE_NAME + " values(null, 2020, 9, 16, '"
+                + (new Time(12, 5, 0)).toString() +"', '" + (new Time(14, 11, 0)).toString()
+                + "', '롯데월드 (송파구 잠실동 올림픽로 240)', 37.511329, 127.098092);" );
         db.execSQL("insert into " + TABLE_NAME + " values(null, 2020, 9, 11, '"
                 + (new Time(12, 5, 0)).toString() +"', '" + (new Time(14, 11, 0)).toString()
                 + "', '동덕여자대학교 (성북구 하월곡동 화랑로13길 60)', 37.60632, 127.041808);" );
