@@ -33,7 +33,7 @@ public class MovingInfoAdapter extends CursorAdapter {
 
         tv_date.setText(cursor.getInt(cursor.getColumnIndex(helper.COL_YEAR)) + "/" +cursor.getInt(cursor.getColumnIndex(helper.COL_MONTH)) + "/" + cursor.getInt(cursor.getColumnIndex(helper.COL_DAY)));
         tv_time.setText(cursor.getString(cursor.getColumnIndex(helper.COL_START_TIME)) + " ~ " + cursor.getString(cursor.getColumnIndex(helper.COL_END_TIME)));
-        tv_gps.setText("(" + cursor.getString(cursor.getColumnIndex(helper.COL_LATITUDE)) + ", " + cursor.getString(cursor.getColumnIndex(helper.COL_LONGITUDE)) + ")");
+        tv_gps.setText("(" + cursor.getDouble(cursor.getColumnIndex(helper.COL_LATITUDE)) + ", " + cursor.getDouble(cursor.getColumnIndex(helper.COL_LONGITUDE)) + ")");
         tv_location.setText(cursor.getString(cursor.getColumnIndex(helper.COL_LOCATION)));
     }
 

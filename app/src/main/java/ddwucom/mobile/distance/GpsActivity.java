@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -36,8 +38,10 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 public class GpsActivity extends AppCompatActivity {
 
@@ -288,6 +292,7 @@ public class GpsActivity extends AppCompatActivity {
 
             if (distance <= 15) {
                 count++;
+                Toast.makeText(GpsActivity.this, Integer.toString(count), Toast.LENGTH_SHORT).show();
             } else {
                 if (count >= 5) {
                     // 현재시간을 msec 으로 구한다.
@@ -297,14 +302,26 @@ public class GpsActivity extends AppCompatActivity {
                     // nowDate 변수에 값을 저장한다.
                     endDateTime = sdfNow.format(date);
 
+
+                    double latitude = Double.parseDouble(String.format("%6f", lastLocation.getLatitude()));
+                    double longitude = Double.parseDouble(String.format("%6f", lastLocation.getLongitude()));
+                    Geocoder geocoder = new Geocoder(GpsActivity.this);
+                    List<Address> address = null;
+                    try {
+                        address = geocoder.getFromLocation(latitude, longitude, 3);
+                    } catch (IOException e) {
+                        Log.d(TAG, "geocoding error");
+                    }
+
+                    Log.d(TAG, Double.toString(latitude));
+                    Log.d(TAG, Double.toString(longitude));
+                    Log.d(TAG, address.get(0).getAddressLine(0));
+//                    Toast.makeText(GpsActivity.this, address.get(0).toString(), Toast.LENGTH_SHORT).show();
+
                     boolean result = dbManager.addNewGps(
-                            new MovingInfo(year, month, day, startDateTime, endDateTime, lastLocation.getLatitude(), lastLocation.getLongitude()));
+                            new MovingInfo(year, month, day, startDateTime, endDateTime, latitude, longitude, address.get(0).getAddressLine(0)));
 
                     if (result) {    // 정상수행에 따른 처리
-//                        Intent resultIntent = new Intent();
-//                        resultIntent.putExtra("food", etFood.getText().toString() );
-//                        setResult(RESULT_OK, resultIntent);
-//                        finish();
                         Toast.makeText(GpsActivity.this, "새로운 위치 추가 성공!", Toast.LENGTH_SHORT).show();
                     } else {        // 이상에 따른 처리
                         Toast.makeText(GpsActivity.this, "새로운 위치 추가 실패!", Toast.LENGTH_SHORT).show();
