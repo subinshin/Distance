@@ -38,17 +38,14 @@ import java.util.ArrayList;
 public class MovingActivity extends AppCompatActivity {
 
     Spinner spinner;
-    CalendarView calendarView;
     DBManager manager;
     MovingInfoAdapter adapter;
     ListView all_listView;
-    ListView calendar_listView;
     Cursor cursor;
     FrameLayout layout_moving;
     LayoutInflater inflater;
 
     LinearLayout all_layout;
-    LinearLayout calendar_layout;
     ConstraintLayout map_layout;
 
     FragmentManager fragmentManager;
@@ -61,10 +58,13 @@ public class MovingActivity extends AppCompatActivity {
     Button btn_map_all;
     Button btn_map_date;
 
-    DatePicker datePicker;
     CameraPosition cameraPosition;
     ArrayList<MarkerOptions> markersOption;
     ArrayList<Marker> markers;
+
+    final static int SPINNER_LIST = 0;
+    final static int SPINNER_MAP = 1;
+    int spinnerSelected;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -87,26 +87,10 @@ public class MovingActivity extends AppCompatActivity {
         adapter = new MovingInfoAdapter(MovingActivity.this, R.layout.layout_listview, cursor);
 
         all_layout = findViewById(R.id.all_layout);
-        calendar_layout = findViewById(R.id.calendar_layout);
         map_layout = findViewById(R.id.map_layout);
 
         all_listView = findViewById(R.id.all_listView);
         all_listView.setAdapter(adapter);
-
-        calendar_listView = findViewById(R.id.calendar_listView);
-        calendar_listView.setAdapter(adapter);
-
-        calendarView = findViewById(R.id.calendarView);
-        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-            @Override
-            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-
-                Log.d(TAG, year + ", " + month + ", " + dayOfMonth);
-                Cursor cursor = manager.searchWithDate(year, month, dayOfMonth);
-                adapter.changeCursor(cursor);
-
-            }
-        });
 
         fragmentManager = getFragmentManager();
         mapFragment = (MapFragment) fragmentManager.findFragmentById(R.id.moving_map);
@@ -134,30 +118,17 @@ public class MovingActivity extends AppCompatActivity {
                         adapter.changeCursor(manager.getAllInfos());
 
                         all_layout.setVisibility(View.VISIBLE);
-                        calendar_layout.setVisibility(View.INVISIBLE);
                         map_layout.setVisibility(View.INVISIBLE);
 
-                        btn_map_all.setVisibility(View.INVISIBLE);
-                        btn_map_date.setVisibility(View.INVISIBLE);
+                        spinnerSelected = SPINNER_LIST;
                         break;
                     case 1:
-                        adapter.changeCursor(null);
-
                         all_layout.setVisibility(View.INVISIBLE);
-                        calendar_layout.setVisibility(View.VISIBLE);
-                        map_layout.setVisibility(View.INVISIBLE);
-
-                        btn_map_all.setVisibility(View.INVISIBLE);
-                        btn_map_date.setVisibility(View.INVISIBLE);
-                        break;
-                    case 2:
-                        all_layout.setVisibility(View.INVISIBLE);
-                        calendar_layout.setVisibility(View.INVISIBLE);
                         map_layout.setVisibility(View.VISIBLE);
 
-                        btn_map_all.setVisibility(View.VISIBLE);
-                        btn_map_date.setVisibility(View.VISIBLE);
+                        spinnerSelected = SPINNER_MAP;
                         break;
+
                 }
             }
 
@@ -220,7 +191,11 @@ public class MovingActivity extends AppCompatActivity {
         switch(v.getId()){
             case R.id.btn_map_all:
                 cursor = manager.getAllInfos();
-                putMyMark(cursor);
+                if(spinnerSelected == SPINNER_LIST){
+                    adapter.changeCursor(cursor);
+                }else if(spinnerSelected == SPINNER_MAP){
+                    putMyMark(cursor);
+                }
                 break;
 
             case R.id.btn_map_date:
@@ -235,7 +210,12 @@ public class MovingActivity extends AppCompatActivity {
         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
             Log.d(TAG, year + "/" + month + "/" + dayOfMonth);
             cursor = manager.searchWithDate(year, month, dayOfMonth);
-            putMyMark(cursor);
+
+            if(spinnerSelected == SPINNER_LIST){
+                adapter.changeCursor(cursor);
+            }else if(spinnerSelected == SPINNER_MAP){
+                putMyMark(cursor);
+            }
         }
     };
 }
