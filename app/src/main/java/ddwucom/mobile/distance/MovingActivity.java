@@ -3,6 +3,7 @@ package ddwucom.mobile.distance;
 import android.app.DatePickerDialog;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
@@ -37,6 +38,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 
 public class MovingActivity extends AppCompatActivity {
+    //gpsAcitivity로 부터 가져온 확진자 동선
+    ArrayList<PathInfo> pathList;
+
 
     Spinner spinner;
     DBManager manager;
@@ -71,6 +75,16 @@ public class MovingActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_moving);
+
+        Log.d(TAG, "Start movingActivity");
+
+        Intent intent = getIntent();
+        //intent로 부터 전달받은 확진자 동선
+        pathList = (ArrayList<PathInfo>) intent.getSerializableExtra("pathList");
+//
+//        for(PathInfo p : pathList) {
+//            System.out.println(p.getPatient_no() + " / " + p.getPlace());
+//        }
 
         btn_map_date = findViewById(R.id.btn_map_date);
         btn_map_all = findViewById(R.id.btn_map_all);

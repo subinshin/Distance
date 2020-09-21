@@ -9,6 +9,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -35,15 +36,23 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class GpsActivity extends AppCompatActivity {
+    //MovingActivity에 넘길 ArrayList
+    ArrayList<PathInfo> pathList = new ArrayList<PathInfo>();
 
     private DrawerLayout mDrawerLayout;
     private Context context = this;
@@ -144,6 +153,7 @@ public class GpsActivity extends AppCompatActivity {
                     startActivity(intent);
                 }else if(id == R.id.item_moving){
                     Intent intent = new Intent(GpsActivity.this, MovingActivity.class);
+                    intent.putExtra("pathList", pathList);
                     startActivity(intent);
                 }else if(id == R.id.item_condition){
                     Intent intent = new Intent(GpsActivity.this, ConfirmedCaseActivity.class);
@@ -172,6 +182,11 @@ public class GpsActivity extends AppCompatActivity {
             // 위치 정보 수신 시작 - 10초 간격, 0m 이상 이동 시 수신
             locManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, 5000, 0, locationListener);
         }
+
+        //화면 띄우기 직전마다 새롭게 확진자동선을 가져온다.
+        pathList.clear();
+
+        GetPathAsyncTask getPathAsyncTask = (GetPathAsyncTask) new GetPathAsyncTask().execute();
     }
 
 
@@ -394,4 +409,45 @@ public class GpsActivity extends AppCompatActivity {
                 break;
         }
     }
+
+
+
+    public class GetPathAsyncTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            Log.d(TAG, "task Start");
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+            db.collectionGroup("paths").get()
+                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            for (QueryDocumentSnapshot snap : queryDocumentSnapshots) {
+                                DocumentSnapshot documentSnapshot = snap;
+                                PathInfo path = documentSnapshot.toObject(PathInfo.class);
+                                pathList.add(path);
+                                Log.d(TAG, path.getPatient_no() + " / " + path.getPlace() + " / " + path.getVisitDate());
+//                            Log.d(TAG, snap.getId() + " => " + snap.getData());
+                            }
+                        }
+                    });
+            Log.d(TAG, "task Finish");
+           return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+        }
+
+
+    }
+
 }
+

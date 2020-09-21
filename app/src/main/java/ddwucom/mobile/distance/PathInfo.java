@@ -1,6 +1,8 @@
 package ddwucom.mobile.distance;
 
-public class PathInfo {
+import java.io.Serializable;
+
+public class PathInfo implements Serializable {
 
     private String patient_no;
     private String place;
