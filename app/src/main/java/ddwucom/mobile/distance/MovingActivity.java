@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.DatePicker;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -55,8 +56,8 @@ public class MovingActivity extends AppCompatActivity {
     DBHelper helper;
     private static final String TAG = "MovingActivity";
 
-    Button btn_map_all;
-    Button btn_map_date;
+    ImageButton btn_map_all;
+    ImageButton btn_map_date;
 
     CameraPosition cameraPosition;
     ArrayList<MarkerOptions> markersOption;

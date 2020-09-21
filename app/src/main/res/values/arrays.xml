@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name = "searchStandard">
-        <item>항목검색</item>
-        <item>지도검색</item>
+        <item>List</item>
+        <item>Map</item>
     </string-array>
 </resources>

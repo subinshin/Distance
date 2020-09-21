@@ -56,9 +56,6 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("insert into " + TABLE_NAME + " values(null, 2020, 9, 16, '"
                 + (new Time(12, 5, 0)).toString() +"', '" + (new Time(14, 11, 0)).toString()
                 + "', '롯데월드 (송파구 잠실동 올림픽로 240)', 37.511329, 127.098092);" );
-        db.execSQL("insert into " + TABLE_NAME + " values(null, 2020, 9, 11, '"
-                + (new Time(12, 5, 0)).toString() +"', '" + (new Time(14, 11, 0)).toString()
-                + "', '동덕여자대학교 (성북구 하월곡동 화랑로13길 60)', 37.60632, 127.041808);" );
 
     }
 

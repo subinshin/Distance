@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#E1E0E0">
+    android:background="#FFFFFF">
 
     <Spinner
         android:id="@+id/search_spinner"
@@ -17,27 +17,29 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <ImageButton
         android:id="@+id/btn_map_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="18dp"
-        android:layout_marginLeft="18dp"
-        android:layout_marginTop="24dp"
+        android:layout_width="41dp"
+        android:layout_height="41dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="32dp"
+        android:background="#00FFFFFF"
         android:onClick="btnMapOnClick"
-        android:text="날짜별 검색"
         android:visibility="visible"
         app:layout_constraintStart_toEndOf="@+id/btn_map_all"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/calendar_small_icon" />
 
-    <Button
+    <ImageButton
         android:id="@+id/btn_map_all"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="18dp"
-        android:layout_marginLeft="18dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginStart="108dp"
+        android:layout_marginLeft="108dp"
+        android:layout_marginTop="32dp"
         android:onClick="btnMapOnClick"
+        android:src="@android:drawable/stat_sys_download"
         android:text="전체 검색"
         android:visibility="visible"
         app:layout_constraintStart_toEndOf="@+id/search_spinner"
@@ -56,6 +58,7 @@
             android:id="@+id/all_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="#ECECEC"
             android:visibility="visible">
 
             <ListView
