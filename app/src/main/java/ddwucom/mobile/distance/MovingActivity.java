@@ -1,5 +1,6 @@
 package ddwucom.mobile.distance;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.FragmentManager;
 import android.content.Context;
@@ -11,8 +12,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.CalendarView;
 import android.widget.DatePicker;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -20,7 +19,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -40,8 +38,6 @@ import java.util.ArrayList;
 public class MovingActivity extends AppCompatActivity {
     //gpsAcitivity로 부터 가져온 확진자 동선
     ArrayList<PathInfo> pathList;
-
-
     Spinner spinner;
     DBManager manager;
     MovingInfoAdapter adapter;
@@ -86,8 +82,8 @@ public class MovingActivity extends AppCompatActivity {
 //            System.out.println(p.getPatient_no() + " / " + p.getPlace());
 //        }
 
-        btn_map_date = findViewById(R.id.btn_map_date);
-        btn_map_all = findViewById(R.id.btn_map_all);
+        btn_map_date = findViewById(R.id.btn_date);
+        btn_map_all = findViewById(R.id.btn_all);
 
         markersOption = new ArrayList<MarkerOptions>();
         markers = new ArrayList<Marker>();
@@ -114,6 +110,21 @@ public class MovingActivity extends AppCompatActivity {
             public void onMapReady(GoogleMap googleMap) {
                 map = googleMap;
 
+                map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                    @Override
+                    public void onInfoWindowClick(Marker marker) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MovingActivity.this);// 대화상자 띄우기
+
+                        LatLng n = marker.getPosition();
+
+                        builder.setTitle(marker.getTitle())
+                                .setMessage("위치좌표 : (" + n.latitude + ", " + n.longitude + ")\n날짜 : " + marker.getSnippet())
+                                .setPositiveButton("확인", null)
+                                .show();
+
+                    }
+                });
+
                 cameraPosition = new CameraPosition.Builder().target(new LatLng(37.5759, 126.9769)).zoom(16).build();
                 map.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
@@ -123,6 +134,8 @@ public class MovingActivity extends AppCompatActivity {
             }
 
         });
+
+
 
         spinner = findViewById(R.id.search_spinner);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -178,16 +191,32 @@ public class MovingActivity extends AppCompatActivity {
             Log.d(TAG,  "latitude : "+ info.getLatitude() + ", longitude : " + info.getLongitude());
 
             String s = info.getYear() + "/" + info.getMonth() + "/" + info.getDayOfMonth() + ", " + info.getStartTime() + " - " + info.getEndTime();
-            LatLng pos = new LatLng(info.getLatitude(), info.getLongitude());
-            MarkerOptions marker = new MarkerOptions().position(pos)
-                    .title(info.getLocation()).snippet(s);
 
-            markersOption.add(marker);
+            // 이미 추가된 markerOption중에 좌표가 동일한 것이 있는지 확인
+            MarkerOptions mo = null;
+            for(MarkerOptions m : markersOption){
+                if(m.getPosition().longitude == info.getLongitude() && m.getPosition().latitude == info.getLatitude()){
+                    m.snippet(m.getSnippet() + "\n" + s);
+                    mo = m;
+                    break;
+                }
+            }
+
+            //동일한 좌표가 없다면 markerOption 생성 후 추가
+            if(mo == null) {
+                LatLng pos = new LatLng(info.getLatitude(), info.getLongitude());
+                MarkerOptions marker = new MarkerOptions().position(pos)
+                        .title(info.getLocation()).snippet(s);
+
+                markersOption.add(marker);
+            }
         }
 
+        //마커 찍기
         for(MarkerOptions m : markersOption){
-            markers.add(map.addMarker(m));
+            map.addMarker(m);
         }
+
         markersOption.clear();
 
         if(info != null) {
@@ -204,7 +233,7 @@ public class MovingActivity extends AppCompatActivity {
     public void btnMapOnClick(View v){
 
         switch(v.getId()){
-            case R.id.btn_map_all:
+            case R.id.btn_all:
                 cursor = manager.getAllInfos();
                 if(spinnerSelected == SPINNER_LIST){
                     adapter.changeCursor(cursor);
@@ -213,7 +242,7 @@ public class MovingActivity extends AppCompatActivity {
                 }
                 break;
 
-            case R.id.btn_map_date:
+            case R.id.btn_date:
                 DatePickerDialog pickerDialog = new DatePickerDialog(this, pickerCallBack, 2020, 9 - 1, 18);
                 pickerDialog.show();
                 break;
