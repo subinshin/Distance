@@ -55,11 +55,11 @@ public class DBManager {
         return cursor;
     }
 
-    public Cursor searchWithGps(String latitude, String longitude){
+    public Cursor searchWithGps(Double latitude, Double longitude){
         SQLiteDatabase db = helper.getReadableDatabase();
 
         String selection = null;
-        String [] selectArgs = new String [] {latitude, longitude};
+        String [] selectArgs = new String [] {String.valueOf(latitude), String.valueOf(longitude)};
 
         cursor = db.query(helper.TABLE_NAME, null, selection, selectArgs, null, null, null, null);
 
@@ -68,6 +68,7 @@ public class DBManager {
 
     //    DB 에 새로운 Gps 추가
     public boolean addNewGps(MovingInfo newGps) {
+
         SQLiteDatabase db = helper.getWritableDatabase();
         ContentValues value = new ContentValues();
         value.put(helper.COL_YEAR, newGps.getYear());
@@ -85,5 +86,6 @@ public class DBManager {
         if (count > 0) return true;
         return false;
     }
+
 
 }
