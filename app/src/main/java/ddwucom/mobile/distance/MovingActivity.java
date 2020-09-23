@@ -81,9 +81,10 @@ public class MovingActivity extends AppCompatActivity {
         //intent로 부터 전달받은 확진자 동선
         pathList = (ArrayList<PathInfo>) intent.getSerializableExtra("pathList");
 //
-//        for(PathInfo p : pathList) {
-//            System.out.println(p.getPatient_no() + " / " + p.getPlace());
-//        }
+        for(PathInfo p : pathList) {
+            Log.d(TAG,p.getPatient_no() + " / " + p.getPlace());
+        }
+//        Log.d(TAG, String.valueOf(pathList.size()));
 
         btn_map_date = findViewById(R.id.btn_map_date);
         btn_map_all = findViewById(R.id.btn_map_all);
