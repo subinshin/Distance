@@ -2,12 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ddwucom.mobile.distance">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -16,34 +10,56 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity" />
-        <activity android:name=".PasswordResetActivity"/>
-        <activity android:name=".loginActivity"/>
+
+        <activity android:name=".PasswordResetActivity" />
+        <activity android:name=".loginActivity" />
         <activity android:name=".GpsActivity" />
         <activity android:name=".JoinActivity" />
         <activity android:name=".MovingActivity" />
-        <activity android:name=".ConfirmedCaseActivity"/>
+        <activity android:name=".ConfirmedCaseActivity" />
         <activity android:name=".StartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".MyPageActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".GpsActivity"
-                />
+                android:value=".GpsActivity" />
+        </activity>
+        <activity android:name=".SMSActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
         </activity>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBirPKZ6hwetA2S_2x_Yhez11zriqotBD4" />
 
+        <receiver
+            android:name=".SMSReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
+            </intent-filter>
+        </receiver>
+
         <service
             android:name=".BackgroundService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
     </application>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
 
-
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>
