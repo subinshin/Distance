@@ -1,5 +1,6 @@
 package ddwucom.mobile.distance;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -10,6 +11,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -23,6 +25,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -51,6 +54,7 @@ import java.util.Date;
 import java.util.List;
 
 public class GpsActivity extends AppCompatActivity {
+    private static final int REQUEST_SMS_RECEIVE = 1000;
     //MovingActivity에 넘길 ArrayList
     ArrayList<PathInfo> pathList = new ArrayList<PathInfo>();
 
@@ -102,6 +106,20 @@ public class GpsActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_gps);
 
+
+        int permissionCheck = 0;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS);
+            if (permissionCheck == PackageManager.PERMISSION_DENIED) {
+                // no permission
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECEIVE_SMS},REQUEST_SMS_RECEIVE);
+            } else {
+                // already have permission
+            }
+        } else {
+            // OS version is lower than marshmallow
+        }
+
         dbManager = new DBManager(this);
 
         // 위치관리자 준비
@@ -121,7 +139,7 @@ public class GpsActivity extends AppCompatActivity {
         lineOptions.width(LINE_WIDTH);
 
         if (checkPermission()) {
-            lastLocation = locManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+            lastLocation = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         }
 
 ///////
@@ -156,13 +174,13 @@ public class GpsActivity extends AppCompatActivity {
                     intent.putExtra("pathList", pathList);
                     startActivity(intent);
                 }else if(id == R.id.item_condition){
-                    Intent intent = new Intent(GpsActivity.this, ConfirmedCaseActivity.class);
+                    Intent intent = new Intent(GpsActivity.this, SMSActivity.class);
                     startActivity((intent));
-                    Toast.makeText(context, "확진자 현황 확인", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "결제 문자 확인", Toast.LENGTH_SHORT).show();
                 }
-                else if(id == R.id.item_setting){
-                    Toast.makeText(context, "설정", Toast.LENGTH_SHORT).show();
-                }
+//                else if(id == R.id.item_setting){
+//                    Toast.makeText(context, "설정", Toast.LENGTH_SHORT).show();
+//                }
                 else if(id == R.id.item_logout){
                     Toast.makeText(context, "로그아웃", Toast.LENGTH_SHORT).show();
                     FirebaseAuth.getInstance().signOut();
@@ -180,7 +198,7 @@ public class GpsActivity extends AppCompatActivity {
         super.onResume();
         if (checkPermission()) {
             // 위치 정보 수신 시작 - 10초 간격, 0m 이상 이동 시 수신
-            locManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, 5000, 0, locationListener);
+            locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 0, locationListener);
         }
 
         //화면 띄우기 직전마다 새롭게 확진자동선을 가져온다.
