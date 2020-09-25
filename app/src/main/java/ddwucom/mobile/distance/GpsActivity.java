@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -60,7 +61,7 @@ public class GpsActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
     private Context context = this;
-    String id;
+    String user_email;
 
     private View mLayout;  // Snackbar 사용하기 위해서는 View가 필요합니다.
 
@@ -144,8 +145,8 @@ public class GpsActivity extends AppCompatActivity {
 
 ///////
         Intent intent = getIntent();
-        id = intent.getStringExtra("email_id");
-        Toast.makeText(this,  "사용자 이메일 : " + id, Toast.LENGTH_SHORT).show();
+        user_email = intent.getStringExtra("email_id");
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -157,6 +158,12 @@ public class GpsActivity extends AppCompatActivity {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.gps_layout);
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View nav_header_view = navigationView.getHeaderView(0);
+        TextView tv_nav_email = nav_header_view.findViewById(R.id.tv_nav_email);
+        if(tv_nav_email != null){
+            tv_nav_email.setText(user_email);
+        }
+
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
@@ -226,7 +233,7 @@ public class GpsActivity extends AppCompatActivity {
     }
 
     private void startLoginActivity() {
-        Intent intent = new Intent(this, loginActivity.class);
+        Intent intent = new Intent(this, LoginActivity.class);
         intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }

@@ -22,11 +22,9 @@ public class MainActivity extends AppCompatActivity {
 
 // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
-
-
         //미로그인 -> loginActivity
         if(mAuth.getCurrentUser() == null) {
-            intent = new Intent(this, loginActivity.class);
+            intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
         }
         else { //현재 로그인 된 상태 -> GpsActivity
@@ -51,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
         //미로그인 -> loginActivity
         if(mAuth.getCurrentUser() == null) {
-            intent = new Intent(this, loginActivity.class);
+            intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
         }
         else { //현재 로그인 된 상태 -> GpsActivity
