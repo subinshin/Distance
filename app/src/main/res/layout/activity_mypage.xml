@@ -9,28 +9,41 @@
     <Button
         android:id="@+id/mypage_btn_phoneCode"
         android:layout_width="85dp"
-        android:layout_height="43dp"
-        android:layout_marginStart="2dp"
-        android:layout_marginLeft="2dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/btn_style"
         android:text="@string/join_btn_phoneCode"
+        android:textColor="@color/text_style"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/mypage_et_phoneCode"
-        app:layout_constraintTop_toBottomOf="@+id/mypage_btn_phone" />
+        app:layout_constraintTop_toBottomOf="@+id/mypage_et_phone" />
 
     <Button
         android:id="@+id/mypage_btn_phone"
         android:layout_width="85dp"
-        android:layout_height="43dp"
-        android:layout_marginTop="141dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/btn_style"
         android:text="@string/join_btn_phone"
+        android:textColor="@color/text_style"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/mypage_et_phone"
-        app:layout_constraintTop_toBottomOf="@+id/mypage_et_pw_2" />
+        app:layout_constraintTop_toBottomOf="@+id/mypage_title_phone" />
 
     <TextView
         android:id="@+id/mypage_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="32dp"
         android:text="@string/mypage_title"
+        android:textColor="@android:color/black"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -41,9 +54,11 @@
         android:id="@+id/mypage_title_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="24dp"
         android:text="@string/mypage_title_email"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.045"
+        android:textColor="@android:color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mypage_title" />
 
@@ -53,13 +68,13 @@
         android:layout_height="40dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="@string/mypage_et_email"
         android:inputType="textEmailAddress"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mypage_title" />
+        app:layout_constraintTop_toBottomOf="@+id/mypage_title_email" />
 
     <TextView
         android:id="@+id/mypage_title_pw"
@@ -67,18 +82,19 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:text="@string/join_title_pw"
+        android:textColor="@android:color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mypage_et_email" />
 
     <EditText
         android:id="@+id/mypage_et_pw"
-        android:layout_width="187dp"
-        android:layout_height="38dp"
+        android:layout_width="180dp"
+        android:layout_height="40dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="2dp"
+        android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="@string/mypage_et_pw"
         android:inputType="textPassword"
@@ -88,31 +104,31 @@
 
     <EditText
         android:id="@+id/mypage_et_pw_2"
-        android:layout_width="187dp"
-        android:layout_height="37dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="27dp"
+        android:layout_width="180dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="@string/join_et_pw_2"
         android:inputType="textPassword"
         android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/mypage_et_pw"
-        app:layout_constraintTop_toBottomOf="@+id/mypage_btn_email" />
+        app:layout_constraintTop_toBottomOf="@+id/mypage_title_pw" />
 
     <Button
         android:id="@+id/mypage_btn_email"
         android:layout_width="85dp"
-        android:layout_height="43dp"
+        android:layout_height="40dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="72dp"
-        android:layout_marginEnd="26dp"
-        android:layout_marginRight="26dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/btn_style"
         android:text="@string/join_btn_email"
+        android:textColor="@color/text_style"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/mypage_et_email"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/mypage_title_email" />
 
     <TextView
         android:id="@+id/mypage_title_name"
@@ -120,16 +136,19 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
         android:text="@string/join_title_name"
+        android:textColor="@android:color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mypage_et_pw" />
 
     <EditText
         android:id="@+id/mypage_et_name"
         android:layout_width="187dp"
-        android:layout_height="38dp"
+        android:layout_height="40dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="@string/join_et_name"
         android:inputType="textPersonName"
@@ -143,8 +162,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="3dp"
+        android:layout_marginTop="16dp"
         android:text="@string/join_title_birth"
+        android:textColor="@android:color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mypage_et_name" />
 
@@ -154,6 +174,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="@string/join_et_birth"
         android:inputType="date"
@@ -167,17 +188,19 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="17dp"
         android:layout_marginLeft="17dp"
-        android:layout_marginTop="1dp"
+        android:layout_marginTop="16dp"
         android:text="@string/join_title_phone"
+        android:textColor="@android:color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mypage_et_birth" />
 
     <EditText
         android:id="@+id/mypage_et_phone"
-        android:layout_width="241dp"
-        android:layout_height="41dp"
+        android:layout_width="240dp"
+        android:layout_height="40dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="@string/join_et_phone"
         android:inputType="phone"
@@ -187,13 +210,13 @@
 
     <EditText
         android:id="@+id/mypage_et_phoneCode"
-        android:layout_width="239dp"
-        android:layout_height="42dp"
+        android:layout_width="240dp"
+        android:layout_height="40dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="1dp"
+        android:layout_marginTop="8dp"
         android:ems="10"
-        android:hint="@string/join_et_phoneCode"
+        android:hint="@string/mypage_et_phoneCode"
         android:inputType="number"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -203,11 +226,12 @@
         android:id="@+id/mypage_btn_cancel"
         android:layout_width="167dp"
         android:layout_height="47dp"
-        android:layout_marginStart="36dp"
-        android:layout_marginLeft="36dp"
-        android:layout_marginTop="65dp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/btn_style"
         android:onClick="onClick"
         android:text="@string/join_btn_cancel"
+        android:textColor="@color/text_style"
+        app:layout_constraintEnd_toStartOf="@+id/mypage_btn_modify"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mypage_et_phoneCode" />
 
@@ -215,12 +239,13 @@
         android:id="@+id/mypage_btn_modify"
         android:layout_width="161dp"
         android:layout_height="48dp"
-        android:layout_marginStart="13dp"
-        android:layout_marginLeft="13dp"
-        android:layout_marginTop="63dp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/btn_style"
         android:onClick="onClick"
         android:text="@string/mypage_btn_update"
+        android:textColor="@color/text_style"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/mypage_btn_cancel"
-        app:layout_constraintTop_toBottomOf="@+id/mypage_btn_phoneCode" />
+        app:layout_constraintTop_toBottomOf="@+id/mypage_et_phoneCode" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

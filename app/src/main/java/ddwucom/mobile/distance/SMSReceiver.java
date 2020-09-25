@@ -18,6 +18,7 @@ public class SMSReceiver extends BroadcastReceiver {
 
     private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy");
     final SmsManager sms = SmsManager.getDefault();
+    SMSDBManager dbManager;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -57,6 +58,15 @@ public class SMSReceiver extends BroadcastReceiver {
                     for (int i = 5; i < msg.length; i++) {
                         location += msg[i];
                     }
+                    SMSInfo s = new SMSInfo(time, location);
+                    Log.d(TAG, s.getDatetime() + s.getLocation());
+//                    boolean result = dbManager.addNewSMS(s);
+//                    if (result) {
+//                        Log.d(TAG, "success");
+//                    } else {
+//                        Log.d(TAG, "fail");
+//                    }
+
                     // 해당 내용을 모두 합쳐서 액티비티로 보낸다.
                     sendToActivity(context, time + '\n' + location);
                 }
