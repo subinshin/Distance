@@ -183,9 +183,9 @@ public class GpsActivity extends AppCompatActivity {
                     intent.putExtra("pathList", pathList);
                     startActivity(intent);
                 }else if(id == R.id.item_condition){
-                    Intent intent = new Intent(GpsActivity.this, SMSActivity.class);
+                    Intent intent = new Intent(GpsActivity.this, SMSListActivity.class);
                     startActivity((intent));
-                    Toast.makeText(context, "결제 문자 확인", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(context, "결제 문자 확인", Toast.LENGTH_SHORT).show();
                 }
 //                else if(id == R.id.item_setting){
 //                    Toast.makeText(context, "설정", Toast.LENGTH_SHORT).show();
@@ -339,7 +339,7 @@ public class GpsActivity extends AppCompatActivity {
 
             if (distance <= 15) {
                 count++;
-                Toast.makeText(GpsActivity.this, Integer.toString(count), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(GpsActivity.this, Integer.toString(count), Toast.LENGTH_SHORT).show();
             } else {
                 if (count >= 5) {
                     // 현재시간을 msec 으로 구한다.
@@ -376,7 +376,7 @@ public class GpsActivity extends AppCompatActivity {
 
                     Log.d(TAG, startDateTime);
                     Log.d(TAG, endDateTime);
-                    Toast.makeText(GpsActivity.this, Integer.toString(count), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(GpsActivity.this, Integer.toString(count), Toast.LENGTH_SHORT).show();
                 }
                 count = 0;
                 lastLocation.setLatitude(currentLocation.getLatitude());
