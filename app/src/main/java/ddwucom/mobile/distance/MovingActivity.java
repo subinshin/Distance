@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -39,6 +40,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class MovingActivity extends AppCompatActivity {
     //gpsAcitivity로 부터 가져온 확진자 동선
@@ -51,7 +53,7 @@ public class MovingActivity extends AppCompatActivity {
     FrameLayout layout_moving;
     LayoutInflater inflater;
 
-    LinearLayout all_layout;
+    ConstraintLayout all_layout;
     ConstraintLayout map_layout;
 
     FragmentManager fragmentManager;
@@ -80,12 +82,20 @@ public class MovingActivity extends AppCompatActivity {
     //확진자 동선보기 버튼 클릭시 필요
     boolean patientOnOff;
 
+    Date date;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_moving);
 
+    //    long now = System.currentTimeMillis();
+     //   date = new Date(now);
+
         Log.d(TAG, "Start movingActivity");
+
+        int screenHeight = ((WindowManager)this.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getHeight();
+
+        spinnerSelected = SPINNER_LIST;
 
         Intent intent = getIntent();
         //intent로 부터 전달받은 확진자 동선
@@ -113,7 +123,6 @@ public class MovingActivity extends AppCompatActivity {
         inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         manager = new DBManager(this);
-        cursor = manager.getAllInfos();
         adapter = new MovingInfoAdapter(MovingActivity.this, R.layout.layout_listview, cursor);
 
         all_layout = findViewById(R.id.all_layout);
@@ -186,6 +195,16 @@ public class MovingActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "spinnerSelected : " + spinnerSelected);
+        if(spinnerSelected == SPINNER_LIST){
+            cursor = manager.getAllInfos();
+            adapter.changeCursor(cursor);
+        }
     }
 
     public void putMyMark(Cursor cursor){
@@ -277,13 +296,14 @@ public class MovingActivity extends AppCompatActivity {
                 cursor = manager.getAllInfos();
                 if(spinnerSelected == SPINNER_LIST){
                     adapter.changeCursor(cursor);
+                    adapter.notifyDataSetChanged();
                 }else if(spinnerSelected == SPINNER_MAP){
                     putMyMark(cursor);
                 }
                 break;
 
             case R.id.btn_date:
-                DatePickerDialog pickerDialog = new DatePickerDialog(this, pickerCallBack, 2020, 9 - 1, 18);
+                DatePickerDialog pickerDialog = new DatePickerDialog(this, pickerCallBack, 2020, 9 - 1, 25);
                 pickerDialog.show();
                 break;
 
