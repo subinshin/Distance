@@ -140,7 +140,7 @@ public class GpsActivity extends AppCompatActivity {
         lineOptions.width(LINE_WIDTH);
 
         if (checkPermission()) {
-            lastLocation = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            lastLocation = locManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
         }
 
 ///////
@@ -205,7 +205,7 @@ public class GpsActivity extends AppCompatActivity {
         super.onResume();
         if (checkPermission()) {
             // 위치 정보 수신 시작 - 10초 간격, 0m 이상 이동 시 수신
-            locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 0, locationListener);
+            locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 60000, 0, locationListener);
         }
 
         //화면 띄우기 직전마다 새롭게 확진자동선을 가져온다.
