@@ -69,6 +69,7 @@ public class SMSReceiver extends BroadcastReceiver {
 
                     // 해당 내용을 모두 합쳐서 액티비티로 보낸다.
                     sendToActivity(context, time + '\n' + location);
+                    
                 }
             }
         }
