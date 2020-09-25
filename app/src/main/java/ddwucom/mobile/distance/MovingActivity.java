@@ -82,6 +82,8 @@ public class MovingActivity extends AppCompatActivity {
     //확진자 동선보기 버튼 클릭시 필요
     boolean patientOnOff;
 
+    Bitmap smallMarker;
+
     Date date;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -130,6 +132,10 @@ public class MovingActivity extends AppCompatActivity {
 
         all_listView = findViewById(R.id.all_listView);
         all_listView.setAdapter(adapter);
+
+        BitmapDrawable bitmapDrawable = (BitmapDrawable)getResources().getDrawable(R.drawable.som_mark_big);
+        Bitmap b = bitmapDrawable.getBitmap();
+        smallMarker = Bitmap.createScaledBitmap(b, 150, 200, false);
 
         fragmentManager = getFragmentManager();
         mapFragment = (MapFragment) fragmentManager.findFragmentById(R.id.moving_map);
@@ -245,9 +251,12 @@ public class MovingActivity extends AppCompatActivity {
                 MarkerOptions marker = new MarkerOptions().position(pos)
                         .title(info.getLocation()).snippet(s);
 
+                marker.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
                 markersOption.add(marker);
             }
         }
+
+
 
         //마커 찍기
         for(MarkerOptions m : markersOption){
