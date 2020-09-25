@@ -28,6 +28,7 @@ public class SMSReceiver extends BroadcastReceiver {
 
         Log.d(TAG, "receiver 호출");
 
+        dbManager = new SMSDBManager(context);
         // sms가 오면 onReceive() 가 호출된다. 여기에 처리하는 코드 작성하면 된다.
 
         Bundle bundle = intent.getExtras();
@@ -60,12 +61,12 @@ public class SMSReceiver extends BroadcastReceiver {
                     }
                     SMSInfo s = new SMSInfo(time, location);
                     Log.d(TAG, s.getDatetime() + s.getLocation());
-//                    boolean result = dbManager.addNewSMS(s);
-//                    if (result) {
-//                        Log.d(TAG, "success");
-//                    } else {
-//                        Log.d(TAG, "fail");
-//                    }
+                    boolean result = dbManager.addNewSMS(s);
+                    if (result) {
+                        Log.d(TAG, "success");
+                    } else {
+                        Log.d(TAG, "fail");
+                    }
 
                     // 해당 내용을 모두 합쳐서 액티비티로 보낸다.
                     sendToActivity(context, time + '\n' + location);
