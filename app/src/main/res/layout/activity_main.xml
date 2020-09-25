@@ -61,6 +61,7 @@
         android:layout_below="@+id/login_et_pw"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="24dp"
+        android:background="@drawable/btn_style"
         android:text="로그인" />
 
     <TextView
