@@ -4,7 +4,9 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -132,7 +134,7 @@ public class GpsActivity extends AppCompatActivity {
 
         // 마커를 생성하기 위한 옵션 지정
         markerOptions = new MarkerOptions();
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+//        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
 
         // 선을 그리기 위한 옵션 지정
         lineOptions = new PolylineOptions();
@@ -181,9 +183,9 @@ public class GpsActivity extends AppCompatActivity {
                     intent.putExtra("pathList", pathList);
                     startActivity(intent);
                 }else if(id == R.id.item_condition){
-                    Intent intent = new Intent(GpsActivity.this, SMSActivity.class);
+                    Intent intent = new Intent(GpsActivity.this, SMSListActivity.class);
                     startActivity((intent));
-                    Toast.makeText(context, "결제 문자 확인", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(context, "결제 문자 확인", Toast.LENGTH_SHORT).show();
                 }
 //                else if(id == R.id.item_setting){
 //                    Toast.makeText(context, "설정", Toast.LENGTH_SHORT).show();
@@ -264,8 +266,13 @@ public class GpsActivity extends AppCompatActivity {
             // 애니메이션 효과로 이동 시
             mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(startLatLng, ZOOM_LEVEL));
 
+            BitmapDrawable bitmapDrawable = (BitmapDrawable)getResources().getDrawable(R.drawable.som_mark_big);
+            Bitmap b = bitmapDrawable.getBitmap();
+            Bitmap smallMarker = Bitmap.createScaledBitmap(b, 200, 250, false);
+
             // 지정한 위치로 마커 위치 설정
-            markerOptions.position(startLatLng);
+            markerOptions.position(startLatLng)
+                    .icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
             centerMarker = mGoogleMap.addMarker(markerOptions);
 
             /*이하의 내용은 실습 1, 2 내용에 포함되어 있지 않은 지도 관련 이벤트 처리에 대한 예이므로 참고*/
@@ -332,7 +339,7 @@ public class GpsActivity extends AppCompatActivity {
 
             if (distance <= 15) {
                 count++;
-                Toast.makeText(GpsActivity.this, Integer.toString(count), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(GpsActivity.this, Integer.toString(count), Toast.LENGTH_SHORT).show();
             } else {
                 if (count >= 5) {
                     // 현재시간을 msec 으로 구한다.
@@ -369,7 +376,7 @@ public class GpsActivity extends AppCompatActivity {
 
                     Log.d(TAG, startDateTime);
                     Log.d(TAG, endDateTime);
-                    Toast.makeText(GpsActivity.this, Integer.toString(count), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(GpsActivity.this, Integer.toString(count), Toast.LENGTH_SHORT).show();
                 }
                 count = 0;
                 lastLocation.setLatitude(currentLocation.getLatitude());

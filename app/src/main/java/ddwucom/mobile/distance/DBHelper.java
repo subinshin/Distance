@@ -23,7 +23,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public final String COL_LONGITUDE = "longitude";
 
     public DBHelper(Context context){
-        super(context, DB_NAME, null, 1);
+        super(context, DB_NAME, null, 2);
     }
 
     @Override
