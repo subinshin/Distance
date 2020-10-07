@@ -35,7 +35,7 @@ public class SMSListActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         smsList.clear();
-        smsList.addAll(manager.getAllSMSInfos());
-        adapter.notifyDataSetChanged();
+        cursor = manager.getAllSMSInfos();
+        adapter.changeCursor(cursor);
     }
 }

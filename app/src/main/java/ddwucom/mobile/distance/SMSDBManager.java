@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import java.sql.Time;
-import java.util.ArrayList;
 
 import static android.content.ContentValues.TAG;
 
@@ -20,22 +19,11 @@ public class SMSDBManager {
         helper = new SMSDBHelper(context);
         this.context = context;
     }
-
-    public ArrayList<SMSInfo> getAllSMSInfos(){
-        ArrayList<SMSInfo> smsList = new ArrayList<SMSInfo>();
+        public Cursor getAllSMSInfos(){
         SQLiteDatabase db = helper.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM " + helper.TABLE_NAME, null);
 
-        while (cursor.moveToNext()) {
-            String datetime = cursor.getString(cursor.getColumnIndex(helper.COL_DATETIME));
-            String location = cursor.getString(cursor.getColumnIndex(helper.COL_LOCATION));
-            smsList.add(new SMSInfo(datetime, location));
-        }
-
-        cursor.close();
-        helper.close();
-
-        return smsList;
+        return cursor;
     }
 
     public void saveSMSInfo(String datetime, String location){
