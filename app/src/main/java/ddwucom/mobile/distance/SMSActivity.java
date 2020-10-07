@@ -12,24 +12,39 @@ public class SMSActivity extends AppCompatActivity {
 
     EditText editText;
     Button button;
+    DBManager dbManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sms);
 
+        dbManager = new DBManager(this);
+
         editText = (EditText)findViewById(R.id.editText);
-        button = (Button)findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        button = (Button)findViewById(R.id.btnSave);
+//        button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                finish();
+//            }
+//        });
 
         // (1) 리시버에 의해 해당 액티비티가 새롭게 실행된 경우
         Intent passedIntent = getIntent();
         processIntent(passedIntent);
+    }
+
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btnSave:
+                boolean result = dbManager.addNewGps(
+                            new MovingInfo(year, month, day, startDateTime, endDateTime, latitude, longitude, address.get(0).getAddressLine(0), "auto"));
+                break;
+            case R.id.btnCancel:
+                finish();
+                break;
+        }
     }
 
     private void processIntent(Intent intent){
