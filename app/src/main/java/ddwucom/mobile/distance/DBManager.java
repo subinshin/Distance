@@ -27,21 +27,25 @@ public class DBManager {
         return cursor;
     }
 
-    public void saveMovingInfo(int year, int month, int dayOfMonth, Time startTime, Time endTime, String latitude, String longitude){
+    public boolean saveMovingInfo(MovingInfo info){
         SQLiteDatabase db = helper.getWritableDatabase();
         ContentValues row = new ContentValues();
 
-        row.put(helper.COL_YEAR, year);
-        row.put(helper.COL_MONTH, month);
-        row.put(helper.COL_DAY, dayOfMonth);
-        row.put(helper.COL_START_TIME, startTime.toString());
-        row.put(helper.COL_END_TIME, endTime.toString());
-        row.put(helper.COL_LATITUDE, latitude);
-        row.put(helper.COL_LONGITUDE, longitude);
+        row.put(helper.COL_YEAR, info.getYear());
+        row.put(helper.COL_MONTH, info.getMonth());
+        row.put(helper.COL_DAY, info.getDayOfMonth());
+        row.put(helper.COL_START_TIME, info.getStartTime());
+        row.put(helper.COL_END_TIME, info.getEndTime());
+        row.put(helper.COL_LATITUDE, info.getLatitude());
+        row.put(helper.COL_LONGITUDE, info.getLongitude());
+        row.put(helper.COL_LOCATION, info.getLocation());
+        row.put(helper.COL_MEMO, info.getMemo());
 
         if(db.insert(helper.TABLE_NAME, null, row) < 0){
             Log.e(TAG, "[saveGps] INSERT ERROR");
+            return false;
         }
+        return true;
     }
 
     public Cursor searchWithDate(int year, int month, int dayOfMonth){
