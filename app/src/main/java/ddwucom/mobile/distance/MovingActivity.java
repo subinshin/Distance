@@ -39,6 +39,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -55,6 +56,7 @@ public class MovingActivity extends AppCompatActivity {
 
     ConstraintLayout all_layout;
     ConstraintLayout map_layout;
+    ConstraintLayout no_data_layout;
 
     FragmentManager fragmentManager;
     MapFragment mapFragment;
@@ -84,19 +86,16 @@ public class MovingActivity extends AppCompatActivity {
 
     Bitmap smallMarker;
 
-    Date date;
+    Date currentTime;
+    int currentYear;
+    int currentMonth;
+    int currentDay;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_moving);
 
-    //    long now = System.currentTimeMillis();
-     //   date = new Date(now);
-
         Log.d(TAG, "Start movingActivity");
-
-        int screenHeight = ((WindowManager)this.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getHeight();
-
         spinnerSelected = SPINNER_LIST;
 
         Intent intent = getIntent();
@@ -105,9 +104,7 @@ public class MovingActivity extends AppCompatActivity {
         patientSelectedList = new ArrayList<PathInfo>();
 
         //전체내용복사
-        for(PathInfo p : patientPathList){
-            patientSelectedList.add(p);
-        }
+        getAllPatientList();
 
         patientMarkers = new ArrayList<Marker>();
         patientOnOff = false;
@@ -129,10 +126,22 @@ public class MovingActivity extends AppCompatActivity {
 
         all_layout = findViewById(R.id.all_layout);
         map_layout = findViewById(R.id.map_layout);
+        no_data_layout = findViewById(R.id.no_data_layout);
 
         all_listView = findViewById(R.id.all_listView);
         all_listView.setAdapter(adapter);
 
+        // 현재시간 저장
+        long now = System.currentTimeMillis();
+        currentTime = new Date(now);
+        SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
+        SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
+        SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
+        currentYear = Integer.parseInt(yearFormat.format(currentTime));
+        currentMonth = Integer.parseInt(monthFormat.format(currentTime));
+        currentDay = Integer.parseInt(dayFormat.format(currentTime));
+
+        // 마커 이미지 불러오기
         BitmapDrawable bitmapDrawable = (BitmapDrawable)getResources().getDrawable(R.drawable.som_mark_big);
         Bitmap b = bitmapDrawable.getBitmap();
         smallMarker = Bitmap.createScaledBitmap(b, 150, 200, false);
@@ -170,7 +179,6 @@ public class MovingActivity extends AppCompatActivity {
         });
 
 
-
         spinner = findViewById(R.id.search_spinner);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -182,6 +190,7 @@ public class MovingActivity extends AppCompatActivity {
                         all_layout.setVisibility(View.VISIBLE);
                         map_layout.setVisibility(View.INVISIBLE);
                         btn_map_patient.setVisibility(View.INVISIBLE);
+                        no_data_layout.setVisibility(View.INVISIBLE);
 
                         spinnerSelected = SPINNER_LIST;
                         break;
@@ -189,6 +198,7 @@ public class MovingActivity extends AppCompatActivity {
                         all_layout.setVisibility(View.INVISIBLE);
                         map_layout.setVisibility(View.VISIBLE);
                         btn_map_patient.setVisibility(View.VISIBLE);
+                        no_data_layout.setVisibility(View.INVISIBLE);
 
                         spinnerSelected = SPINNER_MAP;
                         break;
@@ -210,6 +220,13 @@ public class MovingActivity extends AppCompatActivity {
         if(spinnerSelected == SPINNER_LIST){
             cursor = manager.getAllInfos();
             adapter.changeCursor(cursor);
+        }
+    }
+
+    public void getAllPatientList(){
+        patientSelectedList.clear();
+        for(PathInfo p : patientPathList){
+            patientSelectedList.add(p);
         }
     }
 
@@ -274,9 +291,9 @@ public class MovingActivity extends AppCompatActivity {
     public void putPatientMark(){
         removeMarkers(patientMarkers);
 
-        BitmapDrawable bitmapDrawable = (BitmapDrawable)getResources().getDrawable(R.drawable.coronavirus);
+        BitmapDrawable bitmapDrawable = (BitmapDrawable)getResources().getDrawable(R.drawable.som_patient_marker_blue);
         Bitmap b = bitmapDrawable.getBitmap();
-        Bitmap smallMarker = Bitmap.createScaledBitmap(b, 80, 80, false);
+        Bitmap smallMarker = Bitmap.createScaledBitmap(b, 180, 200, false);
 
         for(PathInfo p : patientSelectedList){
             MarkerOptions markerOptions
@@ -307,12 +324,18 @@ public class MovingActivity extends AppCompatActivity {
                     adapter.changeCursor(cursor);
                     adapter.notifyDataSetChanged();
                 }else if(spinnerSelected == SPINNER_MAP){
+                    if(patientOnOff){
+                        getAllPatientList();
+                    }
+                    putPatientMark();
                     putMyMark(cursor);
+                    //확진자 전체 검색
                 }
                 break;
 
             case R.id.btn_date:
-                DatePickerDialog pickerDialog = new DatePickerDialog(this, pickerCallBack, 2020, 9 - 1, 25);
+
+                DatePickerDialog pickerDialog = new DatePickerDialog(this, pickerCallBack, currentYear, currentMonth - 1, currentDay);
                 pickerDialog.show();
                 break;
 
@@ -348,16 +371,25 @@ public class MovingActivity extends AppCompatActivity {
         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
             Log.d(TAG, year + "/" + month + "/" + dayOfMonth);
             cursor = manager.searchWithDate(year, month, dayOfMonth);
+            // 검색결과가 없을 때 화면처리
+            if(cursor.moveToNext() == false){
+                no_data_layout.setVisibility(View.VISIBLE);
+                all_layout.setVisibility(View.INVISIBLE);
+                map_layout.setVisibility(View.INVISIBLE);
+            }else {
+                no_data_layout.setVisibility(View.INVISIBLE);
+                if (spinnerSelected == SPINNER_LIST) {
+                    all_layout.setVisibility(View.VISIBLE);
+                    adapter.changeCursor(cursor);
+                } else if (spinnerSelected == SPINNER_MAP) {
+                    map_layout.setVisibility(View.VISIBLE);
+                    putMyMark(cursor);
+                }
 
-            if(spinnerSelected == SPINNER_LIST){
-                adapter.changeCursor(cursor);
-            }else if(spinnerSelected == SPINNER_MAP){
-                putMyMark(cursor);
-            }
-
-            if(patientOnOff == true){
-                searchWithDatePatient(year, month + 1, dayOfMonth);
-                putPatientMark();
+                if (patientOnOff == true) {
+                    searchWithDatePatient(year, month + 1, dayOfMonth);
+                    putPatientMark();
+                }
             }
         }
     };

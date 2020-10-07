@@ -103,10 +103,11 @@ public class ComparePathActivity extends AppCompatActivity {
                 String endTime = cursor.getString(cursor.getColumnIndex(helper.COL_END_TIME));
                 double latitude = cursor.getDouble(cursor.getColumnIndex(helper.COL_LATITUDE));
                 double longitude = cursor.getDouble(cursor.getColumnIndex(helper.COL_LATITUDE));
+                String memo = cursor.getString(cursor.getColumnIndex(helper.COL_MEMO));
 //                MovingInfo 객체 생성 (일단 location 없이)
-                MovingInfo movingInfo = new MovingInfo(year, month, dayOfMonth, startTime, endTime, latitude, longitude);
+                //MovingInfo movingInfo = new MovingInfo(year, month, dayOfMonth, startTime, endTime, latitude, longitude, memo);
 //                list에 add
-                myMoving.add(movingInfo);
+                //myMoving.add(movingInfo);
             }
         }
         helper.close();

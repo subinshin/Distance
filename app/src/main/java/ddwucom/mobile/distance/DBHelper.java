@@ -21,6 +21,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public final String COL_LOCATION = "location";
     public final String COL_LATITUDE = "latitude";
     public final String COL_LONGITUDE = "longitude";
+    public final String COL_MEMO = "memo";
 
     public DBHelper(Context context){
         super(context, DB_NAME, null, 2);
@@ -31,31 +32,31 @@ public class DBHelper extends SQLiteOpenHelper {
 
         String sql = "CREATE TABLE " + TABLE_NAME + " (" + COL_ID + " integer primary key autoincrement, " +
                 COL_YEAR + " integer, " + COL_MONTH + " integer, " + COL_DAY + " integer, " + COL_START_TIME + " String, " + COL_END_TIME + " String, "
-                + COL_LOCATION + " TEXT, " + COL_LATITUDE + " double, " + COL_LONGITUDE + " double)";
+                + COL_LOCATION + " TEXT, " + COL_LATITUDE + " double, " + COL_LONGITUDE + " double, " + COL_MEMO + " TEXT)";
 
         Log.d(TAG, sql);
         db.execSQL(sql);
 
         db.execSQL("insert into " + TABLE_NAME + " values(null, 2020, 9, 10, '"
                 + (new Time(12, 5, 0)).toString() +"', '" + (new Time(12, 11, 0)).toString()
-                + "', '광진구 구의동 43-1', 37.550711, 127.095457);" );
+                + "', '광진구 구의동 43-1', 37.550711, 127.095457, 'sample');" );
         db.execSQL("insert into " + TABLE_NAME + " values(null, 2020, 9, 10, '"
                 + (new Time(13, 2, 0)).toString() +"', '" + (new Time(13, 52, 0)).toString()
-                + "', '스타벅스 월곡역점 (성북구 하월곡동 46-73)', 37.601944, 127.040408);" );
+                + "', '스타벅스 월곡역점 (성북구 하월곡동 46-73)', 37.601944, 127.040408, 'sample');" );
 
         db.execSQL("insert into " + TABLE_NAME + " values(null, 2020, 9, 11, '"
                 + (new Time(10, 34, 0)).toString() +"', '" + (new Time(10, 59, 0)).toString()
-                + "', '광진구 구의동 43-1', 37.550711, 127.095457);" );
+                + "', '광진구 구의동 43-1', 37.550711, 127.095457, 'sample');" );
         db.execSQL("insert into " + TABLE_NAME + " values(null, 2020, 9, 11, '"
                 + (new Time(12, 5, 0)).toString() +"', '" + (new Time(14, 11, 0)).toString()
-                + "', '동덕여자대학교 (성북구 하월곡동 화랑로13길 60)', 37.60632, 127.041808);" );
+                + "', '동덕여자대학교 (성북구 하월곡동 화랑로13길 60)', 37.60632, 127.041808, 'sample');" );
 
         db.execSQL("insert into " + TABLE_NAME + " values(null, 2020, 9, 18, '"
                 + (new Time(12, 5, 0)).toString() +"', '" + (new Time(14, 11, 0)).toString()
-                + "', '서울숲(성동구 성수동1가 뚝섬로 273)', 37.544566, 127.037496);" );
+                + "', '서울숲(성동구 성수동1가 뚝섬로 273)', 37.544566, 127.037496, 'sample');" );
         db.execSQL("insert into " + TABLE_NAME + " values(null, 2020, 9, 16, '"
                 + (new Time(12, 5, 0)).toString() +"', '" + (new Time(14, 11, 0)).toString()
-                + "', '롯데월드 (송파구 잠실동 올림픽로 240)', 37.511329, 127.098092);" );
+                + "', '롯데월드 (송파구 잠실동 올림픽로 240)', 37.511329, 127.098092, 'sample');" );
 
     }
 

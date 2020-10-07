@@ -15,18 +15,22 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
@@ -55,6 +59,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class GpsActivity extends AppCompatActivity {
     private static final int REQUEST_SMS_RECEIVE = 1000;
@@ -67,7 +73,7 @@ public class GpsActivity extends AppCompatActivity {
 
     private View mLayout;  // Snackbar 사용하기 위해서는 View가 필요합니다.
 
-    private final static String TAG = "MyGooglemapTest";        // 로그 TAG
+    private final static String TAG = "GpsActivity";        // 로그 TAG
     private final static int ZOOM_LEVEL = 17;                   // 지도 확대 배율
     private final static int PERMISSION_REQ_CODE = 100;         // permission 요청 코드
     private final static int LINE_COLOR = Color.RED;            // 선그리기 지정 색상
@@ -75,7 +81,8 @@ public class GpsActivity extends AppCompatActivity {
 
     private GoogleMap mGoogleMap;           // 구글맵 객체 저장 멥버 변수
     private LocationManager locManager;     // 위치 관리자
-    private Location lastLocation;          // 앱 실행 중 최종으로 수신한 위치 저장 멤버 변수
+    private Location lastLocation; // 앱 실행 중 최종으로 수신한 위치 저장 멤버 변수
+    private Geocoder geocoder;
 
     private Marker centerMarker;            // 현재 위치를 표현하는 마커 멤버 변수
     private MarkerOptions markerOptions;    // 마커 옵션
@@ -93,15 +100,24 @@ public class GpsActivity extends AppCompatActivity {
     // 현재시간을 date 변수에 저장한다.
     Date date = new Date(now);
     // 시간을 나타냇 포맷을 정한다 ( yyyy/MM/dd 같은 형태로 변형 가능 )
-    SimpleDateFormat sdfNow = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+    SimpleDateFormat sdfNow = new SimpleDateFormat("HH:mm");
     SimpleDateFormat sdfNowDate = new SimpleDateFormat("yyyy/MM/dd");
     // nowDate 변수에 값을 저장한다.
     String startDateTime = sdfNow.format(date);
     String startDate = sdfNowDate.format(date);
     String endDateTime;
 
-    int year, month, day;
+    Marker clickedPositionMarker = null;
 
+    ConstraintLayout gps_bottom_layout;
+    TextView tv_gps_loc;
+    Button btn_gps_loc_add = null;
+
+    String loc;
+    LatLng clickedLatLng = null;
+
+    int year, month, day;
+    Timer timer;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,11 +138,9 @@ public class GpsActivity extends AppCompatActivity {
         } else {
             // OS version is lower than marshmallow
         }
-
         dbManager = new DBManager(this);
-
-        // 위치관리자 준비
-        locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE); // 위치관리자 준비
+        geocoder = new Geocoder(GpsActivity.this);
 
         // 구글맵 준비
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
@@ -145,10 +159,8 @@ public class GpsActivity extends AppCompatActivity {
             lastLocation = locManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
         }
 
-///////
         Intent intent = getIntent();
         user_email = intent.getStringExtra("email_id");
-
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -158,6 +170,18 @@ public class GpsActivity extends AppCompatActivity {
         actionBar.setHomeAsUpIndicator(R.drawable.menu_icon); //뒤로가기 버튼 이미지 지정
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.gps_layout);
+        gps_bottom_layout = (ConstraintLayout) findViewById(R.id.gps_buttom_layout);
+        tv_gps_loc = findViewById(R.id.tv_gps_loc);
+        btn_gps_loc_add = findViewById(R.id.btn_gps_loc_add);
+        btn_gps_loc_add.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(GpsActivity.this, AddLocationActivity.class);
+                intent.putExtra("location", loc);
+                intent.putExtra("latlng", clickedLatLng);
+                startActivity(intent);
+            }
+        });
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View nav_header_view = navigationView.getHeaderView(0);
@@ -202,7 +226,6 @@ public class GpsActivity extends AppCompatActivity {
 ///////
 
     }
-
     public void onResume() {
         super.onResume();
         if (checkPermission()) {
@@ -210,10 +233,9 @@ public class GpsActivity extends AppCompatActivity {
             locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 60000, 0, locationListener);
         }
 
-        //화면 띄우기 직전마다 새롭게 확진자동선을 가져온다.
-        pathList.clear();
-
-        GetPathAsyncTask getPathAsyncTask = (GetPathAsyncTask) new GetPathAsyncTask().execute();
+        Log.d("BackgroundService", "onResume");
+        Intent intent = new Intent(getApplicationContext(), BackgroundService.class);
+        startService(intent);
     }
 
 
@@ -221,6 +243,18 @@ public class GpsActivity extends AppCompatActivity {
         super.onPause();
         // 위치 정보 수신 종료 - 위치 정보 수신 종료를 누르지 않았을 경우를 대비
         locManager.removeUpdates(locationListener);
+
+        Log.d("BackgroundService", "onPause");
+//        Intent intent = new Intent(getApplicationContext(), BackgroundService.class);
+//        startService(intent);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Intent intent = new Intent(getApplicationContext(), BackgroundService.class);
+        Log.d("BackgroundService", "onDestroy");
+        startService(intent);
     }
 
     @Override
@@ -243,7 +277,7 @@ public class GpsActivity extends AppCompatActivity {
     /*Google Map 준비 시 호출할 CallBack 인터페이스*/
     OnMapReadyCallback mapReadyCallback = new OnMapReadyCallback() {
         @Override
-        public void onMapReady(GoogleMap googleMap) {
+        public void onMapReady(final GoogleMap googleMap) {
             // 로딩한 구글맵을 보관
             mGoogleMap = googleMap;
 
@@ -270,45 +304,56 @@ public class GpsActivity extends AppCompatActivity {
             Bitmap b = bitmapDrawable.getBitmap();
             Bitmap smallMarker = Bitmap.createScaledBitmap(b, 200, 250, false);
 
+
             // 지정한 위치로 마커 위치 설정
             markerOptions.position(startLatLng)
                     .icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
             centerMarker = mGoogleMap.addMarker(markerOptions);
 
-            /*이하의 내용은 실습 1, 2 내용에 포함되어 있지 않은 지도 관련 이벤트 처리에 대한 예이므로 참고*/
 
-//            마커 윈도우 클릭 시 이벤트 처리
-//            mGoogleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-//                @Override
-//                public void onInfoWindowClick(Marker marker) {
-//                    LatLng markerPosition = marker.getPosition();
-//                    String loc = String.format("윈도우 클릭 - 위도:%f, 경도:%f",  markerPosition.latitude, markerPosition.longitude);
-//                    Toast.makeText(MainActivity.this, loc, Toast.LENGTH_SHORT).show();
-//                }
-//            });
-//
 ////            map 클릭 시 이벤트 처리
-//            mGoogleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-//                @Override
-//                public void onMapClick(LatLng latLng) {
-//                    String loc = String.format("클릭 - 위도:%f, 경도:%f", latLng.latitude, latLng.longitude);
-//                    Toast.makeText(MainActivity.this, loc, Toast.LENGTH_SHORT).show();
-//                }
-//            });
-//
-////            map 롱클릭 시 이벤트 처리
-////            롱클릭 시 NewActivity 를 호출, 호출 시 intent에 현재 위치의 위도 경도를 저장하여 전달
-//            mGoogleMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
-//                @Override
-//                public void onMapLongClick(LatLng latLng) {
-//                    Intent intent = new Intent(MainActivity.this, NewActivity.class);
-//                    intent.putExtra("latitude", latLng.latitude);
-//                    intent.putExtra("longitude", latLng.longitude);
-//                    startActivity(intent);
-//                }
-//            });
+            mGoogleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                @Override
+                public void onMapClick(LatLng latLng) {
+                    if (clickedPositionMarker != null) {
+                        clickedPositionMarker.remove();
+                        clickedPositionMarker = null;
+                        gps_bottom_layout.setVisibility(View.INVISIBLE);
+                    } else {
+                        loc = null;
+                        clickedLatLng = latLng;
+                        List<Address> address = null;
+                        try {
+                            address = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        if (address.size() != 0) {
+                            loc = address.get(0).getAddressLine(0);
+                            MarkerOptions mo = new MarkerOptions().position(latLng);
+                            clickedPositionMarker = googleMap.addMarker(mo);
+
+                            tv_gps_loc.setText(loc);
+                            gps_bottom_layout.setVisibility(View.VISIBLE);
+                        }else {
+                            Toast.makeText(context, "위치정보 불러올 수 없음", Toast.LENGTH_SHORT).show();
+                            clickedPositionMarker = null;
+                        }
+
+                    }
+                }
+            });
         }
     };
+
+
+//    TimerTask timerTask = new TimerTask() {
+//        @Override
+//        public void run() {
+//            Log.d(TAG, "timerTask in counter : " + count);
+//            count++;
+//        }
+//    };
 
     /*위치 정보 수신 LocationListener*/
     LocationListener locationListener = new LocationListener() {
@@ -319,69 +364,70 @@ public class GpsActivity extends AppCompatActivity {
 //            현재 수신한 위치 정보 Location을 LatLng 형태로 변환
             currentLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
 
-            if (count == 0) {
-                // 현재시간을 msec 으로 구한다.
-                now = System.currentTimeMillis();
-                // 현재시간을 date 변수에 저장한다.
-                date = new Date(now);
-                // nowDate 변수에 값을 저장한다.
-                startDateTime = sdfNow.format(date);
-                startDate = sdfNowDate.format(date);
+//            if (count == 0) {
+//                // 현재시간을 msec 으로 구한다.
+//                now = System.currentTimeMillis();
+//                // 현재시간을 date 변수에 저장한다.
+//                date = new Date(now);
+//                // nowDate 변수에 값을 저장한다.
+//                startDateTime = sdfNow.format(date);
+//                startDate = sdfNowDate.format(date);
+//
+//                String a[] = startDate.split("/");
+//
+//                year = Integer.parseInt(a[0]);
+//                month = Integer.parseInt(a[1]);
+//                day = Integer.parseInt(a[2]);
+//            }
 
-                String a[] = startDate.split("/");
+         //   distance = lastLocation.distanceTo(currentLocation);
 
-                year = Integer.parseInt(a[0]);
-                month = Integer.parseInt(a[1]);
-                day = Integer.parseInt(a[2]);
-            }
-
-            distance = lastLocation.distanceTo(currentLocation);
-
-            if (distance <= 15) {
-                count++;
+//            if (distance <= 15 && count == 0) {
+//                timer = new Timer();
+//                timer.schedule(timerTask, 0, 1000);
 //                Toast.makeText(GpsActivity.this, Integer.toString(count), Toast.LENGTH_SHORT).show();
-            } else {
-                if (count >= 5) {
-                    // 현재시간을 msec 으로 구한다.
-                    now = System.currentTimeMillis();
-                    // 현재시간을 date 변수에 저장한다.
-                    date = new Date(now);
-                    // nowDate 변수에 값을 저장한다.
-                    endDateTime = sdfNow.format(date);
+//            } else if(count >= 5 && distance > 15){
+//                    Log.d(TAG, "위치 추가 코드로 진입");
+//
+//                    // 현재시간을 msec 으로 구한다.
+//                    now = System.currentTimeMillis();
+//                    // 현재시간을 date 변수에 저장한다.
+//                    date = new Date(now);
+//                    // nowDate 변수에 값을 저장한다.
+//                    endDateTime = sdfNow.format(date);
+//
+//                    double latitude = Double.parseDouble(String.format("%6f", lastLocation.getLatitude()));
+//                    double longitude = Double.parseDouble(String.format("%6f", lastLocation.getLongitude()));
 
-
-                    double latitude = Double.parseDouble(String.format("%6f", lastLocation.getLatitude()));
-                    double longitude = Double.parseDouble(String.format("%6f", lastLocation.getLongitude()));
-                    Geocoder geocoder = new Geocoder(GpsActivity.this);
-                    List<Address> address = null;
-                    try {
-                        address = geocoder.getFromLocation(latitude, longitude, 3);
-                    } catch (IOException e) {
-                        Log.d(TAG, "geocoding error");
-                    }
-
-                    Log.d(TAG, Double.toString(latitude));
-                    Log.d(TAG, Double.toString(longitude));
-                    Log.d(TAG, address.get(0).getAddressLine(0));
-//                    Toast.makeText(GpsActivity.this, address.get(0).toString(), Toast.LENGTH_SHORT).show();
-
-                    boolean result = dbManager.addNewGps(
-                            new MovingInfo(year, month, day, startDateTime, endDateTime, latitude, longitude, address.get(0).getAddressLine(0)));
-
-                    if (result) {    // 정상수행에 따른 처리
-                        Toast.makeText(GpsActivity.this, "새로운 위치 추가 성공!", Toast.LENGTH_SHORT).show();
-                    } else {        // 이상에 따른 처리
-                        Toast.makeText(GpsActivity.this, "새로운 위치 추가 실패!", Toast.LENGTH_SHORT).show();
-                    }
-
-                    Log.d(TAG, startDateTime);
-                    Log.d(TAG, endDateTime);
-//                    Toast.makeText(GpsActivity.this, Integer.toString(count), Toast.LENGTH_SHORT).show();
-                }
-                count = 0;
+//                    List<Address> address = null;
+//                    try {
+//                        address = geocoder.getFromLocation(latitude, longitude, 3);
+//                    } catch (IOException e) {
+//                        Log.d(TAG, "geocoding error");
+//                    }
+//
+//                    Log.d(TAG, Double.toString(latitude));
+//                    Log.d(TAG, Double.toString(longitude));
+//                    Log.d(TAG, address.get(0).getAddressLine(0));
+//
+//                    boolean result = dbManager.addNewGps(
+//                            new MovingInfo(year, month, day, startDateTime, endDateTime, latitude, longitude, address.get(0).getAddressLine(0), "auto"));
+//
+//                    if (result) {    // 정상수행에 따른 처리
+//                        Log.d(TAG, "위치 추가 성공!");
+//                    } else {        // 이상에 따른 처리
+//                        Log.d(TAG, "위치 추가 실패");
+//                    }
+//
+//                    Log.d(TAG, startDateTime);
+//                    Log.d(TAG, endDateTime);
+////                    Toast.makeText(GpsActivity.this, Integer.toString(count), Toast.LENGTH_SHORT).show();
+//
+//                timer.cancel();
+//                count = 0;
                 lastLocation.setLatitude(currentLocation.getLatitude());
                 lastLocation.setLongitude(currentLocation.getLongitude());
-            }
+       //     }
 
             Log.d(TAG, String.valueOf(count));
 
@@ -425,8 +471,6 @@ public class GpsActivity extends AppCompatActivity {
         return true;
     }
 
-
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch(requestCode) {
@@ -434,7 +478,7 @@ public class GpsActivity extends AppCompatActivity {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED
                         && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(this, "Permission is granted!\nTry again!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Permission is granted!\n", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(this, "Permission is denied!\n", Toast.LENGTH_SHORT).show();
                 }
@@ -444,42 +488,42 @@ public class GpsActivity extends AppCompatActivity {
 
 
 
-    public class GetPathAsyncTask extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            Log.d(TAG, "task Start");
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-            db.collectionGroup("paths").get()
-                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                        @Override
-                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                            for (QueryDocumentSnapshot snap : queryDocumentSnapshots) {
-                                DocumentSnapshot documentSnapshot = snap;
-                                PathInfo path = documentSnapshot.toObject(PathInfo.class);
-                                pathList.add(path);
-                                Log.d(TAG, path.getPatient_no() + " / " + path.getPlace() + " / " + path.getVisitDate());
-//                            Log.d(TAG, snap.getId() + " => " + snap.getData());
-                            }
-                        }
-                    });
-            Log.d(TAG, "task Finish");
-           return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-
-        }
-
-
-    }
+//    public class GetPathAsyncTask extends AsyncTask<Void, Void, Void> {
+//        @Override
+//        protected void onPreExecute() {
+//            super.onPreExecute();
+//        }
+//
+//        @Override
+//        protected Void doInBackground(Void... voids) {
+//            Log.d(TAG, "task Start");
+//            FirebaseFirestore db = FirebaseFirestore.getInstance();
+//
+//            db.collectionGroup("paths").get()
+//                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+//                        @Override
+//                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+//                            for (QueryDocumentSnapshot snap : queryDocumentSnapshots) {
+//                                DocumentSnapshot documentSnapshot = snap;
+//                                PathInfo path = documentSnapshot.toObject(PathInfo.class);
+//                                pathList.add(path);
+//                                Log.d(TAG, path.getPatient_no() + " / " + path.getPlace() + " / " + path.getVisitDate());
+////                            Log.d(TAG, snap.getId() + " => " + snap.getData());
+//                            }
+//                        }
+//                    });
+//            Log.d(TAG, "task Finish");
+//           return null;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Void aVoid) {
+//            super.onPostExecute(aVoid);
+//
+//        }
+//
+//
+//    }
 
 }
 
