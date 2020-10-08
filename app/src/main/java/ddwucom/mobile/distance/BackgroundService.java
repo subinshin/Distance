@@ -191,7 +191,7 @@ public class BackgroundService extends Service {
         }
 
         boolean result = dbManager.addNewGps(
-                new MovingInfo(year, month, day, startDateTime, endDateTime, latitude, longitude, addressString , "auto"));
+                new MovingInfo(year, month, day, startDateTime, endDateTime, latitude, longitude, addressString , "auto", "store"));
         if (result) {    // 정상수행에 따른 처리
             Log.d(TAG, "새로운 위치 추가 성공");
         } else {        // 이상에 따른 처리

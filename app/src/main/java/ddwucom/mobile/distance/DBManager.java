@@ -83,6 +83,7 @@ public class DBManager {
         value.put(helper.COL_LOCATION, newGps.getLocation());
         value.put(helper.COL_LATITUDE, newGps.getLatitude());
         value.put(helper.COL_LONGITUDE, newGps.getLongitude());
+        value.put(helper.COL_MEMO, newGps.getMemo());
         value.put(helper.COL_STORE, newGps.getStore());
 
 //      insert 메소드를 사용할 경우 데이터 삽입이 정상적으로 이루어질 경우 1 이상, 이상이 있을 경우 0 반환 확인 가능
