@@ -15,7 +15,6 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,7 +26,6 @@ import android.widget.Toast;
 
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -71,7 +69,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Timer;
-import java.util.TimerTask;
 
 public class GpsActivity extends AppCompatActivity {
     private static final int REQUEST_SMS_RECEIVE = 1000;
@@ -118,8 +115,7 @@ public class GpsActivity extends AppCompatActivity {
     String startDate = sdfNowDate.format(date);
     String endDateTime;
 
-    Marker clickedPositionMarker = null;
-    Marker searchedPositionMarker = null;
+    Marker selectedPositionMarker = null;
 
     ConstraintLayout gps_bottom_layout;
     TextView tv_gps_loc;
@@ -127,7 +123,7 @@ public class GpsActivity extends AppCompatActivity {
     SearchView sv_location;
 
     String loc;
-    LatLng clickedLatLng = null;
+    LatLng selectedLatLng = null;
 
     int year, month, day;
     Timer timer;
@@ -237,15 +233,14 @@ public class GpsActivity extends AppCompatActivity {
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(@NotNull Place place) {
-                if (searchedPositionMarker != null) {
-                    clickedPositionMarker.remove();
-                    searchedPositionMarker.remove();
-                    searchedPositionMarker = null;
+                if(selectedPositionMarker != null){
+                    selectedPositionMarker.remove();
+                    selectedPositionMarker = null;
                     gps_bottom_layout.setVisibility(View.INVISIBLE);
                 }
                 else {
                     loc = null;
-                    clickedLatLng = null;
+                    selectedLatLng = null;
 
                     // TODO: Get info about the selected place.
 //                  Log.i(TAG, "정보를 확인합니다! Place: " + place.getName() + ", " + place.getLatLng() + ", " + place.getAddress());
@@ -254,14 +249,14 @@ public class GpsActivity extends AppCompatActivity {
                     LatLng latLng = place.getLatLng();
 
                     loc = businessName + ", " + address;
-                    clickedLatLng = latLng;
+                    selectedLatLng = latLng;
 
-                    mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(clickedLatLng, ZOOM_LEVEL));
+                    mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(selectedLatLng, ZOOM_LEVEL));
                     MarkerOptions mo = new MarkerOptions().position(latLng);
-                    if(clickedPositionMarker != null) {
-                        clickedPositionMarker.remove();
+                    if(selectedPositionMarker != null) {
+                        selectedPositionMarker.remove();
                     }
-                    searchedPositionMarker = mGoogleMap.addMarker(mo);
+                    selectedPositionMarker = mGoogleMap.addMarker(mo);
 
                     tv_gps_loc.setText(loc);
                     gps_bottom_layout.setVisibility(View.VISIBLE);
@@ -289,7 +284,7 @@ public class GpsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(GpsActivity.this, AddLocationActivity.class);
                 intent.putExtra("location", loc);
-                intent.putExtra("latlng", clickedLatLng);
+                intent.putExtra("latlng", selectedLatLng);
                 startActivity(intent);
             }
         });
@@ -436,14 +431,13 @@ public class GpsActivity extends AppCompatActivity {
             mGoogleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                 @Override
                 public void onMapClick(LatLng latLng) {
-                    if (clickedPositionMarker != null) {
-                        searchedPositionMarker.remove();
-                        clickedPositionMarker.remove();
-                        clickedPositionMarker = null;
+                    if (selectedPositionMarker != null) {
+                        selectedPositionMarker.remove();
+                        selectedPositionMarker = null;
                         gps_bottom_layout.setVisibility(View.INVISIBLE);
                     } else {
                         loc = null;
-                        clickedLatLng = latLng;
+                        selectedLatLng = latLng;
                         List<Address> address = null;
                         try {
                             address = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
@@ -453,16 +447,13 @@ public class GpsActivity extends AppCompatActivity {
                         if (address.size() != 0) {
                             loc = address.get(0).getAddressLine(0);
                             MarkerOptions mo = new MarkerOptions().position(latLng);
-                            if(searchedPositionMarker != null) {
-                                searchedPositionMarker.remove();
-                            }
-                            clickedPositionMarker = googleMap.addMarker(mo);
+                            selectedPositionMarker = googleMap.addMarker(mo);
 
                             tv_gps_loc.setText(loc);
                             gps_bottom_layout.setVisibility(View.VISIBLE);
                         }else {
                             Toast.makeText(context, "위치정보 불러올 수 없음", Toast.LENGTH_SHORT).show();
-                            clickedPositionMarker = null;
+                            selectedPositionMarker = null;
                         }
 
                     }
