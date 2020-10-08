@@ -57,7 +57,11 @@ public class SMSReceiver extends BroadcastReceiver {
                     String year = simpleDateFormat.format(receivedDate);
                     time = year + "/" + msg[2] + " " + msg[3];
                     for (int i = 5; i < msg.length; i++) {
-                        store += msg[i];
+                        if (i == msg.length - 1) {
+                            store += msg[i];
+                        } else {
+                            store += msg[i] + " ";
+                        }
                     }
                     SMSInfo s = new SMSInfo(time, store);
                     Log.d(TAG, s.getDatetime() + s.getLocation());
