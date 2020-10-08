@@ -21,8 +21,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -36,6 +38,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -47,6 +50,11 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -54,9 +62,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Timer;
@@ -108,10 +119,12 @@ public class GpsActivity extends AppCompatActivity {
     String endDateTime;
 
     Marker clickedPositionMarker = null;
+    Marker searchedPositionMarker = null;
 
     ConstraintLayout gps_bottom_layout;
     TextView tv_gps_loc;
     Button btn_gps_loc_add = null;
+    SearchView sv_location;
 
     String loc;
     LatLng clickedLatLng = null;
@@ -169,6 +182,104 @@ public class GpsActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true); // 뒤로가기 버튼 만들기
         actionBar.setHomeAsUpIndicator(R.drawable.menu_icon); //뒤로가기 버튼 이미지 지정
 
+//        sv_location = findViewById(R.id.sv_location);
+//
+//        sv_location.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                String location = sv_location.getQuery().toString();
+//                List<Address> addressList = null;
+//
+//                if (location != null || !location.equals("")) {
+//                    Geocoder geocoder = new Geocoder(GpsActivity.this);
+//                    try {
+//                        addressList = geocoder.getFromLocationName(location, 1);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                    Address address = addressList.get(0);
+//                    LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+//
+//                    //해당 위치로 이동하게끔 하기.
+//                    //autocomplete 추가하기
+//                    //add마커가 아니라 한번 표시되고 다른장소 가면 마커 사라지도록
+//                    //정보 추출해서 동선 저장하도록하기
+//
+//
+//                }
+//
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//                return false;
+//            }
+//        });
+
+//        you’d need to initialize PlacesClient like this
+        String apiKey = getString(R.string.api_key);
+        if (!Places.isInitialized()) {
+            Places.initialize(getApplicationContext(), apiKey);
+        }
+
+        // Create a new Places client instance.
+        PlacesClient placesClient = Places.createClient(this);
+
+        // Initialize the AutocompleteSupportFragment.
+        AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
+                getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
+
+        // Specify the types of place data to return.
+        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.LAT_LNG, Place.Field.NAME, Place.Field.ADDRESS));
+
+        // Set up a PlaceSelectionListener to handle the response.
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(@NotNull Place place) {
+                if (searchedPositionMarker != null) {
+                    clickedPositionMarker.remove();
+                    searchedPositionMarker.remove();
+                    searchedPositionMarker = null;
+                    gps_bottom_layout.setVisibility(View.INVISIBLE);
+                }
+                else {
+                    loc = null;
+                    clickedLatLng = null;
+
+                    // TODO: Get info about the selected place.
+//                  Log.i(TAG, "정보를 확인합니다! Place: " + place.getName() + ", " + place.getLatLng() + ", " + place.getAddress());
+                    String businessName = place.getName();
+                    String address = place.getAddress();
+                    LatLng latLng = place.getLatLng();
+
+                    loc = businessName + ", " + address;
+                    clickedLatLng = latLng;
+
+                    mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(clickedLatLng, ZOOM_LEVEL));
+                    MarkerOptions mo = new MarkerOptions().position(latLng);
+                    if(clickedPositionMarker != null) {
+                        clickedPositionMarker.remove();
+                    }
+                    searchedPositionMarker = mGoogleMap.addMarker(mo);
+
+                    tv_gps_loc.setText(loc);
+                    gps_bottom_layout.setVisibility(View.VISIBLE);
+                }
+
+            }
+
+            @Override
+            public void onError(@NotNull Status status) {
+                // TODO: Handle the error.
+                Log.i(TAG, "An error occurred: " + status);
+            }
+        });
+
+
+
+
+
         mDrawerLayout = (DrawerLayout) findViewById(R.id.gps_layout);
         gps_bottom_layout = (ConstraintLayout) findViewById(R.id.gps_buttom_layout);
         tv_gps_loc = findViewById(R.id.tv_gps_loc);
@@ -203,6 +314,7 @@ public class GpsActivity extends AppCompatActivity {
                     Intent intent = new Intent(GpsActivity.this, MyPageActivity.class);
                     startActivity(intent);
                 }else if(id == R.id.item_moving){
+                    Log.d(TAG, String.valueOf(pathList.size()));
                     Intent intent = new Intent(GpsActivity.this, MovingActivity.class);
                     intent.putExtra("pathList", pathList);
                     startActivity(intent);
@@ -226,12 +338,20 @@ public class GpsActivity extends AppCompatActivity {
 ///////
 
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
     public void onResume() {
         super.onResume();
         if (checkPermission()) {
             // 위치 정보 수신 시작 - 10초 간격, 0m 이상 이동 시 수신
             locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 60000, 0, locationListener);
         }
+
+        new GetPathAsyncTask().execute();
 
         Log.d("BackgroundService", "onResume");
         Intent intent = new Intent(getApplicationContext(), BackgroundService.class);
@@ -243,6 +363,7 @@ public class GpsActivity extends AppCompatActivity {
         super.onPause();
         // 위치 정보 수신 종료 - 위치 정보 수신 종료를 누르지 않았을 경우를 대비
         locManager.removeUpdates(locationListener);
+
 
         Log.d("BackgroundService", "onPause");
 //        Intent intent = new Intent(getApplicationContext(), BackgroundService.class);
@@ -316,6 +437,7 @@ public class GpsActivity extends AppCompatActivity {
                 @Override
                 public void onMapClick(LatLng latLng) {
                     if (clickedPositionMarker != null) {
+                        searchedPositionMarker.remove();
                         clickedPositionMarker.remove();
                         clickedPositionMarker = null;
                         gps_bottom_layout.setVisibility(View.INVISIBLE);
@@ -331,6 +453,9 @@ public class GpsActivity extends AppCompatActivity {
                         if (address.size() != 0) {
                             loc = address.get(0).getAddressLine(0);
                             MarkerOptions mo = new MarkerOptions().position(latLng);
+                            if(searchedPositionMarker != null) {
+                                searchedPositionMarker.remove();
+                            }
                             clickedPositionMarker = googleMap.addMarker(mo);
 
                             tv_gps_loc.setText(loc);
@@ -488,42 +613,42 @@ public class GpsActivity extends AppCompatActivity {
 
 
 
-//    public class GetPathAsyncTask extends AsyncTask<Void, Void, Void> {
-//        @Override
-//        protected void onPreExecute() {
-//            super.onPreExecute();
-//        }
-//
-//        @Override
-//        protected Void doInBackground(Void... voids) {
-//            Log.d(TAG, "task Start");
-//            FirebaseFirestore db = FirebaseFirestore.getInstance();
-//
-//            db.collectionGroup("paths").get()
-//                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-//                        @Override
-//                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-//                            for (QueryDocumentSnapshot snap : queryDocumentSnapshots) {
-//                                DocumentSnapshot documentSnapshot = snap;
-//                                PathInfo path = documentSnapshot.toObject(PathInfo.class);
-//                                pathList.add(path);
-//                                Log.d(TAG, path.getPatient_no() + " / " + path.getPlace() + " / " + path.getVisitDate());
-////                            Log.d(TAG, snap.getId() + " => " + snap.getData());
-//                            }
-//                        }
-//                    });
-//            Log.d(TAG, "task Finish");
-//           return null;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(Void aVoid) {
-//            super.onPostExecute(aVoid);
-//
-//        }
-//
-//
-//    }
+    public class GetPathAsyncTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            Log.d(TAG, "task Start");
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+            db.collectionGroup("paths").get()
+                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            for (QueryDocumentSnapshot snap : queryDocumentSnapshots) {
+                                DocumentSnapshot documentSnapshot = snap;
+                                PathInfo path = documentSnapshot.toObject(PathInfo.class);
+                                pathList.add(path);
+                                Log.d(TAG, path.getPatient_no() + " / " + path.getPlace() + " / " + path.getVisitDate());
+//                            Log.d(TAG, snap.getId() + " => " + snap.getData());
+                            }
+                        }
+                    });
+            Log.d(TAG, "task Finish");
+           return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+        }
+
+
+    }
 
 }
 

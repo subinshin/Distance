@@ -107,6 +107,11 @@ public class MovingActivity extends AppCompatActivity {
         patientPathList = (ArrayList<PathInfo>) intent.getSerializableExtra("pathList");
         patientSelectedList = new ArrayList<PathInfo>();
 
+        Log.d(TAG, "확진자리스트 갯수: " + String.valueOf(patientPathList.size()));
+        for (PathInfo pathInfo : patientPathList) {
+            Log.d(TAG, "확진자: " + pathInfo.toString());
+        }
+
         //전체내용복사
         getAllPatientList();
 
