@@ -15,13 +15,14 @@ public class MovingInfo {
     double latitude;
     double longitude;
     String memo;
+    String store;
 
     public MovingInfo() {
         startTime = null;
         endTime = null;
     }
 
-    public MovingInfo(int year, int month, int dayOfMonth, String startTime, String endTime, double latitude, double longitude,  String memo) {
+    public MovingInfo(int year, int month, int dayOfMonth, String startTime, String endTime, double latitude, double longitude, String location, String memo, String store) {
         this.year = year;
         this.month = month;
         this.dayOfMonth = dayOfMonth;
@@ -31,19 +32,7 @@ public class MovingInfo {
         this.latitude = latitude;
         this.longitude = longitude;
         this.memo = memo;
-    }
-
-
-    public MovingInfo(int year, int month, int dayOfMonth, String startTime, String endTime, double latitude, double longitude, String location, String memo) {
-        this.year = year;
-        this.month = month;
-        this.dayOfMonth = dayOfMonth;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.location = location;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.memo = memo;
+        this.store = store;
     }
 
 
@@ -125,5 +114,14 @@ public class MovingInfo {
 
     public void setMemo(String memo) {
         this.memo = memo;
+    }
+
+
+    public String getStore() {
+        return store;
+    }
+
+    public void setStore(String store) {
+        this.store = store;
     }
 }

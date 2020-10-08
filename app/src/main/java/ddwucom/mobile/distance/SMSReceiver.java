@@ -50,16 +50,20 @@ public class SMSReceiver extends BroadcastReceiver {
             Log.d(TAG, "received date: " + receivedDate);
 
             String time = "";
-            String location = "";
+            String store = "";
             if (contents != null) {
                 if (contents.contains("[신한체크승인]")) {
                     String msg[] = contents.split(" ");
                     String year = simpleDateFormat.format(receivedDate);
                     time = year + "/" + msg[2] + " " + msg[3];
                     for (int i = 5; i < msg.length; i++) {
-                        location += msg[i];
+                        if (i == msg.length - 1) {
+                            store += msg[i];
+                        } else {
+                            store += msg[i] + " ";
+                        }
                     }
-                    SMSInfo s = new SMSInfo(time, location);
+                    SMSInfo s = new SMSInfo(time, store);
                     Log.d(TAG, s.getDatetime() + s.getLocation());
                     boolean result = dbManager.addNewSMS(s);
                     if (result) {
@@ -69,17 +73,18 @@ public class SMSReceiver extends BroadcastReceiver {
                     }
 
                     // 해당 내용을 모두 합쳐서 액티비티로 보낸다.
-                    sendToActivity(context, time + '\n' + location);
+                    sendToActivity(context, time, store);
 
                 }
             }
         }
     }
 
-    private void sendToActivity(Context context, String str){
+    private void sendToActivity(Context context, String time, String store){
         Intent intent = new Intent(context, SMSActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_SINGLE_TOP|Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra("string", str);
+        intent.putExtra("time", time);
+        intent.putExtra("store", store);
         context.startActivity(intent);
     }
 

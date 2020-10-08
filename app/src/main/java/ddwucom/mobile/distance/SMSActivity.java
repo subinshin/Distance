@@ -1,42 +1,75 @@
 package ddwucom.mobile.distance;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 
 public class SMSActivity extends AppCompatActivity {
 
     EditText editText;
     Button button;
+    DBManager dbManager;
+    String time = "";
+    String store = "";
+    private Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sms);
 
+        dbManager = new DBManager(this);
+
         editText = (EditText)findViewById(R.id.editText);
-        button = (Button)findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        button = (Button)findViewById(R.id.btnSave);
+//        button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                finish();
+//            }
+//        });
 
         // (1) 리시버에 의해 해당 액티비티가 새롭게 실행된 경우
         Intent passedIntent = getIntent();
         processIntent(passedIntent);
     }
 
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btnSave:
+                String[] str = time.split(" ");
+                String[] date = str[0].split("/");
+                int year = Integer.parseInt(date[0]);
+                int month = Integer.parseInt(date[1]);
+                int day = Integer.parseInt(date[2]);
+                boolean result = dbManager.addNewGps(
+                            new MovingInfo(year, month, day, time, time, 0, 0, "address", "auto", store));
+                if (result) {
+                    Toast.makeText(context, "저장 성공", Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+                    Toast.makeText(context, "저장 실패", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case R.id.btnCancel:
+                finish();
+                break;
+        }
+    }
+
     private void processIntent(Intent intent){
         if(intent != null){
             // 인텐트에서 전달된 데이터를 추출하여, 활용한다.(여기서는 edittext를 통하여 내용을 화면에 뿌려주었다.)
-            String string = intent.getStringExtra("string");
-            editText.setText(string);
+            time = intent.getStringExtra("time");
+            store = intent.getStringExtra("store");
+            editText.setText(time + "\n" + store);
         }
     }
 

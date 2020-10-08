@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Distance</string>
+    <string name="app_name">Triary</string>
 
     <string name="login_title">로그인</string>
     <string name="login_email">이메일</string>
