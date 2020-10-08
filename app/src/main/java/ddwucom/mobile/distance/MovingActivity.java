@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.DatePicker;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -24,6 +25,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -45,6 +47,8 @@ import java.util.Date;
 
 public class MovingActivity extends AppCompatActivity {
     //gpsAcitivity로 부터 가져온 확진자 동선
+    ArrayList<PathInfo> pathList;
+
 
     Spinner spinner;
     DBManager manager;
@@ -102,6 +106,11 @@ public class MovingActivity extends AppCompatActivity {
         //intent로 부터 전달받은 확진자 동선
         patientPathList = (ArrayList<PathInfo>) intent.getSerializableExtra("pathList");
         patientSelectedList = new ArrayList<PathInfo>();
+
+        Log.d(TAG, "확진자리스트 갯수: " + String.valueOf(patientPathList.size()));
+        for (PathInfo pathInfo : patientPathList) {
+            Log.d(TAG, "확진자: " + pathInfo.toString());
+        }
 
         //전체내용복사
         getAllPatientList();

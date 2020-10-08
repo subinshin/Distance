@@ -60,4 +60,5 @@
 
     <string name="init_lat">37.606320</string>
     <string name="init_lng">127.041808</string>
+    <string name="api_key">AIzaSyBirPKZ6hwetA2S_2x_Yhez11zriqotBD4</string>
 </resources>
