@@ -131,7 +131,7 @@ public class MovingActivity extends AppCompatActivity {
         inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         manager = new DBManager(this);
-        adapter = new MovingInfoAdapter(MovingActivity.this, R.layout.layout_listview, cursor);
+        adapter = new MovingInfoAdapter(MovingActivity.this, R.layout.layout_listview_2, cursor);
 
         all_layout = findViewById(R.id.all_layout);
         map_layout = findViewById(R.id.map_layout);
