@@ -238,7 +238,9 @@ public class GpsActivity extends AppCompatActivity {
             @Override
             public void onPlaceSelected(@NotNull Place place) {
                 if (searchedPositionMarker != null) {
-                    clickedPositionMarker.remove();
+                    if(clickedPositionMarker != null) {
+                        clickedPositionMarker.remove();
+                    }
                     searchedPositionMarker.remove();
                     searchedPositionMarker = null;
                     gps_bottom_layout.setVisibility(View.INVISIBLE);
