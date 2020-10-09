@@ -135,9 +135,113 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_header"
-        app:menu="@menu/navigation_menu">
+        android:fitsSystemWindows="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#F4ECEC"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/tv_email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:layout_marginStart="80dp"
+                    android:layout_marginLeft="80dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="83dp"
+                    android:layout_marginRight="83dp"
+                    android:layout_marginBottom="30dp"
+                    android:text="사용자 이메일"
+                    android:textColor="#AE53AC"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.642"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageView14" />
+
+                <ImageView
+                    android:id="@+id/imageView14"
+                    android:layout_width="175dp"
+                    android:layout_height="161dp"
+                    android:layout_marginStart="53dp"
+                    android:layout_marginLeft="53dp"
+                    android:layout_marginTop="38dp"
+                    android:layout_marginEnd="52dp"
+                    android:layout_marginRight="52dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/profile_pic" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/tv_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:onClick="tvOnClick"
+                android:padding="15dp"
+                android:text="결제문자확인"
+                android:textColor="#AE53AC"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.502"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_moving" />
+
+            <TextView
+                android:id="@+id/tv_moving"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:onClick="tvOnClick"
+                android:padding="15dp"
+                android:text="동선확인"
+                android:textColor="#AE53AC"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_mypage" />
+
+            <TextView
+                android:id="@+id/tv_logout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:onClick="tvOnClick"
+                android:paddingLeft="15dp"
+                android:paddingTop="15dp"
+                android:paddingRight="15dp"
+                android:paddingBottom="15dp"
+                android:text="로그아웃"
+                android:textColor="#AE53AC"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_message" />
+
+            <TextView
+                android:id="@+id/tv_mypage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="76dp"
+                android:onClick="tvOnClick"
+                android:padding="15dp"
+                android:text="마이페이지"
+                android:textColor="#AE53AC"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout2" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.navigation.NavigationView>
 
