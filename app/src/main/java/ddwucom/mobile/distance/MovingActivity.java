@@ -3,34 +3,34 @@ package ddwucom.mobile.distance;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.FragmentManager;
-import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
+import android.util.TypedValue;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.CalendarView;
 import android.widget.DatePicker;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.baoyz.swipemenulistview.SwipeMenu;
+import com.baoyz.swipemenulistview.SwipeMenuCreator;
+import com.baoyz.swipemenulistview.SwipeMenuItem;
+import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -40,23 +40,21 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.tabs.TabLayout;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class MovingActivity extends AppCompatActivity {
+public class MovingActivity extends AppCompatActivity{
     //gpsAcitivity로 부터 가져온 확진자 동선
     ArrayList<PathInfo> pathList;
 
-
-    Spinner spinner;
     DBManager manager;
     MovingInfoAdapter adapter;
-    ListView all_listView;
+    SwipeMenuListView all_listView;
     Cursor cursor;
     FrameLayout layout_moving;
-    LayoutInflater inflater;
 
     ConstraintLayout all_layout;
     ConstraintLayout map_layout;
@@ -69,9 +67,9 @@ public class MovingActivity extends AppCompatActivity {
     DBHelper helper;
     private static final String TAG = "MovingActivity";
 
-    Button btn_all;
-    Button btn_date;
-    Button btn_map_patient;
+    ImageButton btn_all;
+    ImageButton btn_date;
+    ImageButton btn_map_patient;
 
     CameraPosition cameraPosition;
     ArrayList<MarkerOptions> markersOption;
@@ -81,9 +79,9 @@ public class MovingActivity extends AppCompatActivity {
     ArrayList<PathInfo> patientSelectedList;
     ArrayList<Marker> patientMarkers;
 
-    final static int SPINNER_LIST = 0;
-    final static int SPINNER_MAP = 1;
-    int spinnerSelected;
+    final static int LIST_TAB = 0;
+    final static int MAP_TAB = 1;
+    int tabSelected;
 
     //확진자 동선보기 버튼 클릭시 필요
     boolean patientOnOff;
@@ -94,13 +92,24 @@ public class MovingActivity extends AppCompatActivity {
     int currentYear;
     int currentMonth;
     int currentDay;
+    int selectedYear;
+    int selectedMonth;
+    int selectedDay;
+
+    int clickedBtn;
+    final int BTN_ALL = 10;
+    final int BTN_DATE = 20;
+
+    TabLayout tabLayout;
+    TextView tv_searchCondition;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_moving);
 
         Log.d(TAG, "Start movingActivity");
-        spinnerSelected = SPINNER_LIST;
+        tabSelected = LIST_TAB;
+        clickedBtn = BTN_ALL;
 
         Intent intent = getIntent();
         //intent로 부터 전달받은 확진자 동선
@@ -112,33 +121,155 @@ public class MovingActivity extends AppCompatActivity {
             Log.d(TAG, "확진자: " + pathInfo.toString());
         }
 
-        //전체내용복사
+        //확진자동선 전체내용복사
         getAllPatientList();
-
         patientMarkers = new ArrayList<Marker>();
         patientOnOff = false;
 
+        // 아이콘 설정
         btn_date = findViewById(R.id.btn_date);
         btn_all = findViewById(R.id.btn_all);
         btn_map_patient = findViewById(R.id.btn_map_patient);
 
+        // 내 동선 저장할 마커 배열
         markersOption = new ArrayList<MarkerOptions>();
         myMarkers = new ArrayList<Marker>();
 
-        helper = new DBHelper(this);
-
+        // 레이아웃 가져오기
         layout_moving = findViewById(R.id.layout_moving);
-        inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        manager = new DBManager(this);
-        adapter = new MovingInfoAdapter(MovingActivity.this, R.layout.layout_listview_2, cursor);
-
         all_layout = findViewById(R.id.all_layout);
         map_layout = findViewById(R.id.map_layout);
         no_data_layout = findViewById(R.id.no_data_layout);
+        tabLayout = findViewById(R.id.tabLayout);
+        // tab 선택시 작동하는 리스너
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                cursor = manager.getAllInfos();
+                tv_searchCondition.setText("전체");
+                clickedBtn = BTN_ALL;
+
+                int pos = tab.getPosition();
+                    switch (pos){
+                        case LIST_TAB:
+                            adapter.changeCursor(cursor);
+                            all_layout.setVisibility(View.VISIBLE);
+                            map_layout.setVisibility(View.INVISIBLE);
+                            btn_map_patient.setVisibility(View.INVISIBLE);
+                            tabSelected = LIST_TAB;
+                            break;
+                        case MAP_TAB:
+                            all_layout.setVisibility(View.INVISIBLE);
+                            map_layout.setVisibility(View.VISIBLE);
+                            btn_map_patient.setVisibility(View.VISIBLE);
+                            putMyMark();
+                            tabSelected = MAP_TAB;
+                            break;
+                    }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
+
+        // db데이터 가져올 때 사용 할 변수들
+        helper = new DBHelper(this);
+        manager = new DBManager(this);
+        adapter = new MovingInfoAdapter(MovingActivity.this, R.layout.layout_listview_2, cursor);
 
         all_listView = findViewById(R.id.all_listView);
         all_listView.setAdapter(adapter);
+        all_listView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
+                final int pos = position;
+                cursor.moveToPosition(pos);
+                final int id = cursor.getInt(cursor.getColumnIndex(helper.COL_ID));
+                switch(index){
+                    case 0:
+                        Intent intent = new Intent(MovingActivity.this, UpdateLocationActivity.class);
+                        intent.putExtra("id", id);
+                        startActivity(intent);
+                        break;
+                    case 1:
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MovingActivity.this);
+                        builder.setTitle("동선 삭제")
+                                .setMessage("해당 항목을 삭제하시겠습니까?")
+                                .setPositiveButton("삭제", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        String s = null;
+                                        if(manager.removeInfo(id)){
+                                            s = "삭제성공";
+                                            if(clickedBtn == BTN_ALL){
+                                                cursor = manager.getAllInfos();
+                                            }else if(clickedBtn == BTN_DATE) {
+                                                cursor = manager.searchWithDate(selectedYear, selectedMonth, selectedDay);
+                                            }
+                                            cursorCheck(cursor);
+                                            adapter.changeCursor(cursor);
+                                        }else {
+                                            s = "삭제실패";
+                                        }
+                                        Toast.makeText(MovingActivity.this, s, Toast.LENGTH_SHORT).show();
+                                    }
+                                })
+                                .setNegativeButton("취소", null)
+                                .show();
+                        break;
+                }
+
+                return false;
+            }
+        });
+
+        // 스와이프 메뉴 설정
+        SwipeMenuCreator creator = new SwipeMenuCreator() {
+            @Override
+            public void create(SwipeMenu menu) {
+                // create "open" item
+                SwipeMenuItem openItem = new SwipeMenuItem(
+                        getApplicationContext());
+                // set item background
+                openItem.setBackground(new ColorDrawable(Color.rgb(0xC9, 0xC9,
+                        0xCE)));
+                // set item width
+                openItem.setWidth(dp2px(90));
+                // set item title
+                openItem.setTitle("수정");
+                // set item title fontsize
+                openItem.setTitleSize(18);
+                // set item title font color
+                openItem.setTitleColor(Color.WHITE);
+                // add to menu
+                menu.addMenuItem(openItem);
+
+                // create "delete" item
+                SwipeMenuItem deleteItem = new SwipeMenuItem(
+                        getApplicationContext());
+                // set item background
+                deleteItem.setBackground(new ColorDrawable(Color.rgb(0xF9,
+                        0x3F, 0x25)));
+                // set item width
+                deleteItem.setWidth(dp2px(90));
+                // set a icon
+                deleteItem.setIcon(R.drawable.ic_delete);
+                // add to menu
+                menu.addMenuItem(deleteItem);
+            }
+        };
+        all_listView.setMenuCreator(creator);
+        all_listView.setSwipeDirection(SwipeMenuListView.DIRECTION_LEFT);
+
+        tv_searchCondition = findViewById(R.id.tv_searchCondition);
 
         // 현재시간 저장
         long now = System.currentTimeMillis();
@@ -165,71 +296,58 @@ public class MovingActivity extends AppCompatActivity {
                 map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
                     @Override
                     public void onInfoWindowClick(Marker marker) {
+                        final Marker m = marker;
                         AlertDialog.Builder builder = new AlertDialog.Builder(MovingActivity.this);// 대화상자 띄우기
 
-                        LatLng n = marker.getPosition();
+                        LatLng latLng = marker.getPosition();
 
                         builder.setTitle(marker.getTitle())
-                                .setMessage("위치좌표 : (" + n.latitude + ", " + n.longitude + ")\n날짜 : " + marker.getSnippet())
-                                .setPositiveButton("확인", null)
+                                .setMessage("위치좌표 : (" + latLng.latitude + ", " + latLng.longitude + ")\n날짜 : " + marker.getSnippet())
+                                .setPositiveButton("닫기", null)
+                                .setNegativeButton("삭제", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        int index = myMarkers.indexOf(m);
+                                        cursor.moveToPosition(index);
+                                        int id = cursor.getInt(cursor.getColumnIndex(helper.COL_ID));
+                                        String s = null;
+                                        if(manager.removeInfo(id)){
+                                            s = "삭제성공";
+                                            if(clickedBtn == BTN_ALL){
+                                                cursor = manager.getAllInfos();
+                                            }else if(clickedBtn == BTN_DATE) {
+                                                cursor = manager.searchWithDate(selectedYear, selectedMonth, selectedDay);
+                                            }
+                                            putMyMark();
+                                        }else {
+                                            s = "삭제실패";
+                                        }
+                                        Toast.makeText(MovingActivity.this, s, Toast.LENGTH_SHORT).show();
+                                    }
+                                })
+                                .setNeutralButton("수정", null)
                                 .show();
 
                     }
                 });
 
+
                 cameraPosition = new CameraPosition.Builder().target(new LatLng(37.5759, 126.9769)).zoom(30).build();
                 map.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
-                Cursor cursor = manager.getAllInfos();
-
-                putMyMark(cursor);
             }
 
         });
 
-
-        spinner = findViewById(R.id.search_spinner);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                switch(position){
-                    case 0:
-                        adapter.changeCursor(manager.getAllInfos());
-
-                        all_layout.setVisibility(View.VISIBLE);
-                        map_layout.setVisibility(View.INVISIBLE);
-                        btn_map_patient.setVisibility(View.INVISIBLE);
-                        no_data_layout.setVisibility(View.INVISIBLE);
-
-                        spinnerSelected = SPINNER_LIST;
-                        break;
-                    case 1:
-                        all_layout.setVisibility(View.INVISIBLE);
-                        map_layout.setVisibility(View.VISIBLE);
-                        btn_map_patient.setVisibility(View.VISIBLE);
-                        no_data_layout.setVisibility(View.INVISIBLE);
-
-                        spinnerSelected = SPINNER_MAP;
-                        break;
-
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d(TAG, "spinnerSelected : " + spinnerSelected);
-        if(spinnerSelected == SPINNER_LIST){
-            cursor = manager.getAllInfos();
-            adapter.changeCursor(cursor);
-        }
+        Log.d(TAG, "tabSelected : " + tabSelected);
+
+        cursor = manager.getAllInfos();
+        adapter.changeCursor(cursor);
     }
 
     public void getAllPatientList(){
@@ -239,13 +357,16 @@ public class MovingActivity extends AppCompatActivity {
         }
     }
 
-    public void putMyMark(Cursor cursor){
+    public void putMyMark(){
         // 원래 찍었던 마크들 전부 삭제
         removeMarkers(myMarkers);
 
         // cursor 값으로 새로운 마크 생성
         MovingInfo info = null;
+        int dataFlag = 0;
+
         while(cursor.moveToNext()){
+            dataFlag = 1;
             info = new MovingInfo();
             info.setId(cursor.getInt(cursor.getColumnIndex(helper.COL_ID)));
             info.setYear(cursor.getInt(cursor.getColumnIndex(helper.COL_YEAR)));
@@ -256,6 +377,7 @@ public class MovingActivity extends AppCompatActivity {
             info.setLocation(cursor.getString(cursor.getColumnIndex(helper.COL_LOCATION)));
             info.setStartTime(cursor.getString(cursor.getColumnIndex(helper.COL_START_TIME)));
             info.setEndTime(cursor.getString(cursor.getColumnIndex(helper.COL_END_TIME)));
+            info.setMemo(cursor.getString(cursor.getColumnIndex(helper.COL_MEMO)));
 
             Log.d(TAG,  "latitude : "+ info.getLatitude() + ", longitude : " + info.getLongitude());
 
@@ -282,7 +404,16 @@ public class MovingActivity extends AppCompatActivity {
             }
         }
 
+        // data 없으면 화면처리
+        if(dataFlag == 0){
+            no_data_layout.setVisibility(View.VISIBLE);
+            map_layout.setVisibility(View.INVISIBLE);
 
+            return;
+        }else{
+            no_data_layout.setVisibility(View.INVISIBLE);
+            map_layout.setVisibility(View.VISIBLE);
+        }
 
         //마커 찍기
         for(MarkerOptions m : markersOption){
@@ -325,20 +456,25 @@ public class MovingActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void btnOnClick(View v){
-
         switch(v.getId()){
             case R.id.btn_all:
+                clickedBtn = BTN_ALL;
+                tv_searchCondition.setText("전체");
                 cursor = manager.getAllInfos();
-                if(spinnerSelected == SPINNER_LIST){
-                    adapter.changeCursor(cursor);
-                    adapter.notifyDataSetChanged();
-                }else if(spinnerSelected == SPINNER_MAP){
-                    if(patientOnOff){
-                        getAllPatientList();
+                if(cursorCheck(cursor)){
+                    if (tabSelected == LIST_TAB) {
+                        adapter.changeCursor(cursor);
+                        adapter.notifyDataSetChanged();
+                        all_layout.setVisibility(View.VISIBLE);
+                    } else if (tabSelected == MAP_TAB) {
+                        map_layout.setVisibility(View.VISIBLE);
+                        if (patientOnOff) {
+                            getAllPatientList();
+                            putPatientMark();
+                        }
+                        putMyMark();
+                        //확진자 전체 검색
                     }
-                    putPatientMark();
-                    putMyMark(cursor);
-                    //확진자 전체 검색
                 }
                 break;
 
@@ -379,27 +515,51 @@ public class MovingActivity extends AppCompatActivity {
         @Override
         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
             Log.d(TAG, year + "/" + month + "/" + dayOfMonth);
-            cursor = manager.searchWithDate(year, month, dayOfMonth);
-            // 검색결과가 없을 때 화면처리
-            if(cursor.moveToNext() == false){
-                no_data_layout.setVisibility(View.VISIBLE);
-                all_layout.setVisibility(View.INVISIBLE);
-                map_layout.setVisibility(View.INVISIBLE);
-            }else {
-                no_data_layout.setVisibility(View.INVISIBLE);
-                if (spinnerSelected == SPINNER_LIST) {
-                    all_layout.setVisibility(View.VISIBLE);
-                    adapter.changeCursor(cursor);
-                } else if (spinnerSelected == SPINNER_MAP) {
-                    map_layout.setVisibility(View.VISIBLE);
-                    putMyMark(cursor);
-                }
+            tv_searchCondition.setText(year +"/" + (month + 1)+ "/" + dayOfMonth);
 
-                if (patientOnOff == true) {
+            clickedBtn = BTN_DATE;
+            selectedYear = year;
+            selectedMonth = month;
+            selectedDay = dayOfMonth;
+            cursor = manager.searchWithDate(selectedYear, selectedMonth, selectedDay);
+
+            // 검색결과가 없을 때 화면처리
+
+            if(tabSelected == LIST_TAB){
+                if(cursorCheck(cursor)){
+                    adapter.changeCursor(cursor);
+                    all_layout.setVisibility(View.VISIBLE);
+                }
+            }else if(tabSelected == MAP_TAB){
+                map_layout.setVisibility(View.VISIBLE);
+                putMyMark();
+
+                if (patientOnOff) {
                     searchWithDatePatient(year, month + 1, dayOfMonth);
                     putPatientMark();
                 }
             }
+
         }
     };
+
+    public boolean cursorCheck(Cursor cursor){
+        if(!cursor.moveToNext()){
+            no_data_layout.setVisibility(View.VISIBLE);
+            all_layout.setVisibility(View.INVISIBLE);
+            map_layout.setVisibility(View.INVISIBLE);
+
+            return false;
+        }else{
+            no_data_layout.setVisibility(View.INVISIBLE);
+            cursor.moveToPrevious();
+        }
+        return true;
+    }
+
+    private int dp2px(int dp) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
+                getResources().getDisplayMetrics());
+    }
+
 }

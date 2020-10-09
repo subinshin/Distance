@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:id="@+id/linearLayout2"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/top_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -14,77 +14,83 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true">
 
-        <Spinner
-            android:id="@+id/search_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="20dp"
-            android:entries="@array/searchStandard" />
-
-        <Button
+        <ImageButton
             android:id="@+id/btn_date"
-            android:layout_width="45dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="5dp"
-            android:layout_toRightOf="@id/btn_all"
+            android:layout_width="35dp"
+            android:layout_height="49dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:adjustViewBounds="true"
             android:background="#00FFFFFF"
-            android:drawableBottom="@drawable/calendar"
             android:onClick="btnOnClick"
-            android:text="날짜별 검색"
-            android:textSize="8sp" />
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_calendar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btn_all"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.857" />
 
-        <Button
+        <ImageButton
             android:id="@+id/btn_all"
-            android:layout_width="45dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="4dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="8dp"
-            android:layout_toRightOf="@id/search_spinner"
+            android:layout_width="34dp"
+            android:layout_height="56dp"
+            android:layout_marginStart="76dp"
+            android:layout_marginLeft="76dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:adjustViewBounds="true"
             android:background="#00FFFFFF"
-            android:drawableBottom="@drawable/download"
             android:onClick="btnOnClick"
-            android:text="전체 검색"
-            android:textSize="8sp"
-            android:visibility="visible" />
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_all"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tv_searchCondition"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
 
-        <Button
+        <ImageButton
             android:id="@+id/btn_map_patient"
             android:layout_width="45dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="false"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="215dp"
+            android:layout_height="38dp"
+            android:layout_marginStart="10dp"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="8dp"
-            android:layout_toRightOf="@id/btn_date"
+            android:layout_marginTop="21dp"
+            android:adjustViewBounds="true"
             android:background="#00FFFFFF"
-            android:drawableBottom="@drawable/coronavirus"
             android:onClick="btnOnClick"
-            android:text="확진자동선"
-            android:textAllCaps="false"
-            android:textSize="8sp"
-            android:visibility="invisible" />
-    </RelativeLayout>
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_virus"
+            android:visibility="invisible"
+            app:layout_constraintStart_toEndOf="@+id/btn_date"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_searchCondition"
+            android:layout_width="147dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="27dp"
+            android:gravity="center_vertical"
+            android:text="전체"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <FrameLayout
         android:id="@+id/layout_moving"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
 
-        android:layout_below="@id/linearLayout2"
+        android:layout_above="@id/tabLayout"
+        android:layout_below="@id/top_bar"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentRight="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/no_data_layout"
@@ -130,7 +136,7 @@
             android:layout_height="match_parent"
             android:visibility="visible">
 
-            <ListView
+            <com.baoyz.swipemenulistview.SwipeMenuListView
                 android:id="@+id/all_listView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -155,5 +161,29 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </FrameLayout>
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        app:tabIndicatorColor="#A37BE1"
+        app:tabRippleColor="#A955C8">
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/ti_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:icon="@drawable/ic_list" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/ti_map"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:icon="@drawable/ic_marker" />
+
+    </com.google.android.material.tabs.TabLayout>
 
 </RelativeLayout>
