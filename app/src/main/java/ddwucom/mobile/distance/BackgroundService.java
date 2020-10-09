@@ -11,23 +11,16 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Message;
-import android.os.Messenger;
 import android.util.Log;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Timer;
@@ -49,7 +42,7 @@ public class BackgroundService extends Service {
     SimpleDateFormat sdfNow = new SimpleDateFormat("HH:mm");
     SimpleDateFormat sdfNowDate = new SimpleDateFormat("yyyy/MM/dd");
 
-    String startDateTime = sdfNow.format(date);
+    String startTime = sdfNow.format(date);
     String startDate = sdfNowDate.format(date);
     String endDateTime;
 
@@ -118,7 +111,7 @@ public class BackgroundService extends Service {
                 // 현재시간을 date 변수에 저장한다.
                 Date date = new Date(now);
                 // nowDate 변수에 값을 저장한다.
-                startDateTime = sdfNow.format(date);
+                startTime = sdfNow.format(date);
                 startDate = sdfNowDate.format(date);
 
                 String a[] = startDate.split("/");
@@ -166,9 +159,10 @@ public class BackgroundService extends Service {
         date = new Date(now);
         // nowDate 변수에 값을 저장한다.
         endDateTime = sdfNow.format(date);
+        String endDate = sdfNowDate.format(date);
 
-        double latitude = Double.parseDouble(String.format("%6f", lastLocation.getLatitude()));
-        double longitude = Double.parseDouble(String.format("%6f", lastLocation.getLongitude()));
+        double latitude = Double.parseDouble(String.format("%.6f", lastLocation.getLatitude()));
+        double longitude = Double.parseDouble(String.format("%.6f", lastLocation.getLongitude()));
         Geocoder geocoder = new Geocoder(getApplicationContext());
         List<Address> address = null;
         try {
@@ -191,13 +185,13 @@ public class BackgroundService extends Service {
         }
 
         boolean result = dbManager.addNewGps(
-                new MovingInfo(year, month, day, startDateTime, endDateTime, latitude, longitude, addressString , "auto", "store"));
+                new MovingInfo(year, month, day, endDate, startTime, endDateTime, latitude, longitude, addressString , "auto", "store"));
         if (result) {    // 정상수행에 따른 처리
             Log.d(TAG, "새로운 위치 추가 성공");
         } else {        // 이상에 따른 처리
             Log.d(TAG, "새로운 위치 추가 실패");
         }
-        Log.d(TAG, startDateTime);
+        Log.d(TAG, startTime);
         Log.d(TAG, endDateTime);
     }
 }

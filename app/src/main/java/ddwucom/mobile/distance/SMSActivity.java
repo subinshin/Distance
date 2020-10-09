@@ -70,14 +70,21 @@ public class SMSActivity extends AppCompatActivity {
                 }
 
                 if(addressList.size() != 0) {
+                    address = addressList.get(0).getAddressLine(0);
+                    latitude = Double.parseDouble(String.format("%.6f", addressList.get(0).getLatitude()));
+                    longitude = Double.parseDouble(String.format("%.6f", addressList.get(0).getLongitude()));
+                    Log.d(TAG, Double.toString(latitude));
+                    Log.d(TAG, Double.toString(longitude));
                     Log.d(TAG, addressList.get(0).toString());
+                    Log.d(TAG, addressList.get(0).getAddressLine(0));
                 } else {
-                    address = "주소정보 가져올 수 없음";
+                    latitude = 0;
+                    longitude = 0;
+                    address = "주소정보 없음";
                 }
 
-
                 boolean result = dbManager.addNewGps(
-                            new MovingInfo(year, month, day, time, time, 0, 0, "address", "auto", store));
+                            new MovingInfo(year, month, day, str[0], str[1], str[1], latitude, longitude, address, "auto", store));
                 if (result) {
                     Toast.makeText(context, "저장 성공", Toast.LENGTH_SHORT).show();
                     finish();
