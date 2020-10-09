@@ -9,6 +9,7 @@ public class MovingInfo {
     int year;
     int month;
     int dayOfMonth;
+    String endDate;
     String startTime;
     String endTime;
     String location;
@@ -22,10 +23,11 @@ public class MovingInfo {
         endTime = null;
     }
 
-    public MovingInfo(int year, int month, int dayOfMonth, String startTime, String endTime, double latitude, double longitude, String location, String memo, String store) {
+    public MovingInfo(int year, int month, int dayOfMonth, String endDate, String startTime, String endTime, double latitude, double longitude, String location, String memo, String store) {
         this.year = year;
         this.month = month;
         this.dayOfMonth = dayOfMonth;
+        this.endDate = endDate;
         this.startTime = startTime;
         this.endTime = endTime;
         this.location = location;
@@ -62,6 +64,14 @@ public class MovingInfo {
 
     public int getDayOfMonth() {
         return dayOfMonth;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
     }
 
     public void setDayOfMonth(int dayOfMonth) {
@@ -115,7 +125,6 @@ public class MovingInfo {
     public void setMemo(String memo) {
         this.memo = memo;
     }
-
 
     public String getStore() {
         return store;

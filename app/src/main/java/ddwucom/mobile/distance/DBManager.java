@@ -89,6 +89,7 @@ public class DBManager {
         value.put(helper.COL_YEAR, newGps.getYear());
         value.put(helper.COL_MONTH, newGps.getMonth());
         value.put(helper.COL_DAY, newGps.getDayOfMonth());
+        value.put(helper.COL_END_DATE, newGps.getEndDate());
         value.put(helper.COL_START_TIME, newGps.getStartTime());
         value.put(helper.COL_END_TIME, newGps.getEndTime());
         value.put(helper.COL_LOCATION, newGps.getLocation());

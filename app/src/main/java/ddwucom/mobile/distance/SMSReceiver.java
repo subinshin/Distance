@@ -62,6 +62,7 @@ public class SMSReceiver extends BroadcastReceiver {
                         } else {
                             store += msg[i] + " ";
                         }
+                        Log.d(TAG, msg[i]);
                     }
                     SMSInfo s = new SMSInfo(time, store);
                     Log.d(TAG, s.getDatetime() + s.getLocation());
