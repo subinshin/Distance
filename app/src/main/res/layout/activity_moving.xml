@@ -14,58 +14,56 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true">
 
-        <Button
+        <ImageButton
             android:id="@+id/btn_date"
-            android:layout_width="45dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
+            android:layout_width="35dp"
+            android:layout_height="49dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginLeft="12dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
+            android:adjustViewBounds="true"
             android:background="#00FFFFFF"
-            android:drawableBottom="@drawable/calendar"
             android:onClick="btnOnClick"
-            android:text="날짜별 검색"
-            android:textSize="8sp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_calendar"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/btn_all"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.857" />
 
-        <Button
+        <ImageButton
             android:id="@+id/btn_all"
-            android:layout_width="45dp"
-            android:layout_height="wrap_content"
+            android:layout_width="34dp"
+            android:layout_height="56dp"
             android:layout_marginStart="76dp"
             android:layout_marginLeft="76dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
+            android:adjustViewBounds="true"
             android:background="#00FFFFFF"
-            android:drawableBottom="@drawable/download"
             android:onClick="btnOnClick"
-            android:text="전체 검색"
-            android:textSize="8sp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_all"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tv_searchCondition"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0" />
 
-        <Button
+        <ImageButton
             android:id="@+id/btn_map_patient"
             android:layout_width="45dp"
-            android:layout_height="wrap_content"
+            android:layout_height="38dp"
             android:layout_marginStart="10dp"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginTop="21dp"
+            android:adjustViewBounds="true"
             android:background="#00FFFFFF"
-            android:drawableBottom="@drawable/coronavirus"
             android:onClick="btnOnClick"
-            android:text="확진자동선"
-            android:textAllCaps="false"
-            android:textSize="8sp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_virus"
             android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/btn_date"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -75,7 +73,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="27dp"
             android:gravity="center_vertical"
             android:text="전체"
             android:textColor="#000000"
@@ -170,19 +168,21 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        app:tabIndicatorColor="#A37BE1"
+        app:tabRippleColor="#A955C8">
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/ti_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="List" />
+            android:icon="@drawable/ic_list" />
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/ti_map"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Map" />
+            android:icon="@drawable/ic_marker" />
 
     </com.google.android.material.tabs.TabLayout>
 

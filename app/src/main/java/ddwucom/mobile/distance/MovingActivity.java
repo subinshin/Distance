@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -66,9 +67,9 @@ public class MovingActivity extends AppCompatActivity{
     DBHelper helper;
     private static final String TAG = "MovingActivity";
 
-    Button btn_all;
-    Button btn_date;
-    Button btn_map_patient;
+    ImageButton btn_all;
+    ImageButton btn_date;
+    ImageButton btn_map_patient;
 
     CameraPosition cameraPosition;
     ArrayList<MarkerOptions> markersOption;
