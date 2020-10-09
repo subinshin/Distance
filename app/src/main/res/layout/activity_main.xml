@@ -24,7 +24,8 @@
         android:background="@drawable/rectangle_3_1__2_"
         android:ems="10"
         android:hint="이메일을 입력하세요."
-        android:inputType="textPersonName|text|textEmailAddress" />
+        android:inputType="textPersonName|text|textEmailAddress"
+        android:textColor="#000000" />
 
     <EditText
         android:id="@+id/login_et_pw"
@@ -48,14 +49,14 @@
 
     <Button
         android:id="@+id/btn_login"
-        android:layout_width="141dp"
-        android:layout_height="40dp"
+        android:layout_width="143dp"
+        android:layout_height="55dp"
         android:layout_below="@+id/login_et_pw"
         android:layout_alignEnd="@+id/login_et_pw"
         android:layout_alignRight="@+id/login_et_pw"
-        android:layout_marginTop="66dp"
-        android:layout_marginEnd="97dp"
-        android:layout_marginRight="97dp"
+        android:layout_marginTop="56dp"
+        android:layout_marginEnd="94dp"
+        android:layout_marginRight="94dp"
         android:background="@drawable/group_2__2_" />
 
     <TextView
@@ -168,7 +169,7 @@
         android:layout_alignBottom="@+id/btn_login"
         android:layout_marginEnd="38dp"
         android:layout_marginRight="38dp"
-        android:layout_marginBottom="7dp"
+        android:layout_marginBottom="14dp"
         android:text="로그인"
         android:textColor="#FFFFFF"
         android:textSize="24sp"

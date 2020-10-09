@@ -37,6 +37,9 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBirPKZ6hwetA2S_2x_Yhez11zriqotBD4" />
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
 
         <receiver
             android:name=".SMSReceiver"

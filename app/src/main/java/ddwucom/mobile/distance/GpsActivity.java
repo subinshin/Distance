@@ -176,7 +176,7 @@ public class GpsActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(false); // 기존 title 지우기
         actionBar.setDisplayHomeAsUpEnabled(true); // 뒤로가기 버튼 만들기
-        actionBar.setHomeAsUpIndicator(R.drawable.menu_icon); //뒤로가기 버튼 이미지 지정
+        actionBar.setHomeAsUpIndicator(R.drawable.menu_24px_5); //뒤로가기 버튼 이미지 지정
 
 //        sv_location = findViewById(R.id.sv_location);
 //
