@@ -125,15 +125,16 @@ public class GpsActivity extends AppCompatActivity {
     String loc;
     LatLng selectedLatLng = null;
 
-    int year, month, day;
-    Timer timer;
+    TextView tv_myPage;
+    TextView tv_moving;
+    TextView tv_message;
+    TextView tv_logOut;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_gps);
-
 
         int permissionCheck = 0;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -272,9 +273,6 @@ public class GpsActivity extends AppCompatActivity {
         });
 
 
-
-
-
         mDrawerLayout = (DrawerLayout) findViewById(R.id.gps_layout);
         gps_bottom_layout = (ConstraintLayout) findViewById(R.id.gps_buttom_layout);
         tv_gps_loc = findViewById(R.id.tv_gps_loc);
@@ -290,48 +288,43 @@ public class GpsActivity extends AppCompatActivity {
         });
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        View nav_header_view = navigationView.getHeaderView(0);
-        TextView tv_nav_email = nav_header_view.findViewById(R.id.tv_nav_email);
-        if(tv_nav_email != null){
-            tv_nav_email.setText(user_email);
-        }
+        tv_myPage = navigationView.findViewById(R.id.tv_mypage);
+        tv_moving = navigationView.findViewById(R.id.tv_moving);
+        tv_message = navigationView.findViewById(R.id.tv_message);
+        tv_logOut = navigationView.findViewById(R.id.tv_logout);
+        TextView tv_email = navigationView.findViewById(R.id.tv_email);
+        tv_email.setText(user_email);
 
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(MenuItem menuItem) {
-                menuItem.setChecked(true);
-                mDrawerLayout.closeDrawers();
-
-                int id = menuItem.getItemId();
-                String title = menuItem.getTitle().toString();
-
-                if(id == R.id.item_myPage){
-                    Intent intent = new Intent(GpsActivity.this, MyPageActivity.class);
-                    startActivity(intent);
-                }else if(id == R.id.item_moving){
-                    Log.d(TAG, String.valueOf(pathList.size()));
-                    Intent intent = new Intent(GpsActivity.this, MovingActivity.class);
-                    intent.putExtra("pathList", pathList);
-                    startActivity(intent);
-                }else if(id == R.id.item_condition){
-                    Intent intent = new Intent(GpsActivity.this, SMSListActivity.class);
-                    startActivity((intent));
-//                    Toast.makeText(context, "결제 문자 확인", Toast.LENGTH_SHORT).show();
-                }
-//                else if(id == R.id.item_setting){
-//                    Toast.makeText(context, "설정", Toast.LENGTH_SHORT).show();
-//                }
-                else if(id == R.id.item_logout){
-                    Toast.makeText(context, "로그아웃", Toast.LENGTH_SHORT).show();
-                    FirebaseAuth.getInstance().signOut();
-                    startLoginActivity();
-                }
-
-                return true;
-            }
-        });
 ///////
 
+    }
+
+    public void tvOnClick(View v){
+        Intent intent;
+        switch (v.getId()){
+            case R.id.tv_mypage:
+                tv_myPage.setTextColor(Color.GRAY);
+                intent = new Intent(GpsActivity.this, MyPageActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.tv_moving:
+                tv_moving.setTextColor(Color.GRAY);
+                intent = new Intent(GpsActivity.this, MovingActivity.class);
+                intent.putExtra("pathList", pathList);
+                startActivity(intent);
+                break;
+            case R.id.tv_message:
+                tv_message.setTextColor(Color.GRAY);
+                intent = new Intent(GpsActivity.this, SMSListActivity.class);
+                startActivity((intent));
+                break;
+            case R.id.tv_logout:
+                tv_logOut.setTextColor(Color.GRAY);
+                FirebaseAuth.getInstance().signOut();
+                startLoginActivity();
+                break;
+        }
+        mDrawerLayout.closeDrawers();
     }
 
     @Override
@@ -351,6 +344,11 @@ public class GpsActivity extends AppCompatActivity {
         Log.d("BackgroundService", "onResume");
         Intent intent = new Intent(getApplicationContext(), BackgroundService.class);
         startService(intent);
+
+        tv_myPage.setTextColor(Color.parseColor("#AE53AC"));
+        tv_moving.setTextColor(Color.parseColor("#AE53AC"));
+        tv_message.setTextColor(Color.parseColor("#AE53AC"));
+        tv_logOut.setTextColor(Color.parseColor("#AE53AC"));
     }
 
 

@@ -304,28 +304,6 @@ public class MovingActivity extends AppCompatActivity{
                         builder.setTitle(marker.getTitle())
                                 .setMessage("위치좌표 : (" + latLng.latitude + ", " + latLng.longitude + ")\n날짜 : " + marker.getSnippet())
                                 .setPositiveButton("닫기", null)
-                                .setNegativeButton("삭제", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        int index = myMarkers.indexOf(m);
-                                        cursor.moveToPosition(index);
-                                        int id = cursor.getInt(cursor.getColumnIndex(helper.COL_ID));
-                                        String s = null;
-                                        if(manager.removeInfo(id)){
-                                            s = "삭제성공";
-                                            if(clickedBtn == BTN_ALL){
-                                                cursor = manager.getAllInfos();
-                                            }else if(clickedBtn == BTN_DATE) {
-                                                cursor = manager.searchWithDate(selectedYear, selectedMonth, selectedDay);
-                                            }
-                                            putMyMark();
-                                        }else {
-                                            s = "삭제실패";
-                                        }
-                                        Toast.makeText(MovingActivity.this, s, Toast.LENGTH_SHORT).show();
-                                    }
-                                })
-                                .setNeutralButton("수정", null)
                                 .show();
 
                     }
