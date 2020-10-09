@@ -84,7 +84,7 @@ public class SMSActivity extends AppCompatActivity {
                 }
 
                 boolean result = dbManager.addNewGps(
-                            new MovingInfo(year, month, day, str[0], str[1], str[1], latitude, longitude, address, "auto", store));
+                            new MovingInfo(year, month, day, str[0], str[1], str[1], latitude, longitude, store + ", " + address, "", store));
                 if (result) {
                     Toast.makeText(context, "저장 성공", Toast.LENGTH_SHORT).show();
                     finish();
