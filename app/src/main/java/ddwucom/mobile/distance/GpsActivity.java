@@ -428,9 +428,9 @@ public class GpsActivity extends AppCompatActivity {
 
 
 ////            map 클릭 시 이벤트 처리
-            mGoogleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            mGoogleMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
                 @Override
-                public void onMapClick(LatLng latLng) {
+                public void onMapLongClick(LatLng latLng) {
                     if (selectedPositionMarker != null) {
                         selectedPositionMarker.remove();
                         selectedPositionMarker = null;
@@ -456,6 +456,16 @@ public class GpsActivity extends AppCompatActivity {
                             selectedPositionMarker = null;
                         }
 
+                    }
+                }
+            });
+            mGoogleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                @Override
+                public void onMapClick(LatLng latLng) {
+                    if (selectedPositionMarker != null) {
+                        selectedPositionMarker.remove();
+                        selectedPositionMarker = null;
+                        gps_bottom_layout.setVisibility(View.INVISIBLE);
                     }
                 }
             });
