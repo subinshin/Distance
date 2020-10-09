@@ -47,7 +47,7 @@ public class AddLocationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_save_my_location);
+        setContentView(R.layout.activity_save_moving);
 
         //dbManager 객체 생성
         manager = new DBManager(this);

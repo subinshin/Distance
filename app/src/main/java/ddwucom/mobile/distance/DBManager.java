@@ -48,6 +48,17 @@ public class DBManager {
         return true;
     }
 
+    public Cursor searchWithId(int _id){
+        SQLiteDatabase db = helper.getReadableDatabase();
+
+        String selection = helper.COL_ID + "=?";
+        String [] selectArgs = new String[]{ String.valueOf(_id)};
+
+        cursor = db.query(helper.TABLE_NAME, null, selection, selectArgs, null, null, null, null);
+
+        return cursor;
+    }
+
     public Cursor searchWithDate(int year, int month, int dayOfMonth){
         SQLiteDatabase db = helper.getReadableDatabase();
 
@@ -93,5 +104,40 @@ public class DBManager {
         return false;
     }
 
+    public boolean removeInfo(int _id){
+        SQLiteDatabase db = helper.getWritableDatabase();
 
+        String whereClause = helper.COL_ID + "=?";
+        String [] whereArgs = new String[] {String.valueOf(_id)};
+
+        if(db.delete(helper.TABLE_NAME, whereClause, whereArgs) > 0){
+            return true;
+        }
+        return false;
+    }
+
+    public boolean updateInfo(MovingInfo info){
+        SQLiteDatabase db = helper.getWritableDatabase();
+
+        ContentValues row = new ContentValues();
+        row.put(helper.COL_LOCATION, info.getLocation());
+        row.put(helper.COL_YEAR, info.getYear());
+        row.put(helper.COL_MONTH, info.getMonth());
+        row.put(helper.COL_DAY, info.getDayOfMonth());
+        row.put(helper.COL_START_TIME, info.getStartTime());
+        row.put(helper.COL_END_TIME, info.getEndTime());
+        row.put(helper.COL_MEMO, info.getMemo());
+
+        String whereClause = helper.COL_ID + "=?";
+        String [] whereArgs = new String [] {String.valueOf(info.getId())};
+
+        if(db.update(helper.TABLE_NAME, row, whereClause, whereArgs) > 0){
+            return true;
+        }
+        return false;
+    }
+
+    public DBHelper getHelper(){
+        return helper;
+    }
 }
