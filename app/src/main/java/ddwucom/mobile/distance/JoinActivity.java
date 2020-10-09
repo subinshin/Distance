@@ -58,7 +58,7 @@ public class JoinActivity extends AppCompatActivity {
         join_et_name = findViewById(R.id.join_et_name);
         join_et_birth = findViewById(R.id.join_et_birth);
         join_et_phone = findViewById(R.id.join_et_phone);
-        join_et_phoneCode = findViewById(R.id.join_et_phoneCode);
+//        join_et_phoneCode = findViewById(R.id.join_et_phoneCode);
 
         resultIntent = new Intent();
     }
