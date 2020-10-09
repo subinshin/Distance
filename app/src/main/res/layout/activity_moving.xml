@@ -8,76 +8,84 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/top_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="55dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:background="#FFFBF7">
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="-1dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginRight="0dp"
+        android:background="@drawable/bg_color_beige__2_">
+
+        <ImageView
+            android:id="@+id/imageView18"
+            android:layout_width="210dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="4dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/dropdown" />
+
+        <ImageButton
+            android:id="@+id/btn_map_patient"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="4dp"
+            android:adjustViewBounds="true"
+            android:background="#00FFFFFF"
+            android:onClick="btnOnClick"
+            android:scaleType="fitCenter"
+            android:src="@drawable/component_3"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btn_date"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.6" />
 
         <ImageButton
             android:id="@+id/btn_date"
-            android:layout_width="35dp"
-            android:layout_height="49dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginLeft="12dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="4dp"
             android:adjustViewBounds="true"
             android:background="#00FFFFFF"
             android:onClick="btnOnClick"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_calendar"
+            android:src="@drawable/component_2"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/btn_all"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.857" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
             android:id="@+id/btn_all"
-            android:layout_width="34dp"
-            android:layout_height="56dp"
-            android:layout_marginStart="76dp"
-            android:layout_marginLeft="76dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="63dp"
+            android:layout_marginLeft="63dp"
+            android:layout_marginTop="4dp"
             android:adjustViewBounds="true"
             android:background="#00FFFFFF"
             android:onClick="btnOnClick"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_all"
+            android:src="@drawable/component_1"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tv_searchCondition"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0" />
-
-        <ImageButton
-            android:id="@+id/btn_map_patient"
-            android:layout_width="45dp"
-            android:layout_height="38dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="21dp"
-            android:adjustViewBounds="true"
-            android:background="#00FFFFFF"
-            android:onClick="btnOnClick"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_virus"
-            android:visibility="invisible"
-            app:layout_constraintStart_toEndOf="@+id/btn_date"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintVertical_bias="0.6" />
 
         <TextView
             android:id="@+id/tv_searchCondition"
             android:layout_width="147dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="16dp"
             android:gravity="center_vertical"
             android:text="전체"
-            android:textColor="#000000"
+            android:textColor="#C1BFBF"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -97,12 +105,13 @@
             android:id="@+id/no_data_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="#FFFBF7"
             android:visibility="invisible">
 
             <ImageView
                 android:id="@+id/imageView4"
-                android:layout_width="204dp"
-                android:layout_height="281dp"
+                android:layout_width="226dp"
+                android:layout_height="316dp"
                 android:layout_marginStart="84dp"
                 android:layout_marginLeft="84dp"
                 android:layout_marginTop="52dp"
@@ -112,7 +121,7 @@
                 app:layout_constraintHorizontal_bias="0.475"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/som_app2" />
+                app:srcCompat="@drawable/ic_gps_som_2" />
 
             <TextView
                 android:id="@+id/textView"
@@ -129,6 +138,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imageView4" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -170,6 +180,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
+        app:tabBackground="@drawable/bg_color_beige__2_"
         app:tabIndicatorColor="#EC6C9F"
         app:tabRippleColor="#A955C8">
 

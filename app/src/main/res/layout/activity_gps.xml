@@ -26,7 +26,7 @@
             android:id="@+id/gps_buttom_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#FFFFFF"
+            android:background="@drawable/bottom_tv__1_"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent">
@@ -43,7 +43,7 @@
                 android:layout_marginBottom="15dp"
                 android:gravity="center_horizontal|center_vertical"
                 android:text="위치정보"
-                android:textColor="#000000"
+                android:textColor="#686868"
                 android:textSize="15sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/btn_gps_loc_add"
@@ -54,15 +54,17 @@
 
             <Button
                 android:id="@+id/btn_gps_loc_add"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="120dp"
+                android:layout_height="50dp"
                 android:layout_marginStart="161dp"
                 android:layout_marginLeft="161dp"
                 android:layout_marginEnd="162dp"
                 android:layout_marginRight="162dp"
                 android:layout_marginBottom="16dp"
-                android:background="#746E6B6B"
+                android:background="@drawable/btn_notext"
                 android:text="동선에 추가"
+                android:textColor="@color/white"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -72,7 +74,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="16dp">
+            tools:layout_editor_absoluteY="0dp">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -95,19 +97,19 @@
             </LinearLayout>
 
             <View
-                android:elevation="0dp"
                 android:id="@+id/view_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:layout_below="@+id/toolbar"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:background="@android:color/darker_gray" />
+                android:background="@android:color/darker_gray"
+                android:elevation="0dp" />
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="69dp"
+                android:layout_height="50dp"
                 android:background="@drawable/banner"
                 android:elevation="0dp"
                 app:subtitleTextColor="#FFFFFF"
@@ -121,7 +123,7 @@
                     android:fontFamily="@font/poppins_semibold"
                     android:text="@string/actionbar_name"
                     android:textColor="#FFFFFF"
-                    android:textSize="33sp" />
+                    android:textSize="28sp" />
             </androidx.appcompat.widget.Toolbar>
 
         </RelativeLayout>

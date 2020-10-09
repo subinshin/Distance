@@ -20,7 +20,7 @@ public class StartActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_start); // xml과 java소스를 연결
+        setContentView(R.layout.activity_start_2); // xml과 java소스를 연결
     } // end of onCreate
 
     @Override
