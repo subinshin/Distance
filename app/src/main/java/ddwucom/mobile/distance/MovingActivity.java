@@ -304,11 +304,19 @@ public class MovingActivity extends AppCompatActivity{
                         builder.setTitle(marker.getTitle())
                                 .setMessage("위치좌표 : (" + latLng.latitude + ", " + latLng.longitude + ")\n날짜 : " + marker.getSnippet())
                                 .setPositiveButton("닫기", null)
+
                                 .show();
 
                     }
                 });
 
+                map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                    @Override
+                    public boolean onMarkerClick(Marker marker) {
+
+                        return true;
+                    }
+                });
 
                 cameraPosition = new CameraPosition.Builder().target(new LatLng(37.5759, 126.9769)).zoom(30).build();
                 map.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
@@ -409,7 +417,7 @@ public class MovingActivity extends AppCompatActivity{
     public void putPatientMark(){
         removeMarkers(patientMarkers);
 
-        BitmapDrawable bitmapDrawable = (BitmapDrawable)getResources().getDrawable(R.drawable.som_patient_marker_blue);
+        BitmapDrawable bitmapDrawable = (BitmapDrawable)getResources().getDrawable(R.drawable.pin2);
         Bitmap b = bitmapDrawable.getBitmap();
         Bitmap smallMarker = Bitmap.createScaledBitmap(b, 180, 200, false);
 
