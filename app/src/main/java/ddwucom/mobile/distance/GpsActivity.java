@@ -467,6 +467,7 @@ public class GpsActivity extends AppCompatActivity {
                     }
                 }
             });
+
         }
     };
 

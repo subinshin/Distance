@@ -2,6 +2,7 @@ package ddwucom.mobile.distance;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -19,6 +20,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -102,10 +104,15 @@ public class MovingActivity extends AppCompatActivity{
 
     TabLayout tabLayout;
     TextView tv_searchCondition;
+
+    Dialog dialog;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_moving);
+
+        dialog = new Dialog(this);
 
         Log.d(TAG, "Start movingActivity");
         tabSelected = LIST_TAB;
@@ -297,14 +304,40 @@ public class MovingActivity extends AppCompatActivity{
                     @Override
                     public void onInfoWindowClick(Marker marker) {
                         final Marker m = marker;
-                        AlertDialog.Builder builder = new AlertDialog.Builder(MovingActivity.this);// 대화상자 띄우기
+
+                        dialog.setContentView(R.layout.alert_dialog);
+                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                        ImageView somImg = dialog.findViewById(R.id.imageView);
+                        Button btn_close = dialog.findViewById(R.id.btn_dialog);
+                        TextView tv_title = dialog.findViewById(R.id.tv_dialog_title);
+                        TextView tv_latlng = dialog.findViewById(R.id.tv_dialog_latlng);
+                        TextView tv_snippet = dialog.findViewById(R.id.tv_snippet);
 
                         LatLng latLng = marker.getPosition();
+                        tv_title.setText(marker.getTitle());
+                        tv_latlng.setText("위치좌표 : (" + latLng.latitude + ", " + latLng.longitude + ")");
+                        tv_snippet.setText("날짜 : " + marker.getSnippet());
 
-                        builder.setTitle(marker.getTitle())
-                                .setMessage("위치좌표 : (" + latLng.latitude + ", " + latLng.longitude + ")\n날짜 : " + marker.getSnippet())
-                                .setPositiveButton("닫기", null)
-                                .show();
+                        btn_close.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                            }
+                        });
+
+                        dialog.show();
+
+//                        AlertDialog.Builder builder = new AlertDialog.Builder(MovingActivity.this);// 대화상자 띄우기
+//
+//                        LatLng latLng = marker.getPosition();
+//
+//
+//                        builder.setTitle(marker.getTitle())
+//                                .setMessage("위치좌표 : (" + latLng.latitude + ", " + latLng.longitude + ")\n날짜 : " + marker.getSnippet())
+//                                .setPositiveButton("닫기", null)
+//
+//                                .show();
 
                     }
                 });
@@ -409,7 +442,7 @@ public class MovingActivity extends AppCompatActivity{
     public void putPatientMark(){
         removeMarkers(patientMarkers);
 
-        BitmapDrawable bitmapDrawable = (BitmapDrawable)getResources().getDrawable(R.drawable.som_patient_marker_blue);
+        BitmapDrawable bitmapDrawable = (BitmapDrawable)getResources().getDrawable(R.drawable.pin2);
         Bitmap b = bitmapDrawable.getBitmap();
         Bitmap smallMarker = Bitmap.createScaledBitmap(b, 180, 200, false);
 
