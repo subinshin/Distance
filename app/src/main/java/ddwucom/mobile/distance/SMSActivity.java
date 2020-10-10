@@ -2,6 +2,7 @@ package ddwucom.mobile.distance;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -19,13 +20,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class SMSActivity extends AppCompatActivity {
 
-    private static final String TAG = "SMSActivitys";
+    private static final String TAG = "c";
     EditText editText;
-    Button button;
     DBManager dbManager;
+    SMSDBManager smsdbManager;
+    SMSDBHelper smsdbHelper;
     String time = "";
     String store = "";
     private Context context = this;
+    Cursor cursor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,15 +36,10 @@ public class SMSActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sms);
 
         dbManager = new DBManager(this);
+        smsdbHelper = new SMSDBHelper(this);
+        smsdbManager = new SMSDBManager(this);
 
         editText = (EditText)findViewById(R.id.editText);
-        button = (Button)findViewById(R.id.btnSave);
-//        button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                finish();
-//            }
-//        });
 
         // (1) 리시버에 의해 해당 액티비티가 새롭게 실행된 경우
         Intent passedIntent = getIntent();
@@ -51,51 +49,71 @@ public class SMSActivity extends AppCompatActivity {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnSave:
-                String[] str = time.split(" ");
-                String[] date = str[0].split("/");
-                int year = Integer.parseInt(date[0]);
-                int month = Integer.parseInt(date[1]);
-                int day = Integer.parseInt(date[2]);
-                Geocoder geocoder = new Geocoder(getApplicationContext());
-                List<Address> addressList = null;
-                double latitude;
-                double longitude;
-                String address = "";
-                Log.d(TAG, "OK");
-
-                try {
-                    addressList = geocoder.getFromLocationName(store, 1);
-                } catch (IOException e) {
-                    Log.d(TAG, "geocoding error");
-                }
-
-                if(addressList.size() != 0) {
-                    address = addressList.get(0).getAddressLine(0);
-                    latitude = Double.parseDouble(String.format("%.6f", addressList.get(0).getLatitude()));
-                    longitude = Double.parseDouble(String.format("%.6f", addressList.get(0).getLongitude()));
-                    Log.d(TAG, Double.toString(latitude));
-                    Log.d(TAG, Double.toString(longitude));
-                    Log.d(TAG, addressList.get(0).toString());
-                    Log.d(TAG, addressList.get(0).getAddressLine(0));
+                saveNewGps();
+                cursor = smsdbManager.searchWithDateLocation(time, store);
+                cursor.moveToFirst();
+                final int id = cursor.getInt(0);
+                Log.d(TAG, Integer.toString(id));
+                boolean deleteResult = smsdbManager.deleteSMS(id);
+                if (deleteResult) {
+                    Log.d(TAG, "삭제 성공");
                 } else {
-                    latitude = 0;
-                    longitude = 0;
-                    address = "주소정보 없음";
-                }
-
-                boolean result = dbManager.addNewGps(
-                            new MovingInfo(year, month, day, str[0], str[1], str[1], latitude, longitude, store + ", " + address, "", store));
-                if (result) {
-                    Toast.makeText(context, "저장 성공", Toast.LENGTH_SHORT).show();
-                    finish();
-                } else {
-                    Toast.makeText(context, "저장 실패", Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "삭제 실패");
                 }
                 break;
             case R.id.btnCancel:
                 finish();
                 break;
         }
+    }
+
+    public void saveNewGps() {
+        String[] str = time.split(" ");
+        String[] date = str[0].split("/");
+        int year = Integer.parseInt(date[0]);
+        int month = Integer.parseInt(date[1]);
+        int day = Integer.parseInt(date[2]);
+
+        MovingInfo m = getAddress();
+
+        boolean result = dbManager.addNewGps(
+                new MovingInfo(year, month, day, str[0], str[1], str[1], m.getLatitude(), m.getLongitude(), m.getLocation(), "", store));
+        if (result) {
+            Toast.makeText(context, "저장 성공", Toast.LENGTH_SHORT).show();
+            finish();
+        } else {
+            Toast.makeText(context, "저장 실패", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public MovingInfo getAddress() {
+        Geocoder geocoder = new Geocoder(getApplicationContext());
+        List<Address> addressList = null;
+        double latitude;
+        double longitude;
+        String address = "";
+
+        try {
+            addressList = geocoder.getFromLocationName(store, 1);
+        } catch (IOException e) {
+            Log.d(TAG, "geocoding error");
+        }
+
+        if(addressList.size() != 0) {
+            address = addressList.get(0).getAddressLine(0);
+            latitude = Double.parseDouble(String.format("%.6f", addressList.get(0).getLatitude()));
+            longitude = Double.parseDouble(String.format("%.6f", addressList.get(0).getLongitude()));
+//                    Log.d(TAG, Double.toString(latitude));
+//                    Log.d(TAG, Double.toString(longitude));
+//                    Log.d(TAG, addressList.get(0).toString());
+//                    Log.d(TAG, addressList.get(0).getAddressLine(0));
+        } else {
+            latitude = 0;
+            longitude = 0;
+            address = "주소정보 없음";
+        }
+
+        return new MovingInfo(latitude, longitude, store + ", " + address);
     }
 
     private void processIntent(Intent intent){

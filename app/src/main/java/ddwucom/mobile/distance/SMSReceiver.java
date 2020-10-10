@@ -64,9 +64,7 @@ public class SMSReceiver extends BroadcastReceiver {
                         }
                         Log.d(TAG, msg[i]);
                     }
-                    SMSInfo s = new SMSInfo(time, store);
-                    Log.d(TAG, s.getDatetime() + s.getLocation());
-                    boolean result = dbManager.addNewSMS(s);
+                    boolean result = dbManager.addNewSMS(new SMSInfo(time, store));
                     if (result) {
                         Log.d(TAG, "success");
                     } else {

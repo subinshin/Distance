@@ -19,11 +19,35 @@ public class SMSDBManager {
         helper = new SMSDBHelper(context);
         this.context = context;
     }
-        public Cursor getAllSMSInfos(){
+
+    public Cursor getAllSMSInfos(){
         SQLiteDatabase db = helper.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM " + helper.TABLE_NAME, null);
 
         return cursor;
+    }
+
+    public Cursor searchWithDateLocation(String datetime, String location) {
+        SQLiteDatabase db = helper.getReadableDatabase();
+
+        String selection = helper.COL_DATETIME + "=? and " + helper.COL_LOCATION + "=?";
+        String [] selectArgs = new String[]{ datetime, location };
+
+        cursor = db.query(helper.TABLE_NAME, null, selection, selectArgs, null, null, null, null);
+
+        return cursor;
+    }
+
+    public boolean deleteSMS(int _id){
+        SQLiteDatabase db = helper.getWritableDatabase();
+
+        String whereClause = helper.COL_ID + "=?";
+        String [] whereArgs = new String[] {String.valueOf(_id)};
+
+        if(db.delete(helper.TABLE_NAME, whereClause, whereArgs) > 0){
+            return true;
+        }
+        return false;
     }
 
     public void saveSMSInfo(String datetime, String location){

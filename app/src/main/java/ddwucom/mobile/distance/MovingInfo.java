@@ -23,6 +23,12 @@ public class MovingInfo {
         endTime = null;
     }
 
+    public MovingInfo(double latitude, double longitude, String location) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.location = location;
+    }
+
     public MovingInfo(int year, int month, int dayOfMonth, String endDate, String startTime, String endTime, double latitude, double longitude, String location, String memo, String store) {
         this.year = year;
         this.month = month;
