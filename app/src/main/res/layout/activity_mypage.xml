@@ -9,9 +9,9 @@
         android:id="@+id/imageView10"
         android:layout_width="15dp"
         android:layout_height="19dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/mypage_et_email"
         app:layout_constraintEnd_toEndOf="@+id/mypage_et_email"
         app:layout_constraintTop_toTopOf="@+id/mypage_et_email"
         app:srcCompat="@drawable/group__2_" />
@@ -20,97 +20,17 @@
         android:id="@+id/imageView11"
         android:layout_width="16dp"
         android:layout_height="16dp"
-        android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/mypage_et_name"
         app:layout_constraintEnd_toEndOf="@+id/mypage_et_name"
         app:layout_constraintTop_toTopOf="@+id/mypage_et_name"
         app:srcCompat="@drawable/group_2__3_" />
-
-    <TextView
-        android:id="@+id/textView16"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/mypage_et_phone"
-        android:textSize="14sp"
-        android:visibility="invisible"
-        app:layout_constraintStart_toStartOf="@+id/mypage_et_phone"
-        app:layout_constraintTop_toTopOf="@+id/mypage_et_phone" />
-
-    <TextView
-        android:id="@+id/textView17"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/mypage_et_email"
-        android:textSize="14sp"
-        android:visibility="invisible"
-        app:layout_constraintStart_toStartOf="@+id/mypage_et_email"
-        app:layout_constraintTop_toTopOf="@+id/mypage_et_email" />
-
-    <TextView
-        android:id="@+id/textView18"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/mypage_et_birth"
-        android:textSize="14sp"
-        android:visibility="invisible"
-        app:layout_constraintStart_toStartOf="@+id/mypage_et_birth"
-        app:layout_constraintTop_toTopOf="@+id/mypage_et_birth" />
-
-    <TextView
-        android:id="@+id/textView19"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/mypage_et_name"
-        android:textSize="14sp"
-        android:visibility="invisible"
-        app:layout_constraintStart_toStartOf="@+id/mypage_et_name"
-        app:layout_constraintTop_toTopOf="@+id/mypage_et_name" />
-
-    <TextView
-        android:id="@+id/textView20"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/mypage_et_pw"
-        android:textSize="14sp"
-        android:visibility="invisible"
-        app:layout_constraintStart_toStartOf="@+id/mypage_et_pw"
-        app:layout_constraintTop_toTopOf="@+id/mypage_et_pw" />
-
-    <TextView
-        android:id="@+id/textView15"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/mypage_et_pw_2"
-        android:textSize="14sp"
-        android:visibility="invisible"
-        app:layout_constraintStart_toStartOf="@+id/mypage_et_pw_2"
-        app:layout_constraintTop_toTopOf="@+id/mypage_et_pw_2" />
 
     <Button
         android:id="@+id/mypage_btn_cancel"
         android:layout_width="161dp"
         android:layout_height="48dp"
-        android:layout_marginStart="124dp"
-        android:layout_marginLeft="124dp"
         android:layout_marginTop="96dp"
         android:background="@drawable/btn_notext"
         android:onClick="onClick"
@@ -119,6 +39,7 @@
         android:textColorLink="#FFFFFF"
         android:textSize="22sp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mypage_et_phone" />
 
@@ -126,9 +47,8 @@
         android:id="@+id/imageView8"
         android:layout_width="116dp"
         android:layout_height="118dp"
-        android:layout_marginStart="144dp"
-        android:layout_marginLeft="144dp"
         android:layout_marginTop="64dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/boy__1_" />
@@ -137,14 +57,14 @@
         android:id="@+id/mypage_et_email"
         android:layout_width="276dp"
         android:layout_height="40dp"
-        android:layout_marginStart="64dp"
-        android:layout_marginLeft="64dp"
         android:layout_marginTop="44dp"
         android:background="@drawable/rectangle_3_1__2_"
         android:ems="10"
         android:hint="이메일을 입력하세요."
         android:inputType="textEmailAddress"
+        android:paddingLeft="10dp"
         android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView8" />
 
@@ -152,14 +72,14 @@
         android:id="@+id/mypage_et_pw"
         android:layout_width="276dp"
         android:layout_height="40dp"
-        android:layout_marginStart="64dp"
-        android:layout_marginLeft="64dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/rectangle_3_1__2_"
         android:ems="10"
         android:hint="비밀번호를 입력하세요."
         android:inputType="textPassword"
+        android:paddingLeft="10dp"
         android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mypage_et_email" />
 
@@ -167,14 +87,14 @@
         android:id="@+id/mypage_et_pw_2"
         android:layout_width="276dp"
         android:layout_height="40dp"
-        android:layout_marginStart="64dp"
-        android:layout_marginLeft="64dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/rectangle_3_1__2_"
         android:ems="10"
         android:hint="비밀번호를 다시 입력하세요."
         android:inputType="textPassword"
+        android:paddingLeft="10dp"
         android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mypage_et_pw" />
 
@@ -182,10 +102,10 @@
         android:id="@+id/imageView15"
         android:layout_width="14dp"
         android:layout_height="18dp"
-        android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
-        app:layout_constraintEnd_toEndOf="@+id/mypage_et_pw"
+        app:layout_constraintBottom_toBottomOf="@+id/mypage_et_pw_2"
+        app:layout_constraintEnd_toEndOf="@+id/mypage_et_pw_2"
         app:layout_constraintTop_toTopOf="@+id/mypage_et_pw_2"
         app:srcCompat="@drawable/group_2_1" />
 
@@ -193,14 +113,14 @@
         android:id="@+id/mypage_et_name"
         android:layout_width="276dp"
         android:layout_height="40dp"
-        android:layout_marginStart="64dp"
-        android:layout_marginLeft="64dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/rectangle_3_1__2_"
         android:ems="10"
         android:hint="이름을 입력하세요."
         android:inputType="textPersonName"
+        android:paddingLeft="10dp"
         android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mypage_et_pw_2" />
 
@@ -208,14 +128,14 @@
         android:id="@+id/mypage_et_birth"
         android:layout_width="276dp"
         android:layout_height="40dp"
-        android:layout_marginStart="64dp"
-        android:layout_marginLeft="64dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/rectangle_3_1__2_"
         android:ems="10"
         android:hint="생년월일을 입력하세요."
         android:inputType="date"
+        android:paddingLeft="10dp"
         android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mypage_et_name" />
 
@@ -223,14 +143,14 @@
         android:id="@+id/mypage_et_phone"
         android:layout_width="276dp"
         android:layout_height="40dp"
-        android:layout_marginStart="64dp"
-        android:layout_marginLeft="64dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/rectangle_3_1__2_"
         android:ems="10"
         android:hint="전화번호를 입력하세요."
         android:inputType="phone"
+        android:paddingLeft="10dp"
         android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mypage_et_birth" />
 
@@ -238,8 +158,6 @@
         android:id="@+id/mypage_btn_modify"
         android:layout_width="161dp"
         android:layout_height="48dp"
-        android:layout_marginStart="124dp"
-        android:layout_marginLeft="124dp"
         android:layout_marginTop="32dp"
         android:background="@drawable/btn_notext"
         android:onClick="onClick"
@@ -248,6 +166,7 @@
         android:textColorLink="#FFFFFF"
         android:textSize="22sp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mypage_et_phone" />
 
@@ -255,9 +174,9 @@
         android:id="@+id/imageView9"
         android:layout_width="16dp"
         android:layout_height="15dp"
-        android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/mypage_et_birth"
         app:layout_constraintEnd_toEndOf="@+id/mypage_et_birth"
         app:layout_constraintTop_toTopOf="@+id/mypage_et_birth"
         app:srcCompat="@drawable/vector" />
@@ -266,9 +185,9 @@
         android:id="@+id/imageView12"
         android:layout_width="16dp"
         android:layout_height="16dp"
-        android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/mypage_et_phone"
         app:layout_constraintEnd_toEndOf="@+id/mypage_et_phone"
         app:layout_constraintTop_toTopOf="@+id/mypage_et_phone"
         app:srcCompat="@drawable/group_2__3_" />
@@ -277,9 +196,9 @@
         android:id="@+id/imageView13"
         android:layout_width="15dp"
         android:layout_height="19dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="9dp"
-        android:layout_marginRight="9dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/mypage_et_pw"
         app:layout_constraintEnd_toEndOf="@+id/mypage_et_pw"
         app:layout_constraintTop_toTopOf="@+id/mypage_et_pw"
         app:srcCompat="@drawable/group_2_1" />

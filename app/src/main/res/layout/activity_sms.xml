@@ -11,9 +11,12 @@
         android:layout_width="365dp"
         android:layout_height="150dp"
         android:layout_marginTop="16dp"
+        android:background="@drawable/rectangle_3_1__2_"
         android:ems="10"
+        android:enabled="false"
         android:gravity="center"
         android:inputType="textPersonName"
+        android:textColor="@android:color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView10" />
@@ -23,11 +26,13 @@
         android:layout_width="100dp"
         android:layout_height="45dp"
         android:layout_marginTop="16dp"
-        android:background="@drawable/btn_style"
+        android:background="@drawable/btn_notext"
         android:gravity="center"
         android:onClick="onClick"
         android:text="저장"
-        android:textColor="@color/text_style"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/btnCancel"
         app:layout_constraintTop_toBottomOf="@+id/editText" />
@@ -37,11 +42,13 @@
         android:layout_width="100dp"
         android:layout_height="45dp"
         android:layout_marginTop="16dp"
-        android:background="@drawable/btn_style"
+        android:background="@drawable/btn_notext"
         android:gravity="center"
         android:onClick="onClick"
         android:text="취소"
-        android:textColor="@color/text_style"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/btnSave"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editText" />
@@ -54,10 +61,10 @@
         android:text="동선에 저장"
         android:textColor="@android:color/black"
         android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.07"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView6" />
 
     <TextView
         android:id="@+id/textView10"
@@ -69,4 +76,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView9" />
+
+    <ImageView
+        android:id="@+id/imageView6"
+        android:layout_width="180dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="72dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/logo_shadow" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
