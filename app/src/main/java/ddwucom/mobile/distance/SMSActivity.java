@@ -52,7 +52,7 @@ public class SMSActivity extends AppCompatActivity {
                 saveNewGps();
                 cursor = smsdbManager.searchWithDateLocation(time, store);
                 cursor.moveToFirst();
-                final int id = cursor.getInt(0);
+                final int id = cursor.getInt(cursor.getColumnIndex(smsdbHelper.COL_ID));
                 Log.d(TAG, Integer.toString(id));
                 boolean deleteResult = smsdbManager.deleteSMS(id);
                 if (deleteResult) {
@@ -103,10 +103,10 @@ public class SMSActivity extends AppCompatActivity {
             address = addressList.get(0).getAddressLine(0);
             latitude = Double.parseDouble(String.format("%.6f", addressList.get(0).getLatitude()));
             longitude = Double.parseDouble(String.format("%.6f", addressList.get(0).getLongitude()));
-//                    Log.d(TAG, Double.toString(latitude));
-//                    Log.d(TAG, Double.toString(longitude));
-//                    Log.d(TAG, addressList.get(0).toString());
-//                    Log.d(TAG, addressList.get(0).getAddressLine(0));
+//            Log.d(TAG, Double.toString(latitude));
+//            Log.d(TAG, Double.toString(longitude));
+//            Log.d(TAG, addressList.get(0).toString());
+//            Log.d(TAG, addressList.get(0).getAddressLine(0));
         } else {
             latitude = 0;
             longitude = 0;
