@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 public class SMSListActivity extends AppCompatActivity {
 
@@ -35,16 +37,21 @@ public class SMSListActivity extends AppCompatActivity {
     ArrayList<SMSInfo> smsList;
     SMSInfoAdapter adapter;
 
+    ConstraintLayout allList;
+    ConstraintLayout noData;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sms_list);
 
+        allList = findViewById(R.id.all_layout);
+        noData = findViewById(R.id.no_data_layout);
+
         listView = findViewById(R.id.sms_listview);
         smsList = new ArrayList<SMSInfo>();
         manager = new SMSDBManager(this);
         adapter = new SMSInfoAdapter(SMSListActivity.this, R.layout.layout_listview_sms, cursor);
-        listView.setAdapter(adapter);
 
         listView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
             @Override
@@ -65,6 +72,7 @@ public class SMSListActivity extends AppCompatActivity {
                                         if(manager.deleteSMS(id)){
                                             s = "삭제성공";
                                             cursor = manager.getAllSMSInfos();
+                                            cursorCheck(cursor);
                                             adapter.changeCursor(cursor);
                                         }else {
                                             s = "삭제실패";
@@ -125,7 +133,23 @@ public class SMSListActivity extends AppCompatActivity {
         super.onResume();
         smsList.clear();
         cursor = manager.getAllSMSInfos();
+        if (cursorCheck(cursor)) {
+            listView.setAdapter(adapter);
+        }
         adapter.changeCursor(cursor);
+    }
+
+    public boolean cursorCheck(Cursor cursor){
+        if(!cursor.moveToNext()){
+            noData.setVisibility(View.VISIBLE);
+            allList.setVisibility(View.INVISIBLE);
+
+            return false;
+        }else{
+            noData.setVisibility(View.INVISIBLE);
+            cursor.moveToPrevious();
+        }
+        return true;
     }
 
     private int dp2px(int dp) {
