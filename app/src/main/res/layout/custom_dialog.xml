@@ -1,39 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/customDialogLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:background="#E7D5EA">
+
+    <Button
+        android:id="@+id/btn_dialog_close"
+        android:layout_width="161dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="21dp"
+        android:layout_marginBottom="21dp"
+        android:background="@drawable/btn_notext"
+        android:onClick="onClick"
+        android:text="닫기"
+        android:textColor="#FFFFFF"
+        android:textColorLink="#FFFFFF"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_dialog_memo" />
 
     <TextView
-        android:id="@+id/textView21"
+        android:id="@+id/tv_dialog_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="21dp"
         android:text="서울특별시 광진구 구의동 43-1"
-        tools:layout_editor_absoluteX="113dp"
-        tools:layout_editor_absoluteY="40dp" />
+        android:textColor="#000000"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView22"
+        android:id="@+id/tv_dialog_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
-        tools:layout_editor_absoluteX="171dp"
-        tools:layout_editor_absoluteY="75dp" />
+        android:layout_marginTop="21dp"
+        android:text="2020/10/2"
+        android:textColor="#4E4D4D"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_dialog_location" />
 
     <TextView
-        android:id="@+id/textView23"
+        android:id="@+id/tv_dialog_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
-        tools:layout_editor_absoluteX="171dp"
-        tools:layout_editor_absoluteY="109dp" />
+        android:layout_marginTop="21dp"
+        android:text="14:23~14:54"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_dialog_date" />
 
     <TextView
-        android:id="@+id/textView24"
+        android:id="@+id/tv_dialog_memo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
-        tools:layout_editor_absoluteX="171dp"
-        tools:layout_editor_absoluteY="140dp" />
+        android:layout_marginTop="21dp"
+        android:text="내가저장한동선"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_dialog_time" />
 </androidx.constraintlayout.widget.ConstraintLayout>

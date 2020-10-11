@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.FrameLayout;
@@ -105,14 +106,15 @@ public class MovingActivity extends AppCompatActivity{
     TabLayout tabLayout;
     TextView tv_searchCondition;
 
-    Dialog dialog;
+    AlertDialog.Builder builder;
+    AlertDialog dialog;
+    View custom_dialog;
+    ArrayList<MovingInfo> infoArray;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_moving);
-
-        dialog = new Dialog(this);
 
         Log.d(TAG, "Start movingActivity");
         tabSelected = LIST_TAB;
@@ -185,6 +187,7 @@ public class MovingActivity extends AppCompatActivity{
 
             }
         });
+
 
 
         // db데이터 가져올 때 사용 할 변수들
@@ -288,6 +291,8 @@ public class MovingActivity extends AppCompatActivity{
         currentMonth = Integer.parseInt(monthFormat.format(currentTime));
         currentDay = Integer.parseInt(dayFormat.format(currentTime));
 
+        infoArray = new ArrayList<MovingInfo>();
+
         // 마커 이미지 불러오기
         BitmapDrawable bitmapDrawable = (BitmapDrawable)getResources().getDrawable(R.drawable.som_mark_big);
         Bitmap b = bitmapDrawable.getBitmap();
@@ -300,47 +305,61 @@ public class MovingActivity extends AppCompatActivity{
             public void onMapReady(GoogleMap googleMap) {
                 map = googleMap;
 
-                map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                     @Override
-                    public void onInfoWindowClick(Marker marker) {
-                        final Marker m = marker;
+                    public boolean onMarkerClick(Marker marker) {
+                        builder = new AlertDialog.Builder(MovingActivity.this);
+                        custom_dialog = View.inflate(MovingActivity.this, R.layout.alert_dialog, null);
+                        MovingInfo info = (MovingInfo) marker.getTag();
 
-                        dialog.setContentView(R.layout.alert_dialog);
-                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        if(info != null) {
+                            TextView tv_alert_location = custom_dialog.findViewById(R.id.tv_alert_location);
+                            TextView tv_alert_dateTime = custom_dialog.findViewById(R.id.tv_alert_dateTime);
+                            TextView tv_alert_latlng = custom_dialog.findViewById(R.id.tv_alert_latlng);
+                            TextView tv_alert_memo = custom_dialog.findViewById(R.id.tv_alert_memo);
+                            Button btn_alert_close = custom_dialog.findViewById(R.id.btn_alert_close);
 
-                        ImageView somImg = dialog.findViewById(R.id.imageView);
-                        Button btn_close = dialog.findViewById(R.id.btn_dialog);
-                        TextView tv_title = dialog.findViewById(R.id.tv_dialog_title);
-                        TextView tv_latlng = dialog.findViewById(R.id.tv_dialog_latlng);
-                        TextView tv_snippet = dialog.findViewById(R.id.tv_snippet);
+                            btn_alert_close.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    dialog.dismiss();
+                                }
+                            });
 
-                        LatLng latLng = marker.getPosition();
-                        tv_title.setText(marker.getTitle());
-                        tv_latlng.setText("위치좌표 : (" + latLng.latitude + ", " + latLng.longitude + ")");
-                        tv_snippet.setText("날짜 : " + marker.getSnippet());
+                            tv_alert_location.setText(info.getLocation());
+                            tv_alert_latlng.setText("(" + info.getLatitude() + ", " + info.getLongitude() + ")");
+                            tv_alert_dateTime.setText(info.getYear() + "/" + info.getMonth() + "/" + info.getDayOfMonth() + ", " + info.getStartTime() + "~" + info.getEndTime());
+                            tv_alert_memo.setText("메모 : " + info.getMemo());
 
-                        btn_close.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                dialog.dismiss();
-                            }
-                        });
+                            builder.setView(custom_dialog);
+                            dialog = builder.create();
+                            dialog.show();
+                        }
+                        else {
+                            marker.showInfoWindow();
+                        }
 
-                        dialog.show();
-
-//                        AlertDialog.Builder builder = new AlertDialog.Builder(MovingActivity.this);// 대화상자 띄우기
-//
-//                        LatLng latLng = marker.getPosition();
-//
-//
-//                        builder.setTitle(marker.getTitle())
-//                                .setMessage("위치좌표 : (" + latLng.latitude + ", " + latLng.longitude + ")\n날짜 : " + marker.getSnippet())
-//                                .setPositiveButton("닫기", null)
-//
-//                                .show();
-
+                        return true;
                     }
                 });
+
+//                map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+//                    @Override
+//                    public void onInfoWindowClick(Marker marker) {
+//                        if(marker.getTag() == null) {
+//                            AlertDialog.Builder builder = new AlertDialog.Builder(MovingActivity.this);// 대화상자 띄우기
+//
+//                            LatLng latLng = marker.getPosition();
+//
+//                            builder.setTitle(marker.getTitle())
+//                                    .setMessage("위치좌표 : (" + latLng.latitude + ", " + latLng.longitude + ")\n날짜 : " + marker.getSnippet())
+//                                    .setPositiveButton("닫기", null)
+//                                    .show();
+//                        }
+//
+//                    }
+//                });
+
 
 
                 cameraPosition = new CameraPosition.Builder().target(new LatLng(37.5759, 126.9769)).zoom(30).build();
@@ -407,12 +426,17 @@ public class MovingActivity extends AppCompatActivity{
             //동일한 좌표가 없다면 markerOption 생성 후 추가
             if(mo == null) {
                 LatLng pos = new LatLng(info.getLatitude(), info.getLongitude());
-                MarkerOptions marker = new MarkerOptions().position(pos)
-                        .title(info.getLocation()).snippet(s);
+                MarkerOptions marker = new MarkerOptions().position(pos);
 
                 marker.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
                 markersOption.add(marker);
+                //마커 찍기
+                Marker m = map.addMarker(marker);
+                m.setTag(info);
+                myMarkers.add(m);
             }
+
+            infoArray.add(info);
         }
 
         // data 없으면 화면처리
@@ -425,13 +449,16 @@ public class MovingActivity extends AppCompatActivity{
             no_data_layout.setVisibility(View.INVISIBLE);
             map_layout.setVisibility(View.VISIBLE);
         }
-
-        //마커 찍기
-        for(MarkerOptions m : markersOption){
-            myMarkers.add(map.addMarker(m));
-        }
+//
+//        //마커찍기
+//        for(int i = 0; i < markersOption.size(); i++){
+//            Marker marker = map.addMarker(markersOption.get(i));
+//            marker.setTag(infoArray.get(i));
+//            myMarkers.add(marker);
+//        }
 
         markersOption.clear();
+        infoArray.clear();
 
         if(info != null) {
             cameraPosition = new CameraPosition.Builder().target(new LatLng(info.getLatitude(), info.getLongitude())).zoom(16).build();
@@ -442,7 +469,7 @@ public class MovingActivity extends AppCompatActivity{
     public void putPatientMark(){
         removeMarkers(patientMarkers);
 
-        BitmapDrawable bitmapDrawable = (BitmapDrawable)getResources().getDrawable(R.drawable.pin2);
+        BitmapDrawable bitmapDrawable = (BitmapDrawable)getResources().getDrawable(R.drawable.som_patient_marker_blue);
         Bitmap b = bitmapDrawable.getBitmap();
         Bitmap smallMarker = Bitmap.createScaledBitmap(b, 180, 200, false);
 
@@ -574,3 +601,4 @@ public class MovingActivity extends AppCompatActivity{
     }
 
 }
+
