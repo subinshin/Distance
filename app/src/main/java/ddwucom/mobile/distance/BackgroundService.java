@@ -79,7 +79,7 @@ public class BackgroundService extends Service {
             // for ActivityCompat#requestPermissions for more details.
             return TODO;
         }
-        locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 60000, 0, locationListener);
+        locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, locationListener);
         lastLocation = locManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
         return super.onStartCommand(intent, flags, startId);
@@ -128,9 +128,9 @@ public class BackgroundService extends Service {
                 TimerTask timerTask = new TimerTask() {
                     @Override
                     public void run() {
-                        if(count < 5) { // count가 5이상이면 더 이상 증가하지않음
+                        //if(count < 5) { // count가 5이상이면 더 이상 증가하지않음
                             count++;
-                        }
+                       // }
                     }
                 };
                 timer.schedule(timerTask, 0, 300000); // 타이머 시작
