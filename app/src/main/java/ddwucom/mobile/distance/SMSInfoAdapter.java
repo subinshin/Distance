@@ -74,7 +74,7 @@ public class SMSInfoAdapter extends CursorAdapter {
                                     Log.d(TAG, "삭제 실패");
                                 }
                                 Toast.makeText(context, Integer.toString(id), Toast.LENGTH_SHORT).show();
-                                notifyDataSetChanged();
+                                changeCursor(cursor);
 //                            }
 //                        })
 //                        .setNegativeButton("취소", null)
