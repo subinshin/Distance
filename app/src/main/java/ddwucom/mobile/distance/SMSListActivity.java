@@ -10,6 +10,8 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baoyz.swipemenulistview.SwipeMenu;
@@ -38,6 +40,10 @@ public class SMSListActivity extends AppCompatActivity {
     ConstraintLayout allList;
     ConstraintLayout noData;
 
+    View custom_dialog;
+    AlertDialog.Builder builder;
+    AlertDialog ad;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +58,8 @@ public class SMSListActivity extends AppCompatActivity {
         smsdbHelper = new SMSDBHelper(this);
         adapter = new SMSInfoAdapter(SMSListActivity.this, R.layout.layout_listview_sms, cursor);
 
+
+
         listView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
@@ -61,26 +69,40 @@ public class SMSListActivity extends AppCompatActivity {
                 final int id = cursor.getInt(cursor.getColumnIndex(smsdbHelper.COL_ID));
                 switch(index){
                     case 0:
-                        AlertDialog.Builder builder = new AlertDialog.Builder(SMSListActivity.this);
-                        builder.setTitle("결제 문자 삭제")
-                                .setMessage("해당 항목을 삭제하시겠습니까?")
-                                .setPositiveButton("삭제", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        String s = "";
-                                        if(manager.deleteSMS(id)){
-                                            s = "삭제성공";
-                                            cursor = manager.getAllSMSInfos();
-                                            cursorCheck(cursor);
-                                            adapter.changeCursor(cursor);
-                                        }else {
-                                            s = "삭제실패";
-                                        }
-                                        Toast.makeText(SMSListActivity.this, s, Toast.LENGTH_SHORT).show();
-                                    }
-                                })
-                                .setNegativeButton("취소", null)
-                                .show();
+                        custom_dialog = View.inflate(SMSListActivity.this, R.layout.delete_alert_dialog, null);
+                        builder = new AlertDialog.Builder(SMSListActivity.this);
+
+                        TextView alert_title = custom_dialog.findViewById(R.id.alert_title);
+                        alert_title.setText("결제 문자 삭제");
+                        Button btn_alert_delete = custom_dialog.findViewById(R.id.btn_alert_delete);
+                        Button btn_alert_close = custom_dialog.findViewById(R.id.btn_alert_close);
+
+                        btn_alert_delete.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                String s = "";
+                                if(manager.deleteSMS(id)){
+                                    s = "삭제성공";
+                                    cursor = manager.getAllSMSInfos();
+                                    cursorCheck(cursor);
+                                    adapter.changeCursor(cursor);
+                                }else {
+                                    s = "삭제실패";
+                                }
+                                ad.dismiss();
+                                Toast.makeText(SMSListActivity.this, s, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        btn_alert_close.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                ad.dismiss();
+                            }
+                        });
+
+                        builder.setView(custom_dialog);
+                        ad = builder.create();
+                        ad.show();
                         break;
                 }
 

@@ -67,7 +67,6 @@ public class SMSInfoAdapter extends CursorAdapter {
                 } else {
                     Log.d(TAG, "삭제 실패");
                 }
-                Toast.makeText(context, Integer.toString(id), Toast.LENGTH_SHORT).show();
                 classCursor = smsdbManager.getAllSMSInfos();
                 changeCursor(classCursor);
             }

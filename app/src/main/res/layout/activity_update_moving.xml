@@ -92,6 +92,7 @@
         android:onClick="textOnClick"
         android:paddingLeft="10dp"
         android:text="날짜를 입력하려면 클릭하세요"
+        android:textColor="@android:color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_update_location" />
 
@@ -108,6 +109,7 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:text="시작시간을\n입력하려면 클릭"
+        android:textColor="@android:color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_update_date" />
 
@@ -139,6 +141,7 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:text="종료시간을\n입력하려면 클릭"
+        android:textColor="@android:color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView12"
         app:layout_constraintTop_toBottomOf="@+id/tv_update_date" />
@@ -183,7 +186,7 @@
         android:layout_marginTop="32dp"
         android:background="@drawable/btn_notext"
         android:onClick="onClick"
-        android:text="추가"
+        android:text="수정"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
         android:textStyle="bold"
