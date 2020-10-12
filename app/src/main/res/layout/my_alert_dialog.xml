@@ -19,7 +19,7 @@
 
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/img_myalert"
                 android:layout_width="250dp"
                 android:layout_height="220dp"
                 android:layout_marginStart="20dp"
@@ -50,7 +50,7 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView" />
+                app:layout_constraintTop_toBottomOf="@+id/img_myalert" />
 
             <TextView
                 android:id="@+id/tv_alert_latlng"

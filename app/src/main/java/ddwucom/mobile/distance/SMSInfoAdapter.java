@@ -22,7 +22,7 @@ public class SMSInfoAdapter extends CursorAdapter {
 
     private static final String TAG = "SMSInfoAdapter";
 
-    Cursor cursor;
+    Cursor classCursor;
     Context context;
     int layout;
     LayoutInflater layoutInflater;
@@ -37,7 +37,7 @@ public class SMSInfoAdapter extends CursorAdapter {
         super(context, c);
         this.context = context;
         this.layout = layout;
-        this.cursor = c;
+        this.classCursor = c;
         this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         dbManager = new DBManager(context);
         smsdbHelper = new SMSDBHelper(context);
@@ -68,7 +68,8 @@ public class SMSInfoAdapter extends CursorAdapter {
                     Log.d(TAG, "삭제 실패");
                 }
                 Toast.makeText(context, Integer.toString(id), Toast.LENGTH_SHORT).show();
-                changeCursor(cursor);
+                classCursor = smsdbManager.getAllSMSInfos();
+                changeCursor(classCursor);
             }
         });
     }

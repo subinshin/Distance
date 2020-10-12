@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +27,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 
 import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
@@ -291,7 +293,7 @@ public class MovingActivity extends AppCompatActivity{
         infoArray = new ArrayList<MovingInfo>();
 
         // 마커 이미지 불러오기
-        BitmapDrawable bitmapDrawable = (BitmapDrawable)getResources().getDrawable(R.drawable.som_mark_big);
+        final BitmapDrawable bitmapDrawable = (BitmapDrawable)getResources().getDrawable(R.drawable.som_mark_big);
         Bitmap b = bitmapDrawable.getBitmap();
         smallMarker = Bitmap.createScaledBitmap(b, 150, 200, false);
 
@@ -309,6 +311,7 @@ public class MovingActivity extends AppCompatActivity{
                         custom_dialog = View.inflate(MovingActivity.this, R.layout.my_alert_dialog, null);
                         Object object = marker.getTag();
 
+                        ImageView img_alert = custom_dialog.findViewById(R.id.img_myalert);
                         TextView tv_alert_location = custom_dialog.findViewById(R.id.tv_alert_location);
                         TextView tv_alert_dateTime = custom_dialog.findViewById(R.id.tv_alert_dateTime);
                         TextView tv_alert_latlng = custom_dialog.findViewById(R.id.tv_alert_latlng);
@@ -333,6 +336,8 @@ public class MovingActivity extends AppCompatActivity{
                         else if(object instanceof PathInfo){
                             PathInfo info = (PathInfo) object;
 
+                            img_alert.setImageResource(R.drawable.patient_alert_img);
+                            btn_alert_close.setBackground(ContextCompat.getDrawable(MovingActivity.this, R.drawable.patient_alert_btn));
                             tv_alert_location.setText(info.getPlace());
                             tv_alert_latlng.setText("(" + info.getLat() + ", " + info.getLng() + ")");
                             tv_alert_dateTime.setText(info.getVisitDate());
@@ -346,25 +351,6 @@ public class MovingActivity extends AppCompatActivity{
                         return true;
                     }
                 });
-
-//                map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-//                    @Override
-//                    public void onInfoWindowClick(Marker marker) {
-//                        if(marker.getTag() == null) {
-//                            AlertDialog.Builder builder = new AlertDialog.Builder(MovingActivity.this);// 대화상자 띄우기
-//
-//                            LatLng latLng = marker.getPosition();
-//
-//                            builder.setTitle(marker.getTitle())
-//                                    .setMessage("위치좌표 : (" + latLng.latitude + ", " + latLng.longitude + ")\n날짜 : " + marker.getSnippet())
-//                                    .setPositiveButton("닫기", null)
-//                                    .show();
-//                        }
-//
-//                    }
-//                });
-
-
 
                 cameraPosition = new CameraPosition.Builder().target(new LatLng(37.5759, 126.9769)).zoom(30).build();
                 map.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
