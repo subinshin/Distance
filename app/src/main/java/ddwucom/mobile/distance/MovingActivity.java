@@ -2,7 +2,6 @@ package ddwucom.mobile.distance;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,12 +15,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -309,36 +306,43 @@ public class MovingActivity extends AppCompatActivity{
                     @Override
                     public boolean onMarkerClick(Marker marker) {
                         builder = new AlertDialog.Builder(MovingActivity.this);
-                        custom_dialog = View.inflate(MovingActivity.this, R.layout.alert_dialog, null);
-                        MovingInfo info = (MovingInfo) marker.getTag();
+                        custom_dialog = View.inflate(MovingActivity.this, R.layout.my_alert_dialog, null);
+                        Object object = marker.getTag();
 
-                        if(info != null) {
-                            TextView tv_alert_location = custom_dialog.findViewById(R.id.tv_alert_location);
-                            TextView tv_alert_dateTime = custom_dialog.findViewById(R.id.tv_alert_dateTime);
-                            TextView tv_alert_latlng = custom_dialog.findViewById(R.id.tv_alert_latlng);
-                            TextView tv_alert_memo = custom_dialog.findViewById(R.id.tv_alert_memo);
-                            Button btn_alert_close = custom_dialog.findViewById(R.id.btn_alert_close);
+                        TextView tv_alert_location = custom_dialog.findViewById(R.id.tv_alert_location);
+                        TextView tv_alert_dateTime = custom_dialog.findViewById(R.id.tv_alert_dateTime);
+                        TextView tv_alert_latlng = custom_dialog.findViewById(R.id.tv_alert_latlng);
+                        TextView tv_alert_memo = custom_dialog.findViewById(R.id.tv_alert_memo);
+                        Button btn_alert_close = custom_dialog.findViewById(R.id.btn_myalert_close);
 
-                            btn_alert_close.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    dialog.dismiss();
-                                }
-                            });
+                        btn_alert_close.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                dialog.dismiss();
+                            }
+                        });
+
+                        if(object instanceof MovingInfo) {
+                            MovingInfo info = (MovingInfo) object;
 
                             tv_alert_location.setText(info.getLocation());
                             tv_alert_latlng.setText("(" + info.getLatitude() + ", " + info.getLongitude() + ")");
                             tv_alert_dateTime.setText(info.getYear() + "/" + info.getMonth() + "/" + info.getDayOfMonth() + ", " + info.getStartTime() + "~" + info.getEndTime());
                             tv_alert_memo.setText("메모 : " + info.getMemo());
-
-                            builder.setView(custom_dialog);
-                            dialog = builder.create();
-                            dialog.show();
                         }
-                        else {
-                            marker.showInfoWindow();
+                        else if(object instanceof PathInfo){
+                            PathInfo info = (PathInfo) object;
+
+                            tv_alert_location.setText(info.getPlace());
+                            tv_alert_latlng.setText("(" + info.getLat() + ", " + info.getLng() + ")");
+                            tv_alert_dateTime.setText(info.getVisitDate());
+                            tv_alert_memo.setText("확진자 번호 : " + info.getPatient_no());
                         }
 
+
+                        builder.setView(custom_dialog);
+                        dialog = builder.create();
+                        dialog.show();
                         return true;
                     }
                 });
@@ -477,11 +481,11 @@ public class MovingActivity extends AppCompatActivity{
             MarkerOptions markerOptions
                     = new MarkerOptions()
                     .position(new LatLng(p.getLat(), p.getLng()))
-                    .title(p.getPlace())
-                    .snippet(p.getVisitDate()+"\n" + p.getDisinfect())
                     .icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
 
-            patientMarkers.add(map.addMarker(markerOptions));
+            Marker m = map.addMarker(markerOptions);
+            m.setTag(p);
+            patientMarkers.add(m);
         }
     }
 

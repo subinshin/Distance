@@ -3,7 +3,6 @@ package ddwucom.mobile.distance;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.database.Cursor;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,6 @@ import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class MovingInfoAdapter extends CursorAdapter {
     Cursor cursor;
@@ -58,12 +56,12 @@ public class MovingInfoAdapter extends CursorAdapter {
         ic_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                custom_dialog = View.inflate(context, R.layout.alert_dialog, null);
+                custom_dialog = View.inflate(context, R.layout.my_alert_dialog, null);
                 TextView tv_alert_location = custom_dialog.findViewById(R.id.tv_alert_location);
                 TextView tv_alert_dateTime = custom_dialog.findViewById(R.id.tv_alert_dateTime);
                 TextView tv_alert_latlng = custom_dialog.findViewById(R.id.tv_alert_latlng);
                 TextView tv_alert_memo = custom_dialog.findViewById(R.id.tv_alert_memo);
-                Button btn_alert_close = custom_dialog.findViewById(R.id.btn_alert_close);
+                Button btn_alert_close = custom_dialog.findViewById(R.id.btn_myalert_close);
 
                 btn_alert_close.setOnClickListener(new View.OnClickListener() {
                         @Override
