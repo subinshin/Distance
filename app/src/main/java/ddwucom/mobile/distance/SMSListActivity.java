@@ -2,7 +2,6 @@ package ddwucom.mobile.distance;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -11,7 +10,6 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.baoyz.swipemenulistview.SwipeMenu;
@@ -33,7 +31,7 @@ public class SMSListActivity extends AppCompatActivity {
     SwipeMenuListView listView;
     Cursor cursor;
     LayoutInflater inflater;
-    SMSDBHelper helper;
+    SMSDBHelper smsdbHelper;
     ArrayList<SMSInfo> smsList;
     SMSInfoAdapter adapter;
 
@@ -51,6 +49,7 @@ public class SMSListActivity extends AppCompatActivity {
         listView = findViewById(R.id.sms_listview);
         smsList = new ArrayList<SMSInfo>();
         manager = new SMSDBManager(this);
+        smsdbHelper = new SMSDBHelper(this);
         adapter = new SMSInfoAdapter(SMSListActivity.this, R.layout.layout_listview_sms, cursor);
 
         listView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
@@ -59,7 +58,7 @@ public class SMSListActivity extends AppCompatActivity {
                 final int pos = position;
                 Log.d(TAG, Integer.toString(pos));
                 cursor.moveToPosition(pos);
-                final int id = cursor.getInt(cursor.getColumnIndex(helper.COL_ID));
+                final int id = cursor.getInt(cursor.getColumnIndex(smsdbHelper.COL_ID));
                 switch(index){
                     case 0:
                         AlertDialog.Builder builder = new AlertDialog.Builder(SMSListActivity.this);

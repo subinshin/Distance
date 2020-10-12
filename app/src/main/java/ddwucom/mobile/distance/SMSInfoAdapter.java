@@ -59,26 +59,16 @@ public class SMSInfoAdapter extends CursorAdapter {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-//                builder.setTitle("동선 저장")
-//                        .setMessage("해당 항목을 저장하시겠습니까?")
-//                        .setPositiveButton("저장", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialogInterface, int i) {
-                                saveNewGps();
-                                Log.d(TAG, Integer.toString(id));
-                                boolean deleteResult = smsdbManager.deleteSMS(id);
-                                if (deleteResult) {
-                                    Log.d(TAG, "삭제 성공");
-                                } else {
-                                    Log.d(TAG, "삭제 실패");
-                                }
-                                Toast.makeText(context, Integer.toString(id), Toast.LENGTH_SHORT).show();
-                                changeCursor(cursor);
-//                            }
-//                        })
-//                        .setNegativeButton("취소", null)
-//                        .show();
+                saveNewGps();
+                Log.d(TAG, Integer.toString(id));
+                boolean deleteResult = smsdbManager.deleteSMS(id);
+                if (deleteResult) {
+                    Log.d(TAG, "삭제 성공");
+                } else {
+                    Log.d(TAG, "삭제 실패");
+                }
+                Toast.makeText(context, Integer.toString(id), Toast.LENGTH_SHORT).show();
+                changeCursor(cursor);
             }
         });
     }
@@ -93,10 +83,6 @@ public class SMSInfoAdapter extends CursorAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         return super.getView(position, convertView, parent);
-    }
-
-    public Cursor getCursor(){
-        return cursor;
     }
 
     public void saveNewGps() {
