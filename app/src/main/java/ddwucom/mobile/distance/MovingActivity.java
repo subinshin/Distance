@@ -459,9 +459,9 @@ public class MovingActivity extends AppCompatActivity{
     public void putPatientMark(){
         removeMarkers(patientMarkers);
 
-        BitmapDrawable bitmapDrawable = (BitmapDrawable)getResources().getDrawable(R.drawable.som_patient_marker_blue);
+        BitmapDrawable bitmapDrawable = (BitmapDrawable)getResources().getDrawable(R.drawable.location_pin);
         Bitmap b = bitmapDrawable.getBitmap();
-        Bitmap smallMarker = Bitmap.createScaledBitmap(b, 180, 200, false);
+        Bitmap smallMarker = Bitmap.createScaledBitmap(b, 100, 110, false);
 
         for(PathInfo p : patientSelectedList){
             MarkerOptions markerOptions

@@ -8,11 +8,13 @@
     android:background="@drawable/alert_dialog_bg">
 
     <androidx.cardview.widget.CardView
+        android:background="@android:color/transparent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:cardCornerRadius="20dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:background="@android:color/transparent"
             android:id="@+id/alert_dialog_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
