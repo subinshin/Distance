@@ -110,6 +110,10 @@ public class MovingActivity extends AppCompatActivity{
     View custom_dialog;
     ArrayList<MovingInfo> infoArray;
 
+    View delete_dialog;
+    AlertDialog.Builder deleteBuilder;
+    AlertDialog ad;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -209,30 +213,44 @@ public class MovingActivity extends AppCompatActivity{
                         startActivity(intent);
                         break;
                     case 1:
-                        AlertDialog.Builder builder = new AlertDialog.Builder(MovingActivity.this);
-                        builder.setTitle("동선 삭제")
-                                .setMessage("해당 항목을 삭제하시겠습니까?")
-                                .setPositiveButton("삭제", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        String s = null;
-                                        if(manager.removeInfo(id)){
-                                            s = "삭제성공";
-                                            if(clickedBtn == BTN_ALL){
-                                                cursor = manager.getAllInfos();
-                                            }else if(clickedBtn == BTN_DATE) {
-                                                cursor = manager.searchWithDate(selectedYear, selectedMonth, selectedDay);
-                                            }
-                                            cursorCheck(cursor);
-                                            adapter.changeCursor(cursor);
-                                        }else {
-                                            s = "삭제실패";
-                                        }
-                                        Toast.makeText(MovingActivity.this, s, Toast.LENGTH_SHORT).show();
+                        delete_dialog = View.inflate(MovingActivity.this, R.layout.delete_alert_dialog, null);
+                        deleteBuilder = new AlertDialog.Builder(MovingActivity.this);
+
+                        TextView alert_title = delete_dialog.findViewById(R.id.alert_title);
+                        alert_title.setText("동선 삭제");
+                        Button btn_alert_delete = delete_dialog.findViewById(R.id.btn_alert_delete);
+                        Button btn_alert_close = delete_dialog.findViewById(R.id.btn_alert_close);
+
+                        btn_alert_delete.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                String s = null;
+                                if(manager.removeInfo(id)){
+                                    s = "삭제성공";
+                                    if(clickedBtn == BTN_ALL){
+                                        cursor = manager.getAllInfos();
+                                    }else if(clickedBtn == BTN_DATE) {
+                                        cursor = manager.searchWithDate(selectedYear, selectedMonth, selectedDay);
                                     }
-                                })
-                                .setNegativeButton("취소", null)
-                                .show();
+                                    cursorCheck(cursor);
+                                    adapter.changeCursor(cursor);
+                                }else {
+                                    s = "삭제실패";
+                                }
+                                ad.dismiss();
+                                Toast.makeText(MovingActivity.this, s, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        btn_alert_close.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                ad.dismiss();
+                            }
+                        });
+
+                        deleteBuilder.setView(delete_dialog);
+                        ad = deleteBuilder.create();
+                        ad.show();
                         break;
                 }
 
