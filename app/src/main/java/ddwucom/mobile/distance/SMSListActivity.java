@@ -102,6 +102,7 @@ public class SMSListActivity extends AppCompatActivity {
 
                         builder.setView(custom_dialog);
                         ad = builder.create();
+                        ad.getWindow().setBackgroundDrawable(new ColorDrawable((Color.TRANSPARENT)));
                         ad.show();
                         break;
                 }
