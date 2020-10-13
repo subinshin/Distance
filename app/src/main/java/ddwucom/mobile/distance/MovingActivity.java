@@ -250,6 +250,7 @@ public class MovingActivity extends AppCompatActivity{
 
                         deleteBuilder.setView(delete_dialog);
                         ad = deleteBuilder.create();
+                        ad.getWindow().setBackgroundDrawable(new ColorDrawable((Color.TRANSPARENT)));
                         ad.show();
                         break;
                 }
@@ -326,6 +327,7 @@ public class MovingActivity extends AppCompatActivity{
                     @Override
                     public boolean onMarkerClick(Marker marker) {
                         builder = new AlertDialog.Builder(MovingActivity.this);
+
                         custom_dialog = View.inflate(MovingActivity.this, R.layout.my_alert_dialog, null);
                         Object object = marker.getTag();
 
@@ -365,6 +367,7 @@ public class MovingActivity extends AppCompatActivity{
 
                         builder.setView(custom_dialog);
                         dialog = builder.create();
+                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable((Color.TRANSPARENT)));
                         dialog.show();
                         return true;
                     }
