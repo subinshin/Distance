@@ -79,7 +79,7 @@ public class BackgroundService extends Service {
             // for ActivityCompat#requestPermissions for more details.
             return TODO;
         }
-        locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, locationListener);
+        locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 60000, 0, locationListener);
         lastLocation = locManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
         return super.onStartCommand(intent, flags, startId);
@@ -128,12 +128,12 @@ public class BackgroundService extends Service {
                 TimerTask timerTask = new TimerTask() {
                     @Override
                     public void run() {
-                        //if(count < 5) { // count가 5이상이면 더 이상 증가하지않음
                             count++;
+                            Log.d(TAG, "count : " + count);
                        // }
                     }
                 };
-                timer.schedule(timerTask, 0, 300000); // 타이머 시작
+                timer.schedule(timerTask, 0, 60000); // 타이머 시작
             } else if(count >= 5 && distance > 15) { // lastLocation과 currentLocation이 다르다고 간주하는 부분
                 Log.d(TAG, "위치 추가 코드로 진입");
                 saveLocation();

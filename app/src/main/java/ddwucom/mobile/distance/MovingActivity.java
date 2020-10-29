@@ -114,6 +114,7 @@ public class MovingActivity extends AppCompatActivity{
     AlertDialog.Builder deleteBuilder;
     AlertDialog ad;
 
+    boolean patientData = true;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -386,6 +387,7 @@ public class MovingActivity extends AppCompatActivity{
 
         cursor = manager.getAllInfos();
         adapter.changeCursor(cursor);
+        //cursorCheck(cursor);
     }
 
     public void getAllPatientList(){
@@ -448,7 +450,8 @@ public class MovingActivity extends AppCompatActivity{
         }
 
         // data 없으면 화면처리
-        if(dataFlag == 0){
+        if(dataFlag == 0 && !patientData){
+            Log.d(TAG, "no data - map");
             no_data_layout.setVisibility(View.VISIBLE);
             map_layout.setVisibility(View.INVISIBLE);
 
@@ -514,8 +517,8 @@ public class MovingActivity extends AppCompatActivity{
                         all_layout.setVisibility(View.VISIBLE);
                     } else if (tabSelected == MAP_TAB) {
                         map_layout.setVisibility(View.VISIBLE);
+                        getAllPatientList();
                         if (patientOnOff) {
-                            getAllPatientList();
                             putPatientMark();
                         }
                         putMyMark();
@@ -554,6 +557,13 @@ public class MovingActivity extends AppCompatActivity{
                 patientSelectedList.add(info);
             }
         }
+        if(patientSelectedList.size() == 0){
+            patientData = false;
+        }
+        else{
+            patientData = true;
+        }
+
         return patientSelectedList;
     }
 
@@ -577,13 +587,12 @@ public class MovingActivity extends AppCompatActivity{
                     all_layout.setVisibility(View.VISIBLE);
                 }
             }else if(tabSelected == MAP_TAB){
-                map_layout.setVisibility(View.VISIBLE);
-                putMyMark();
-
+                searchWithDatePatient(year, month + 1, dayOfMonth);
                 if (patientOnOff) {
-                    searchWithDatePatient(year, month + 1, dayOfMonth);
                     putPatientMark();
                 }
+                map_layout.setVisibility(View.VISIBLE);
+                putMyMark();
             }
 
         }
@@ -598,6 +607,7 @@ public class MovingActivity extends AppCompatActivity{
             return false;
         }else{
             no_data_layout.setVisibility(View.INVISIBLE);
+            all_layout.setVisibility(View.VISIBLE);
             cursor.moveToPrevious();
         }
         return true;
