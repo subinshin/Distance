@@ -133,8 +133,8 @@ public class BackgroundService extends Service {
                        // }
                     }
                 };
-                timer.schedule(timerTask, 0, 60000); // 타이머 시작
-            } else if(count >= 5 && distance > 15) { // lastLocation과 currentLocation이 다르다고 간주하는 부분
+                timer.schedule(timerTask, 0, 1000); // 타이머 시작
+            } else if(count >= 20 && distance > 15) { // lastLocation과 currentLocation이 다르다고 간주하는 부분
                 Log.d(TAG, "위치 추가 코드로 진입");
                 saveLocation();
                 timer.cancel();
