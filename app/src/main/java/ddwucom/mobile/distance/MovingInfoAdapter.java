@@ -3,6 +3,8 @@ package ddwucom.mobile.distance;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,6 +77,7 @@ public class MovingInfoAdapter extends CursorAdapter {
 
                 builder.setView(custom_dialog);
                 ad = builder.create();
+                ad.getWindow().setBackgroundDrawable(new ColorDrawable((Color.TRANSPARENT)));
                 ad.show();
             }
         });
