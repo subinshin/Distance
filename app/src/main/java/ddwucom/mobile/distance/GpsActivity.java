@@ -603,9 +603,9 @@ public class GpsActivity extends AppCompatActivity {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED
                         && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(this, "Permission is granted!\n", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Permission is granted!", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(this, "Permission is denied!\n", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Permission is denied!", Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
