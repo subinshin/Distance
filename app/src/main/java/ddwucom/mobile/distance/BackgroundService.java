@@ -39,8 +39,8 @@ public class BackgroundService extends Service {
     // 현재시간을 date 변수에 저장한다.
     Date date = new Date(now);
     // 시간을 나타냇 포맷을 정한다 ( yyyy/MM/dd 같은 형태로 변형 가능 )
-    SimpleDateFormat sdfNow = new SimpleDateFormat("HH시mm분");
-    SimpleDateFormat sdfNowDate = new SimpleDateFormat("yyyy년MM월dd일");
+    SimpleDateFormat sdfNow = new SimpleDateFormat("HH:mm");
+    SimpleDateFormat sdfNowDate = new SimpleDateFormat("yyyy/MM/dd");
 
     String startTime = sdfNow.format(date);
     String startDate = sdfNowDate.format(date);
