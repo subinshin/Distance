@@ -150,7 +150,7 @@ public class UpdateLocationActivity extends AppCompatActivity {
     DatePickerDialog.OnDateSetListener datePickerListener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-            tv_update_date.setText(year + "년" + (month + 1) + "월" + day +"일");
+            tv_update_date.setText(year + "/" + (month + 1) + "/" + day);
 
             info.setYear(year);
             info.setMonth(month + 1);
@@ -162,10 +162,10 @@ public class UpdateLocationActivity extends AppCompatActivity {
         @Override
         public void onTimeSet(TimePicker timePicker, int hour, int minute) {
             if(timeFlag == START_TIME){
-                tv_update_startTime.setText(hour + "시" + minute + "분");
+                tv_update_startTime.setText(hour + ":" + minute);
                 info.setStartTime(hour + ":" + minute);
             }else if(timeFlag == END_TIME){
-                tv_update_endTime.setText(hour + "시" + minute + "분");
+                tv_update_endTime.setText(hour + ":" + minute);
                 info.setEndTime(hour + ":" + minute);
             }
         }

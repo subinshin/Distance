@@ -58,10 +58,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
                 android:layout_marginLeft="25dp"
-                android:layout_marginTop="11dp"
                 android:layout_marginEnd="25dp"
                 android:layout_marginRight="25dp"
                 android:gravity="center"
+                android:padding="10dp"
                 android:text="위치좌표 : (37.11111111, 27.111111111)"
                 android:textColor="#4E4E4E"
                 android:textStyle="bold"
@@ -71,13 +71,14 @@
 
             <TextView
                 android:id="@+id/tv_alert_dateTime"
-                android:layout_width="234dp"
-                android:layout_height="59dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
                 android:layout_marginLeft="30dp"
                 android:layout_marginEnd="30dp"
                 android:layout_marginRight="30dp"
                 android:gravity="center"
+                android:padding="10dp"
                 android:text="날짜 : 9.16(수) 15:00 ~ 15:30  소독완료"
                 android:textColor="#4E4E4E"
                 android:textStyle="bold"
@@ -87,9 +88,10 @@
 
             <TextView
                 android:id="@+id/tv_alert_memo"
-                android:layout_width="237dp"
-                android:layout_height="34dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:gravity="center"
+                android:padding="10dp"
                 android:text="메모 : 내가저장한위치"
                 android:textColor="#4E4E4E"
                 android:textStyle="bold"
@@ -99,7 +101,7 @@
 
             <TextView
                 android:id="@+id/tv_alert_location"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="62dp"
                 android:layout_marginLeft="62dp"
@@ -107,6 +109,7 @@
                 android:layout_marginEnd="62dp"
                 android:layout_marginRight="62dp"
                 android:gravity="center"
+                android:padding="10dp"
                 android:text="광진구보건소(자양로 117)"
                 android:textColor="#000000"
                 android:textSize="18sp"

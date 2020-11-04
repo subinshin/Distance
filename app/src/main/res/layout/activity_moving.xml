@@ -188,13 +188,13 @@
             android:id="@+id/ti_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:icon="@drawable/ic_list" />
+            android:icon="@drawable/moving_list_selector" />
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/ti_map"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:icon="@drawable/ic_marker" />
+            android:icon="@drawable/moving_map_selector" />
 
     </com.google.android.material.tabs.TabLayout>
 

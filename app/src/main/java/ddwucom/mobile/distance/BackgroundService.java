@@ -101,7 +101,7 @@ public class BackgroundService extends Service {
     LocationListener locationListener = new LocationListener() {
         @Override
         public void onLocationChanged(Location currentLocation) {
-            Log.i(TAG, "Current Location : " + currentLocation.getLatitude() + ", " + currentLocation.getLongitude());
+          //  Log.i(TAG, "Current Location : " + currentLocation.getLatitude() + ", " + currentLocation.getLongitude());
 
 //            현재 수신한 위치 정보 Location을 LatLng 형태로 변환
             currentLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());;
@@ -133,8 +133,8 @@ public class BackgroundService extends Service {
                        // }
                     }
                 };
-                timer.schedule(timerTask, 0, 1000); // 타이머 시작
-            } else if(count >= 20 && distance > 15) { // lastLocation과 currentLocation이 다르다고 간주하는 부분
+                timer.schedule(timerTask, 0, 60000); // 타이머 시작
+            } else if(count >= 5 && distance > 15) { // lastLocation과 currentLocation이 다르다고 간주하는 부분
                 Log.d(TAG, "위치 추가 코드로 진입");
                 saveLocation();
                 timer.cancel();
