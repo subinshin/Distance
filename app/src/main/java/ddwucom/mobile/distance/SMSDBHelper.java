@@ -28,9 +28,9 @@ public class SMSDBHelper extends SQLiteOpenHelper {
         Log.d(TAG, sql);
         db.execSQL(sql);
 
-        db.execSQL("insert into " + TABLE_NAME + " values(null, '2020/09/24 16:15', '홈플러스 월곡점');" );
-        db.execSQL("insert into " + TABLE_NAME + " values(null, '2020/09/24 16:32', '스타벅스 월곡역점');" );
-        db.execSQL("insert into " + TABLE_NAME + " values(null, '2020/09/24 18:03', '누들아한타이 월곡점');" );
+        db.execSQL("insert into " + TABLE_NAME + " values(null, '2020/11/02 16:15', '홈플러스 월곡점');" );
+        db.execSQL("insert into " + TABLE_NAME + " values(null, '2020/11/03 10:32', '스타벅스 월곡역점');" );
+        db.execSQL("insert into " + TABLE_NAME + " values(null, '2020/11/04 12:03', '누들아한타이 월곡점');" );
     }
 
     @Override
