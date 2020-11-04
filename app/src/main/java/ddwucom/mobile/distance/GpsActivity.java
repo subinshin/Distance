@@ -350,8 +350,7 @@ public class GpsActivity extends AppCompatActivity {
         tv_message.setTextColor(Color.parseColor("#AE53AC"));
         tv_logOut.setTextColor(Color.parseColor("#AE53AC"));
     }
-
-
+    
     protected void onPause() {
         super.onPause();
         // 위치 정보 수신 종료 - 위치 정보 수신 종료를 누르지 않았을 경우를 대비
