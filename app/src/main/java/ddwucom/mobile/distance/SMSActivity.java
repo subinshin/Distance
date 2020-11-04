@@ -79,10 +79,10 @@ public class SMSActivity extends AppCompatActivity {
         boolean result = dbManager.addNewGps(
                 new MovingInfo(year, month, day, str[0], str[1], str[1], m.getLatitude(), m.getLongitude(), m.getLocation(), "", store));
         if (result) {
-            Toast.makeText(context, "저장 성공", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "동선 저장 성공", Toast.LENGTH_SHORT).show();
             finish();
         } else {
-            Toast.makeText(context, "저장 실패", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "동선 저장 실패", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -103,10 +103,6 @@ public class SMSActivity extends AppCompatActivity {
             address = addressList.get(0).getAddressLine(0);
             latitude = Double.parseDouble(String.format("%.6f", addressList.get(0).getLatitude()));
             longitude = Double.parseDouble(String.format("%.6f", addressList.get(0).getLongitude()));
-//            Log.d(TAG, Double.toString(latitude));
-//            Log.d(TAG, Double.toString(longitude));
-//            Log.d(TAG, addressList.get(0).toString());
-//            Log.d(TAG, addressList.get(0).getAddressLine(0));
         } else {
             latitude = 0;
             longitude = 0;

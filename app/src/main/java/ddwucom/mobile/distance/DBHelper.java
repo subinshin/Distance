@@ -39,26 +39,21 @@ public class DBHelper extends SQLiteOpenHelper {
         Log.d(TAG, sql);
         db.execSQL(sql);
 
-        db.execSQL("insert into " + TABLE_NAME + " values(null, 2020, 9, 10, '2020/09/10', '"
-                + (new Time(12, 5, 0)).toString() +"', '" + (new Time(12, 11, 0)).toString()
+        db.execSQL("insert into " + TABLE_NAME + " values(null, 2020, 10, 24, '2020/10/24', '"
+                + "12:05', '12:07"
                 + "', '광진구 구의동 43-1', 37.550711, 127.095457, 'sample', 'store1');" );
-        db.execSQL("insert into " + TABLE_NAME + " values(null, 2020, 9, 10, '2020/09/10', '"
-                + (new Time(13, 2, 0)).toString() +"', '" + (new Time(13, 52, 0)).toString()
-                + "', '스타벅스 월곡역점 (성북구 하월곡동 46-73)', 37.601944, 127.040408, 'sample', 'store2');" );
-
-        db.execSQL("insert into " + TABLE_NAME + " values(null, 2020, 9, 11, '2020/09/11', '"
-                + (new Time(10, 34, 0)).toString() +"', '" + (new Time(10, 59, 0)).toString()
-                + "', '광진구 구의동 43-1', 37.550711, 127.095457, 'sample', 'store3');" );
-        db.execSQL("insert into " + TABLE_NAME + " values(null, 2020, 9, 11, '2020/09/11', '"
-                + (new Time(12, 5, 0)).toString() +"', '" + (new Time(14, 11, 0)).toString()
-                + "', '동덕여자대학교 (성북구 하월곡동 화랑로13길 60)', 37.60632, 127.041808, 'sample', 'store4');" );
-
-        db.execSQL("insert into " + TABLE_NAME + " values(null, 2020, 9, 18, '2020/09/18', '"
-                + (new Time(12, 5, 0)).toString() +"', '" + (new Time(14, 11, 0)).toString()
-                + "', '서울숲(성동구 성수동1가 뚝섬로 273)', 37.544566, 127.037496, 'sample', 'store5');" );
-        db.execSQL("insert into " + TABLE_NAME + " values(null, 2020, 9, 16, '2020/09/16', '"
-                + (new Time(12, 5, 0)).toString() +"', '" + (new Time(14, 11, 0)).toString()
-                + "', '롯데월드 (송파구 잠실동 올림픽로 240)', 37.511329, 127.098092, 'sample', 'store6');" );
+        db.execSQL("insert into " + TABLE_NAME + " values(null, 2020, 10, 28, '2020/10/28', '"
+                + "14:02', '14:07"
+                + "', '스타벅스 월곡역점, 성북구 하월곡동 46-73', 37.601944, 127.040408, 'sample', 'store2');" );
+        db.execSQL("insert into " + TABLE_NAME + " values(null, 2020, 10, 29, '2020/10/29', '"
+                + "12:15', '13:26"
+                + "', '동덕여자대학교, 성북구 하월곡동 화랑로13길 60', 37.60632, 127.041808, 'sample', 'store4');" );
+        db.execSQL("insert into " + TABLE_NAME + " values(null, 2020, 10, 31, '2020/10/31', '"
+                + "18:21', '19:46"
+                + "', '서울숲, 성동구 성수동1가 뚝섬로 273', 37.544566, 127.037496, 'sample', 'store5');" );
+        db.execSQL("insert into " + TABLE_NAME + " values(null, 2020, 11, 02, '2020/11/02', '"
+                + "10:05', '20:07"
+                + "', '롯데월드, 송파구 잠실동 올림픽로 240', 37.511329, 127.098092, 'sample', 'store6');" );
 
     }
 

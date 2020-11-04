@@ -97,9 +97,9 @@ public class SMSInfoAdapter extends CursorAdapter {
         boolean result = dbManager.addNewGps(
                 new MovingInfo(year, month, day, str[0], str[1], str[1], m.getLatitude(), m.getLongitude(), m.getLocation(), "", location));
         if (result) {
-            Toast.makeText(context, "저장 성공", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "동선 저장 성공", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(context, "저장 실패", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "동선 저장 실패", Toast.LENGTH_SHORT).show();
         }
     }
 
